@@ -1,0 +1,1 @@
+export { getGeoJson } from './getGeoJson';
