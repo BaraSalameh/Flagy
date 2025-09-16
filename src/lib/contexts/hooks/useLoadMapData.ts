@@ -1,6 +1,6 @@
 'use client'
 
 import { useContext } from "react";
-import { MapContext } from "../contexts/MapContext";
+import { MapContext } from "../MapProvider";
 
 export const useLoadMapData = () => useContext(MapContext).map;

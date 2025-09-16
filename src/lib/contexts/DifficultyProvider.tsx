@@ -1,8 +1,13 @@
 'use client'
 
-import { ReactNode, useState } from "react";
-import { DifficultyContext } from "./DifficultyContext";
+import { createContext, ReactNode, useState } from "react";
 import { GameDifficulty } from "@/components/shared/types.shared";
+import { DifficultyContextType } from "./types.context";
+
+export const DifficultyContext = createContext<DifficultyContextType>({
+    difficulty: null,
+    setDifficulty: () => {}
+});
 
 export const DifficultyProvider = ({ children }: { children: ReactNode }) => {
 

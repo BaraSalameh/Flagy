@@ -1,5 +1,5 @@
 import { GameDifficulty } from "@/components/shared/types.shared";
-import { useLoadMapData } from "@/lib/hooks";
+import { useLoadMapData } from "@/lib/contexts/hooks";
 import { useEffect } from "react"
 
 export const useGenerateRandomCountry = (difficulty: GameDifficulty, setCountryName: (countryName: string) => void) => {

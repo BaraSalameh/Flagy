@@ -2,9 +2,9 @@
 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer } from 'react-leaflet';
-import { useLoadMapData } from '@/lib/hooks';
 import { getGeoJson } from '@/games/country/utils';
 import { GameProps } from './types.shared';
+import { useLoadMapData } from '@/lib/contexts/hooks';
 
 export const Map = (props: GameProps) => {
     const geoData = useLoadMapData();

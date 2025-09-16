@@ -1,9 +1,7 @@
 
 import { CountryGuess, GameProps } from "@/components/shared/types.shared";
-import { Text } from "@/components/ui";
-import { useLoadMapData } from "@/lib/hooks"
-import { Popup } from "leaflet";
-import { Fragment, JSX } from "react"
+import { useLoadMapData } from "@/lib/contexts/hooks";
+import {  JSX } from "react"
 import { GeoJSON } from 'react-leaflet';
 
 export const getGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: GameProps): JSX.Element | null => {
