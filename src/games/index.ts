@@ -1,1 +1,1 @@
-export * from './country-guess';
+export * from './country';
