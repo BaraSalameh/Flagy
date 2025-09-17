@@ -15,13 +15,18 @@ export const GuessCountryInXMoves = () => {
     const [ randomCountry, setRandomCountry ] = useState<string | null>(null);
     const [ selectedCountry, setSelectedCountry ] = useState<string | undefined>(undefined);
     const [ counter, setCounter ] = useState<number | undefined>(undefined);
+    const [ hint, seHint ] = useState<Record<string, string> | null>(null);
     
-    useGenerateRandomCountry(difficulty, setRandomCountry);
+    useGenerateRandomCountry(difficulty, setRandomCountry, seHint);
     useDetermineCounter(difficulty, setCounter, selectedCountry);
 
     useEffect(() => {
         if (randomCountry) alert(randomCountry);
     }, [randomCountry]);
+
+    useEffect(() => {
+        if (hint) console.log(hint);
+    }, [hint]);
       
     return (
         <div className="h-screen">

@@ -1,8 +1,8 @@
 import { GameDifficulty } from "@/components/shared/types.shared";
 import { useLoadInfoData, useLoadMapData, useLoadStatisticsData } from "@/lib/contexts/hooks";
-import { useEffect } from "react"
+import React, { useEffect } from "react"
 
-export const useGenerateRandomCountry = (difficulty: GameDifficulty, setCountryName: (countryName: string) => void) => {
+export const useGenerateRandomCountry = (difficulty: GameDifficulty, setCountryName: (countryName: string) => void, setHint: React.Dispatch<React.SetStateAction<Record<string, string> | null>>) => {
     const mapData = useLoadMapData();
     const infoData = useLoadInfoData();
     const statisticsData = useLoadStatisticsData();
@@ -16,14 +16,16 @@ export const useGenerateRandomCountry = (difficulty: GameDifficulty, setCountryN
             const countryISO3 = countryFeature.properties?.ISO3;
             const countryPopulation = infoData?.[countryISO2]?.population;
             const countryArea = statisticsData?.[countryISO3]?.area;
+            const countryNeighbors = statisticsData?.[countryISO3]?.borders;
 
-            console.log(`countryName: ${countryName}`);
-            console.log(`iso 2: ${countryISO2}`);
-            console.log(`iso 3: ${countryISO3}`);
-            console.log(`population: ${countryPopulation}`);
-            console.log(`area: ${countryArea}`);
-
-
+            setHint({
+                iso2: countryISO2,
+                iso3: countryISO3,
+                population: countryPopulation,
+                area: countryArea,
+                borders: countryNeighbors
+            });
+            
             setCountryName(countryName);
         }
     }, [mapData, infoData, statisticsData,  setCountryName, difficulty]);

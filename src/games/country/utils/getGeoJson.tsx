@@ -22,6 +22,7 @@ const getGuessCountryGeoJson = (geoData: ReturnType<typeof useLoadMapData>, prop
             const countryName = feature?.properties?.name;
             const isSelected = countryName === userSelectedCountry;
             const userDidWin = countryName === randomCountryName;
+
             return {
                 fillColor: isSelected ? userDidWin ? 'green' : 'red' : '#f5f5f5',
                 fillOpacity: isSelected ? 0.7 : 1,
