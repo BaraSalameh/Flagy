@@ -1,4 +1,4 @@
-import { ArrowBigRightIcon, Settings } from "lucide-react"
+import { ArrowBigRightIcon } from "lucide-react"
 import { NavButton } from "../ui"
 import { Fragment } from "react"
 import { useSetDifficulty } from "@/lib/contexts/hooks"

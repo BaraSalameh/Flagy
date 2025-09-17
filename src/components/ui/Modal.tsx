@@ -23,8 +23,8 @@ export const Modal = ({
     const [openModal, setOpenModal] = useState(isModalOpen);
 
     useEffect(() => {
-        openModal !== isModalOpen && setOpenModal(isModalOpen);
-    }, [isModalOpen]);
+        if (openModal !== isModalOpen) setOpenModal(isModalOpen);
+    }, [isModalOpen, openModal]); // open modal is added without testing
             
     return (
         <React.Fragment>

@@ -14,3 +14,27 @@ export const useLoadGeoData = () => {
 
     return geoData;
 }
+
+export const useLoadInfoData = () => {
+    const [infoData, setInfoData] = useState<Record<string, string>[] | null>(null);
+    
+    useEffect(() => {
+        fetch('/data/countries.info.json')
+            .then(res => res.json())
+            .then(data => setInfoData(data));
+    }, []);
+
+    return infoData;
+}
+
+export const useLoadStatisticsData = () => {
+    const [statisticsData, setStatisticsData] = useState<Record<string, string>[] | null>(null);
+    
+    useEffect(() => {
+        fetch('/data/countries.statistics.json')
+            .then(res => res.json())
+            .then(data => setStatisticsData(data));
+    }, []);
+
+    return statisticsData;
+}

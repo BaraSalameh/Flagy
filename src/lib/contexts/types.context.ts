@@ -4,6 +4,8 @@ import React from 'react';
 
 export type MapContextType = {
     map: FeatureCollection<Geometry, GeoJsonProperties> | null;
+    info: Record<string, string>[] | null;
+    statistics: Record<string, string>[] | null;
 };
 
 export type DifficultyContextType = {
