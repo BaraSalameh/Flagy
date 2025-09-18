@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FeatureCollection, Geometry, GeoJsonProperties } from 'geojson';
+import { InfoData } from "../types.context";
 
 export const useLoadGeoData = () => {
     const [geoData, setGeoData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | null>(null);
@@ -16,7 +17,7 @@ export const useLoadGeoData = () => {
 }
 
 export const useLoadInfoData = () => {
-    const [infoData, setInfoData] = useState<Record<string, string>[] | null>(null);
+    const [infoData, setInfoData] = useState<Record<string, InfoData> | null>(null);
     
     useEffect(() => {
         fetch('/data/countries.info.json')
@@ -25,16 +26,4 @@ export const useLoadInfoData = () => {
     }, []);
 
     return infoData;
-}
-
-export const useLoadStatisticsData = () => {
-    const [statisticsData, setStatisticsData] = useState<Record<string, string>[] | null>(null);
-    
-    useEffect(() => {
-        fetch('/data/countries.statistics.json')
-            .then(res => res.json())
-            .then(data => setStatisticsData(data));
-    }, []);
-
-    return statisticsData;
 }

@@ -13,7 +13,7 @@ export const getGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: Ga
 }
 
 const getGuessCountryGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: CountryGuess): JSX.Element | null => {
-    const { onCountryClick, randomCountryName, userSelectedCountry } = props;
+    const { onCountryClick, onWin, randomCountryName, userSelectedCountry } = props;
 
     return geoData &&
     <GeoJSON
@@ -33,9 +33,9 @@ const getGuessCountryGeoJson = (geoData: ReturnType<typeof useLoadMapData>, prop
         onEachFeature={(feature, layer) => {
             if (feature.properties?.name) {
                 layer.on('click', (e) => {
-                    console.log(feature);
                     const countryName = feature.properties.name;
                     onCountryClick?.(countryName);
+                    if (countryName === randomCountryName) onWin();
                     layer.bindPopup(`${countryName}`).openPopup(e.latlng);
                 });
             }

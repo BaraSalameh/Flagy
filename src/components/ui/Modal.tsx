@@ -1,7 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ResponsiveIcon } from './ResponsiveIcon';
 import { Text } from './Text';
 import { BlurBackground } from './BlurBackground';
@@ -15,16 +15,18 @@ export const Modal = ({
     content,
     icon,
     closeOnOutsideClick = true,
-    isModalOpen = false,
+    modalOpen = false,
+    setModalOpen,
     isOpenable = true,
     isCloseable = true
 }: ModalProps) => {
 
-    const [openModal, setOpenModal] = useState(isModalOpen);
+    const [openModal, setOpenModal] = useState(false);
 
-    useEffect(() => {
-        if (openModal !== isModalOpen) setOpenModal(isModalOpen);
-    }, [isModalOpen, openModal]); // open modal is added without testing
+    const handleClose = () => {
+        setOpenModal(false);
+        setModalOpen?.(false);
+    }
             
     return (
         <React.Fragment>
@@ -35,14 +37,14 @@ export const Modal = ({
                     icon={icon}
                 />
             }
-            {openModal && (
-                <BlurBackground intent='sm' onClick={closeOnOutsideClick ? () => setOpenModal(false) : undefined}>
+            {(openModal || modalOpen) && (
+                <BlurBackground intent='sm' onClick={closeOnOutsideClick ? handleClose : undefined}>
                     <div className={card()}>
                         {/* Header */}
                         <div className='flex justify-between'>
                             {subTitle && <Text size="md">{subTitle}</Text>}
                             {isCloseable &&
-                                <ResponsiveIcon icon={X} onClick={() => setOpenModal(false)} />
+                                <ResponsiveIcon icon={X} onClick={handleClose} />
                             }
                         </div>
                         <hr />

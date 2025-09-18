@@ -11,7 +11,8 @@ export const Starter = () => {
         <Modal
             subTitle="Game description"
             icon={File}
-            isModalOpen={isModalOpen}
+            modalOpen={isModalOpen}
+            setModalOpen={setIsModalOpen}
             isOpenable={false}
             closeOnOutsideClick={false}
             isCloseable={false}

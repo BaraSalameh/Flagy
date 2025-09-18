@@ -4,6 +4,7 @@ export type GameDifficulty = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert'
 export interface CountryGuess {
     mode: 'country';
     onCountryClick?: (countryName: string) => void;
+    onWin: () => void;
     userSelectedCountry?: string;
     randomCountryName?: string;
 }

@@ -1,4 +1,5 @@
 
+import { UseStateSetter } from "@/games/country/hooks/types.hooks";
 import { BlurBackgroundVariantProps, CardVariantProps, TextVariantProps } from "@/styles";
 import { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
@@ -25,7 +26,8 @@ export interface ModalProps {
     content?: ReactNode | string;
     icon?: LucideIcon;
     closeOnOutsideClick?: boolean;
-    isModalOpen?: boolean;
+    modalOpen?: boolean;
+    setModalOpen?: UseStateSetter<boolean>;
     isOpenable?: boolean;
     isCloseable?: boolean;
 }

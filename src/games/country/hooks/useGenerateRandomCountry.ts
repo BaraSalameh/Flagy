@@ -1,32 +1,37 @@
 import { GameDifficulty } from "@/components/shared/types.shared";
-import { useLoadInfoData, useLoadMapData, useLoadStatisticsData } from "@/lib/contexts/hooks";
-import React, { useEffect } from "react"
+import { useLoadInfoData } from "@/lib/contexts/hooks";
+import { useEffect } from "react"
+import { UseStateSetter } from "./types.hooks";
+import { InfoData } from "@/lib/contexts/types.context";
 
-export const useGenerateRandomCountry = (difficulty: GameDifficulty, setCountryName: (countryName: string) => void, setHint: React.Dispatch<React.SetStateAction<Record<string, string> | null>>) => {
-    const mapData = useLoadMapData();
+export const useGenerateRandomCountry = (
+    difficulty: GameDifficulty,
+    setCountryName: UseStateSetter<string | undefined>,
+    setHint: UseStateSetter<InfoData | undefined>
+) => {
     const infoData = useLoadInfoData();
-    const statisticsData = useLoadStatisticsData();
 
     useEffect(() => {
-        if (difficulty && mapData && infoData && statisticsData) {
-            const randomIndex = Math.floor(Math.random() * mapData.features.length);
-            const countryFeature = mapData.features[randomIndex];
-            const countryName = countryFeature.properties?.name;
-            const countryISO2 = countryFeature.properties?.ISO2;
-            const countryISO3 = countryFeature.properties?.ISO3;
-            const countryPopulation = infoData?.[countryISO2]?.population;
-            const countryArea = statisticsData?.[countryISO3]?.area;
-            const countryNeighbors = statisticsData?.[countryISO3]?.borders;
+        if (difficulty && infoData) {
+
+            const keys = Object.keys(infoData);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const record = infoData[randomKey as keyof typeof  infoData];
 
             setHint({
-                iso2: countryISO2,
-                iso3: countryISO3,
-                population: countryPopulation,
-                area: countryArea,
-                borders: countryNeighbors
-            });
+                countryCode: record.countryCode,
+                currencyCode: record.currencyCode,
+                population: record.population,
+                capital: record.capital,
+                continentName: record.continentName,
+                region: record.region,
+                area: record.area,
+                borders: record.borders,
+                languages: record.languages,
+                flag: record.flag
+            } as InfoData);
             
-            setCountryName(countryName);
+            setCountryName(record.countryName);
         }
-    }, [mapData, infoData, statisticsData,  setCountryName, difficulty]);
+    }, [infoData, setCountryName, difficulty]);
 }
