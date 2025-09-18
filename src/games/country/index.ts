@@ -1,1 +1,1 @@
-export { GuessCountryInXMoves } from './guess-country-in-x-moves/GuessCountryInXMoves';
+export * from './guess-country-in-x-moves';

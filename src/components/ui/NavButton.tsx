@@ -32,8 +32,8 @@ export const NavButton = ({ navigateTo, label, icon, onClick, hoverable = true}:
             <a
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
-                href={`#${navigateTo}`}
                 className={navButtonContainer({hovered: hoverable ? hovered : true})}
+                href={`#${navigateTo}`}
             >
                 <Text className={navButtonIconContainer()}>{<ResponsiveIcon icon={icon} />}</Text>
                 <Text className={navButtonText({hovered: hoverable ? hovered : true})}>

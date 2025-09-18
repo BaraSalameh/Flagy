@@ -1,15 +1,14 @@
-import { GameDifficulty } from "@/components/shared/types.shared";
 import { useLoadInfoData } from "@/lib/contexts/hooks";
 import { useEffect } from "react"
-import { UseStateSetter } from "./types.hooks";
-import { InfoData } from "@/lib/contexts/types.context";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { setHint } from "@/lib/store/slices/hintSlice"
+import { InfoData } from "@/lib/store/slices/types.slices";
+import { setRandomCountry } from "@/lib/store/slices/countrySlice";
 
-export const useGenerateRandomCountry = (
-    difficulty: GameDifficulty,
-    setCountryName: UseStateSetter<string | undefined>,
-    setHint: UseStateSetter<InfoData | undefined>
-) => {
+export const useGenerateRandomCountry = () => {
+    const dispatch = useAppDispatch();
     const infoData = useLoadInfoData();
+    const difficulty = useAppSelector(state => state.general.difficulty);
 
     useEffect(() => {
         if (difficulty && infoData) {
@@ -18,7 +17,7 @@ export const useGenerateRandomCountry = (
             const randomKey = keys[Math.floor(Math.random() * keys.length)];
             const record = infoData[randomKey as keyof typeof  infoData];
 
-            setHint({
+            dispatch(setHint({
                 countryCode: record.countryCode,
                 currencyCode: record.currencyCode,
                 population: record.population,
@@ -29,9 +28,9 @@ export const useGenerateRandomCountry = (
                 borders: record.borders,
                 languages: record.languages,
                 flag: record.flag
-            } as InfoData);
+            } as InfoData));
             
-            setCountryName(record.countryName);
+            dispatch(setRandomCountry(record.countryName))
         }
-    }, [infoData, setCountryName, difficulty]);
+    }, [infoData, difficulty, dispatch]);
 }

@@ -1,12 +1,7 @@
 export type GameProps = CountryGuess | FlagGuess;
-export type GameDifficulty = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert' | null;
 
-export interface CountryGuess {
+interface CountryGuess {
     mode: 'country';
-    onCountryClick?: (countryName: string) => void;
-    onWin: () => void;
-    userSelectedCountry?: string;
-    randomCountryName?: string;
 }
 
 interface FlagGuess {

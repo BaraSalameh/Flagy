@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FeatureCollection, Geometry, GeoJsonProperties } from 'geojson';
-import { InfoData } from "../types.context";
+import { InfoData } from "@/lib/store/slices/types.slices";
 
 export const useLoadGeoData = () => {
     const [geoData, setGeoData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | null>(null);

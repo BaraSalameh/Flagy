@@ -1,2 +1,2 @@
+export { ReduxProvider } from './ReduxProvider';
 export { MapProvider } from './MapProvider';
-export { DifficultyProvider } from './DifficultyProvider';

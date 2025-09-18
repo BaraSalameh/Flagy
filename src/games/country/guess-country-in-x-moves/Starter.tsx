@@ -1,18 +1,20 @@
 import { GameDifficultyMenu } from "@/components/shared"
 import { Modal, Text } from "@/components/ui"
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks"
+import { setGameStarted } from "@/lib/store/slices/countrySlice"
 import { File } from "lucide-react"
-import { Fragment, useState } from "react"
+import { Fragment } from "react"
 
 export const Starter = () => {
 
-    const [ isModalOpen, setIsModalOpen ] = useState(true);
-
+    const dispatch = useAppDispatch();
+    const gameStarted = useAppSelector(state => state.country.gameStarted);
+    
     return (
         <Modal
             subTitle="Game description"
             icon={File}
-            modalOpen={isModalOpen}
-            setModalOpen={setIsModalOpen}
+            modalOpen={!gameStarted}
             isOpenable={false}
             closeOnOutsideClick={false}
             isCloseable={false}
@@ -21,7 +23,7 @@ export const Starter = () => {
                     <Text>
                         {`A country is randomly going to be selected!\n\nDepending on the difficulty level, you'll have a number of allowed guesses.\n\nTo start, first set up the difficulty level`}
                     </Text>
-                    <GameDifficultyMenu sideEffect={() => setIsModalOpen(false)} />
+                    <GameDifficultyMenu sideEffect={() => dispatch(setGameStarted(true))} />
                 </Fragment>
             }
         />

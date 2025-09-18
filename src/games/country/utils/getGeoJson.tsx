@@ -1,27 +1,31 @@
 
-import { CountryGuess, GameProps } from "@/components/shared/types.shared";
+import { GameProps } from "@/components/shared/types.shared";
 import { useLoadMapData } from "@/lib/contexts/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { setCurrentCountry } from "@/lib/store/slices/countrySlice";
 import {  JSX } from "react"
 import { GeoJSON } from 'react-leaflet';
 
 export const getGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: GameProps): JSX.Element | null => {
     switch (props.mode) {
         case 'country':
-            return getGuessCountryGeoJson(geoData, props);
+            return <GetGuessCountryGeoJson geoData={geoData} />;
         default: return null;
     }
 }
 
-const getGuessCountryGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: CountryGuess): JSX.Element | null => {
-    const { onCountryClick, onWin, randomCountryName, userSelectedCountry } = props;
+const GetGuessCountryGeoJson = ({ geoData }: {geoData: ReturnType<typeof useLoadMapData>}): JSX.Element | null => {
+    const dispatch = useAppDispatch();
+
+    const currentCountry = useAppSelector(state => state.country.currentCountry);
+    const userDidWin = useAppSelector(state => state.country.result);
 
     return geoData &&
     <GeoJSON
         data={geoData}
         style={(feature) => {
             const countryName = feature?.properties?.name;
-            const isSelected = countryName === userSelectedCountry;
-            const userDidWin = countryName === randomCountryName;
+            const isSelected = countryName === currentCountry;
 
             return {
                 fillColor: isSelected ? userDidWin ? 'green' : 'red' : '#f5f5f5',
@@ -34,8 +38,7 @@ const getGuessCountryGeoJson = (geoData: ReturnType<typeof useLoadMapData>, prop
             if (feature.properties?.name) {
                 layer.on('click', (e) => {
                     const countryName = feature.properties.name;
-                    onCountryClick?.(countryName);
-                    if (countryName === randomCountryName) onWin();
+                    dispatch(setCurrentCountry(countryName));
                     layer.bindPopup(`${countryName}`).openPopup(e.latlng);
                 });
             }

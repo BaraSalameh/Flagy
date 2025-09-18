@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
-import { MapProvider } from '@/lib/contexts';
+import { MapProvider, ReduxProvider } from '@/lib/contexts';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -23,9 +23,11 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: ReactNode })  => 
     <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            <MapProvider>
-                {children}
-            </MapProvider>
+            <ReduxProvider>
+                <MapProvider>
+                    {children}
+                </MapProvider>
+            </ReduxProvider>
         </body>
     </html>
 

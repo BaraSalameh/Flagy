@@ -1,6 +1,5 @@
-
-import { UseStateSetter } from "@/games/country/hooks/types.hooks";
-import { BlurBackgroundVariantProps, CardVariantProps, TextVariantProps } from "@/styles";
+import { UseStateSetter } from "@/lib/types.lib";
+import { BlurBackgroundVariantProps, TextVariantProps } from "@/styles";
 import { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -40,14 +39,6 @@ export interface NavButtonProps {
     hoverable?: Hoverable;
 }
 type Hoverable = true | false;
-
-export interface CardProps extends CardVariantProps {
-    title: string;
-    subTitle?: string;
-    logoUrl?: string;
-    content?: React.ReactNode;
-    className?: string;
-};
 
 export interface BlurBackgroundProps extends BlurBackgroundVariantProps {
     children: React.ReactNode;

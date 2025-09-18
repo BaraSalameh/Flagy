@@ -1,14 +1,15 @@
 import { ArrowBigRightIcon } from "lucide-react"
 import { NavButton } from "../ui"
 import { Fragment } from "react"
-import { useSetDifficulty } from "@/lib/contexts/hooks"
-import { GameDifficulty } from "./types.shared"
+import { useAppDispatch } from "@/lib/store/hooks"
+import { setDifficulty } from "@/lib/store/slices/generalSlice"
+import { GameDifficulty } from "@/lib/store/slices/types.slices"
 
 export const GameDifficultyMenu = ({ sideEffect } : {sideEffect?: () => void}) => {
-    const setDifficulty = useSetDifficulty();
+    const dispatch = useAppDispatch();
 
     const handleClick = (difficulty: GameDifficulty) => {
-        setDifficulty(difficulty);
+        dispatch(setDifficulty(difficulty))
         sideEffect?.();
     }
 

@@ -1,25 +1,30 @@
 import { Modal, Text } from "@/components/ui"
-import { useGetDifficulty } from "@/lib/contexts/hooks"
-import { InfoData } from "@/lib/contexts/types.context"
 import { useEffect, useState } from "react"
-import { GameDifficulty } from "@/components/shared/types.shared"
+import { useAppSelector } from "@/lib/store/hooks"
+import { RootState } from "@/lib/store/store"
 
-export const Hint = ({ hint, counter }: { hint: InfoData | undefined; counter: number | undefined }) => {
+export const Hint = () => {
     
-    const difficulty = useGetDifficulty();
+    const hint = useAppSelector(state => state.hint);
+    const general = useAppSelector(state => state.general);
+    const userDidWin = useAppSelector(state => state.country.result);
 
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ hintText, setHintText ] = useState<string | undefined>(undefined);
 
     useEffect(() => {
-        if (counter && difficulty) {
-            setHintText(fillHint(counter, difficulty, hint));
+        if (general.counter && general.difficulty && hint) {
+            setHintText(fillHint(general.difficulty, general.counter, hint));
         }
-    }, [counter, difficulty]);
+    }, [general.counter, general.difficulty, hint]);
 
     useEffect(() => {
-        setIsModalOpen(hintText ? true : false);
-    }, [hintText]);
+        if (!userDidWin) {
+            setIsModalOpen(!!hintText);
+        }
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hintText]); // ignoring 'userDidWin'
 
     return (
         <Modal
@@ -36,7 +41,11 @@ export const Hint = ({ hint, counter }: { hint: InfoData | undefined; counter: n
     )
 }
 
-const fillHint = (counter: number, difficulty: GameDifficulty, hint: InfoData | undefined): string | undefined => {
+const fillHint = (
+    difficulty: ReturnType<typeof useAppSelector<RootState['general']['difficulty']>>,
+    counter: ReturnType<typeof useAppSelector<RootState['general']['counter']>>,
+    hint: ReturnType<typeof useAppSelector<RootState['hint']>>
+): string | undefined => {
     switch (difficulty) {
         case 'Beginner':
             return counter === 14

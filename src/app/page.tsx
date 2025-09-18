@@ -1,11 +1,5 @@
-import { GuessCountryInXMoves } from "@/games";
-import { DifficultyProvider } from "@/lib/contexts/DifficultyProvider";
+import { redirect } from "next/navigation";
 
-const HomePage = () =>
-    <div className="h-screen">
-        <DifficultyProvider>
-            <GuessCountryInXMoves />
-        </DifficultyProvider>
-    </div>
+const Home = () => redirect("/country");
 
-export default HomePage;
+export default Home;
