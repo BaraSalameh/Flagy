@@ -18,7 +18,8 @@ export const Modal = ({
     modalOpen = false,
     setModalOpen,
     isOpenable = true,
-    isCloseable = true
+    isCloseable = true,
+    customHeaderButton
 }: ModalProps) => {
 
     const [openModal, setOpenModal] = useState(false);
@@ -46,6 +47,7 @@ export const Modal = ({
                             {isCloseable &&
                                 <ResponsiveIcon icon={X} onClick={handleClose} />
                             }
+                            {customHeaderButton && customHeaderButton}
                         </div>
                         <hr />
                         {/* Main */}

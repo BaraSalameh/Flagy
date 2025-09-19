@@ -3,12 +3,12 @@
 import 'leaflet/dist/leaflet.css';
 import { MapContainer } from 'react-leaflet';
 import { getGeoJson } from '@/games/map/utils';
-import { GameProps } from './types.shared';
 import { useLoadMapData } from '@/lib/contexts/hooks';
+import { MapProps } from './types.shared';
 
-export const Map = (props: GameProps) => {
+export const Map = (props: MapProps) => {
     const geoData = useLoadMapData();
-    const geoJSON = getGeoJson(geoData, props);
+    const geoJSON = getGeoJson(geoData, props.game);
 
     return (
         <MapContainer
