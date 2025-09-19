@@ -1,10 +1,10 @@
 'use client';
 
-import { useDetermineCounter, useGenerateRandomCountry } from "../hooks";
 import { Counter, Map } from "@/components/shared";
 import { Starter } from "./Starter";
 import { Hint } from "./Hint";
 import { WinLose } from "./WinLose";
+import { useDetermineCounter, useGenerateRandomCountry } from "./hooks";
 
 export const GuessCountryInXMoves = () => {
     useGenerateRandomCountry();
