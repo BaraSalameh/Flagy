@@ -1,16 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { InfoData } from './types.slices';
+import { HintState } from './types.slices';
 
-const initialState = {} as InfoData;
+const initialState = {} as HintState;
 
 const hintSlice = createSlice({
     name: 'hint',
     initialState,
     reducers: {
-        setHint: (state, action: {payload: InfoData}) => (state = {...action.payload}),
-        clearHint: () => ({} as InfoData)
+        setInformations: (state, action: {payload: HintState['information']}) => ({
+            ...state,
+            information: action.payload
+        }),
+        setHint: (state, action: {payload: HintState['hint']}) => ({
+            ...state,
+            hint: action.payload
+        }),
+        clearHint: () => ({} as HintState)
     }
 });
 
-export const { setHint, clearHint } = hintSlice.actions;
+export const { setInformations, setHint, clearHint } = hintSlice.actions;
 export default hintSlice.reducer;

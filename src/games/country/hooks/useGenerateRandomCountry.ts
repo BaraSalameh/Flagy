@@ -1,7 +1,7 @@
 import { useLoadInfoData } from "@/lib/contexts/hooks";
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setHint } from "@/lib/store/slices/hintSlice"
+import { setInformations } from "@/lib/store/slices/hintSlice"
 import { InfoData } from "@/lib/store/slices/types.slices";
 import { setRandomCountry } from "@/lib/store/slices/countrySlice";
 
@@ -17,7 +17,7 @@ export const useGenerateRandomCountry = () => {
             const randomKey = keys[Math.floor(Math.random() * keys.length)];
             const record = infoData[randomKey as keyof typeof  infoData];
 
-            dispatch(setHint({
+            dispatch(setInformations({
                 countryCode: record.countryCode,
                 currencyCode: record.currencyCode,
                 population: record.population,

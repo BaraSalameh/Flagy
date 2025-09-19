@@ -1,3 +1,8 @@
+export interface HintState {
+    information: InfoData;
+    hint: string | string[] | undefined;
+}
+
 export interface InfoData {
     countryCode: string;
     countryName: string;
