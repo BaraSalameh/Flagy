@@ -8,7 +8,7 @@ import { GeoJSON } from 'react-leaflet';
 
 export const getGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: GameProps): JSX.Element | null => {
     switch (props.mode) {
-        case 'country':
+        case 'map':
             return <GetGuessCountryGeoJson geoData={geoData} />;
         default: return null;
     }

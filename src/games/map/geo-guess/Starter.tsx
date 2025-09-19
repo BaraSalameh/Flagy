@@ -21,7 +21,7 @@ export const Starter = () => {
             content= {
                 <Fragment>
                     <Text>
-                        {`A country is randomly going to be selected!\n\nDepending on the difficulty level, you'll have a number of allowed guesses.\n\nTo start, first set up the difficulty level`}
+                        {`A country has been randomly selected. Choose your difficulty level and use the hints to guess the country before your counter reaches zero.\n\nSharpen your geography skills with each move!`}
                     </Text>
                     <GameDifficultyMenu sideEffect={() => dispatch(setGameStarted(true))} />
                 </Fragment>

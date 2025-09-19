@@ -2,7 +2,7 @@
 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer } from 'react-leaflet';
-import { getGeoJson } from '@/games/country/utils';
+import { getGeoJson } from '@/games/map/utils';
 import { GameProps } from './types.shared';
 import { useLoadMapData } from '@/lib/contexts/hooks';
 

@@ -1,0 +1,1 @@
+export { GeoGuess } from './GeoGuess';

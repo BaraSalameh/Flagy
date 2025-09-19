@@ -1,8 +1,8 @@
-import { GuessCountryInXMoves } from "@/games";
+import { GeoGuess } from "@/games";
 
 const CountryPage = () =>
     <div className="h-screen">
-        <GuessCountryInXMoves />
+        <GeoGuess />
     </div>
 
 export default CountryPage;

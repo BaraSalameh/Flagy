@@ -6,7 +6,7 @@ import { Hint } from "./Hint";
 import { WinLose } from "./WinLose";
 import { useDetermineCounter, useGenerateRandomCountry } from "./hooks";
 
-export const GuessCountryInXMoves = () => {
+export const GeoGuess = () => {
     useGenerateRandomCountry();
     useDetermineCounter();
       
@@ -18,7 +18,7 @@ export const GuessCountryInXMoves = () => {
                 <WinLose />
                 <Counter />
             </div>
-            <Map mode="country" />
+            <Map mode="map" />
         </div>
     )
 }

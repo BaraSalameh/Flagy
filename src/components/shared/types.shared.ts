@@ -1,7 +1,7 @@
-export type GameProps = CountryGuess | FlagGuess;
+export type GameProps = GeoGuess | FlagGuess;
 
-interface CountryGuess {
-    mode: 'country';
+interface GeoGuess {
+    mode: 'map';
 }
 
 interface FlagGuess {
