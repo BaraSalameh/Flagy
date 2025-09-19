@@ -46,61 +46,66 @@ const fillHint = (
     counter: ReturnType<typeof useAppSelector<RootState['general']['counter']>>,
     hint: ReturnType<typeof useAppSelector<RootState['hint']>>
 ): string | undefined => {
+    const population = Number(hint.population).toLocaleString("en-US", {notation: "compact"});
+    const area = hint.area.toLocaleString("en-US") + " km²";
+    const languages: string | string[] = hint.languages.length === 0 ? "A country with no specific language" : hint.languages;
+    const neighbors: string | string[] = hint.borders.length === 0 ? "A country with no borders" : hint.borders;
+
     switch (difficulty) {
         case 'Beginner':
             return counter === 14
-            ?   `Population: ${hint?.population}`
+            ?   `Population: ${population}`
             :   counter === 12
-            ?   `Area: ${hint?.area}`
+            ?   `Area: ${area}`
             :   counter === 10
-            ?   `Continent: ${hint?.continentName}`
+            ?   `Continent: ${hint.continentName}`
             :   counter === 8
-            ?   `Region: ${hint?.region}`
+            ?   `Region: ${hint.region}`
             :   counter === 6
-            ?   `Languages: ${hint?.languages}`
+            ?   `Languages: ${languages}`
             :   counter === 4
-            ?   `Neighbors: ${hint?.borders}`
+            ?   `Neighbors: ${neighbors}`
             :   counter === 2 
-            ?   `Capital: ${hint?.capital}`
+            ?   `Capital: ${hint.capital}`
             :   undefined;
 
         case 'Intermediate':
             return counter === 11
-            ?   `Population: ${hint?.population}`
+            ?   `Population: ${hint.population}`
             :   counter === 9
-            ?   `Area: ${hint?.area}`
+            ?   `Area: ${area}`
             :   counter === 7
-            ?   `Continent: ${hint?.continentName}`
+            ?   `Continent: ${hint.continentName}`
             :   counter === 5
-            ?   `Region: ${hint?.region}`
+            ?   `Region: ${hint.region}`
             :   counter === 3
-            ?   `Languages: ${hint?.languages}`
+            ?   `Languages: ${languages}`
             :   counter === 1
-            ?   `Capital: ${hint?.capital}`
+            ?   `Capital: ${hint.capital}`
             :   undefined;
             
         case 'Advanced':
             return counter === 10
-            ?   `Population: ${hint?.population}`
+            ?   `Population: ${hint.population}`
             :   counter === 8
-            ?   `Area: ${hint?.area}`
+            ?   `Area: ${area}`
             :   counter === 6
-            ?   `Continent: ${hint?.continentName}`
+            ?   `Continent: ${hint.continentName}`
             :   counter === 4
-            ?   `Region: ${hint?.region}`
+            ?   `Region: ${hint.region}`
             :   counter === 2
-            ?   `Languages: ${hint?.languages}`
+            ?   `Languages: ${languages}`
             :   undefined;
             
         case 'Expert':
             return counter === 7
-            ?   `Population: ${hint?.population}`
+            ?   `Population: ${population}`
             :   counter === 5
-            ?   `Area: ${hint?.area}`
+            ?   `Area: ${area}`
             :   counter === 3
-            ?   `Continent: ${hint?.continentName}`
+            ?   `Continent: ${hint.continentName}`
             :   counter === 1
-            ?   `Region: ${hint?.region}`
+            ?   `Region: ${hint.region}`
             :   undefined;
     }
 }

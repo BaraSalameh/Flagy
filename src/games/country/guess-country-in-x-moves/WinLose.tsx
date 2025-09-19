@@ -18,12 +18,12 @@ export const WinLose = () => {
     useEffect(() => {
         if (counter === 0 && randomCountry !== currentCountry) {
             dispatch(setResult(false));
-            setMessage("Unfortunately! You Lose");
+            setMessage(`😅 It was ${randomCountry}!`);
         }
 
         if (randomCountry && currentCountry && randomCountry === currentCountry) {
             dispatch(setResult(true));
-            setMessage('Congratulations! You Win')
+            setMessage(`🚀 ${randomCountry} is a Perfect guess! Keep it up!`)
         }
     }, [counter, currentCountry, randomCountry, dispatch]);
 
@@ -42,7 +42,7 @@ export const WinLose = () => {
 
     return (
         <Modal
-            subTitle={result ? 'You won' : 'You lose'}
+            subTitle={result ? '✨ Brilliant!' : '❌ Oops!'}
             modalOpen={isModalOpen}
             isOpenable={false}
             closeOnOutsideClick={false}
