@@ -18,7 +18,7 @@ export const GeoGuess = () => {
                 <WinLose />
                 <Counter />
             </div>
-            <Map mode="map" />
+            <Map game="geo-guess" />
         </div>
     )
 }

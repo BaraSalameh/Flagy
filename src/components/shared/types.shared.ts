@@ -1,10 +1,5 @@
-export type GameProps = GeoGuess | FlagGuess;
+import { GameName } from "@/lib/types.lib";
 
-interface GeoGuess {
-    mode: 'map';
-}
-
-interface FlagGuess {
-    mode: 'flag';
-    flagName: string;
+export interface MapProps {
+    game: GameName;
 }

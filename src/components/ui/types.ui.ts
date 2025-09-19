@@ -29,6 +29,7 @@ export interface ModalProps {
     setModalOpen?: UseStateSetter<boolean>;
     isOpenable?: boolean;
     isCloseable?: boolean;
+    customHeaderButton?: ReactNode;
 }
 
 export interface NavButtonProps {

@@ -1,14 +1,14 @@
 
-import { GameProps } from "@/components/shared/types.shared";
 import { useLoadMapData } from "@/lib/contexts/hooks";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setCurrentCountry } from "@/lib/store/slices/countrySlice";
+import { GameName } from "@/lib/types.lib";
 import {  JSX } from "react"
 import { GeoJSON } from 'react-leaflet';
 
-export const getGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: GameProps): JSX.Element | null => {
-    switch (props.mode) {
-        case 'map':
+export const getGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: GameName): JSX.Element | null => {
+    switch (props) {
+        case 'geo-guess':
             return <GetGuessCountryGeoJson geoData={geoData} />;
         default: return null;
     }
