@@ -6,7 +6,7 @@ export const gamesMap: GamesMap = {
         name: 'Map',
         games: [
             { name: 'Geo Guess', path: 'geo-guess', component: <GeoGuess />},
-            { name: 'Map Master', path: 'map-master', component: <MapMaster />}
+            // { name: 'Map Master', path: 'map-master', component: <MapMaster />}
         ]
     }
 }
