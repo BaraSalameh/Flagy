@@ -18,7 +18,7 @@ export const MapMaster = () => {
                 <WinLose /> */}
                 <Counter />
             </div>
-            <Map mode="map" />
+            <Map game="map-master" />
         </div>
     )
 }
