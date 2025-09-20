@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { decrementCounter, setCounter } from "@/lib/store/slices/generalSlice";
+import { updateCounter, setCounter } from "@/lib/store/slices/generalSlice";
 import { useEffect } from "react"
 
 export const useDetermineCounter = () => {
@@ -9,7 +9,7 @@ export const useDetermineCounter = () => {
 
     useEffect(() => {
         if (currentCountry) {
-            dispatch(decrementCounter());
+            dispatch(updateCounter(-1));
             return;
         }
 
