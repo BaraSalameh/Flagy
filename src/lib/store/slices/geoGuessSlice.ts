@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CountryState } from './types.slices';
 
-const initialState = { gameStarted: false } as CountryState;
+const initialState = {} as CountryState;
 
-const countrySlice = createSlice({
-    name: 'country',
+const geoGuessSlice = createSlice({
+    name: 'geoGuess',
     initialState,
     reducers: {
         setCurrentCountry: (state, action: {payload: CountryState['currentCountry']}) => ({
@@ -19,13 +19,9 @@ const countrySlice = createSlice({
             ...state,
             result: action.payload
         }),
-        setGameStarted: (state, action: {payload: CountryState['gameStarted']}) => ({
-            ...state,
-            gameStarted: action.payload
-        }),
-        clearCountry: () => ({gameStarted: false} as CountryState)
+        clearCountry: () => ({} as CountryState)
     }
 });
 
-export const { setCurrentCountry, setRandomCountry, setResult, clearCountry, setGameStarted } = countrySlice.actions;
-export default countrySlice.reducer;
+export const { setCurrentCountry, setRandomCountry, setResult, clearCountry } = geoGuessSlice.actions;
+export default geoGuessSlice.reducer;

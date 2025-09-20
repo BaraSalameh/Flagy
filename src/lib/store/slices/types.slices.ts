@@ -20,6 +20,7 @@ export interface InfoData {
 export interface GeneralState {
     counter: number;
     difficulty: GameDifficulty;
+    gameStarted: boolean;
 }
 export type GameDifficulty = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
 
@@ -27,5 +28,4 @@ export interface CountryState {
     currentCountry: InfoData['countryName'];
     randomCountry: InfoData['countryName'];
     result: boolean;
-    gameStarted: boolean;
 }

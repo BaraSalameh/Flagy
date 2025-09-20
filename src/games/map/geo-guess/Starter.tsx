@@ -1,7 +1,7 @@
 import { GameDifficultyMenu } from "@/components/shared"
 import { Modal, NavButton, Text } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks"
-import { setGameStarted } from "@/lib/store/slices/countrySlice"
+import { setGameStarted } from "@/lib/store/slices/generalSlice"
 import { File, UndoIcon } from "lucide-react"
 import { redirect } from "next/navigation"
 import { Fragment } from "react"
@@ -9,7 +9,7 @@ import { Fragment } from "react"
 export const Starter = () => {
 
     const dispatch = useAppDispatch();
-    const gameStarted = useAppSelector(state => state.country.gameStarted);
+    const gameStarted = useAppSelector(state => state.general.gameStarted);
 
     return (
         <Modal

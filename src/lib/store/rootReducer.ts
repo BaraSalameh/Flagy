@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 import generalSlice from "./slices/generalSlice";
-import countrySlice from "./slices/countrySlice";
+import geoGuessSlice from "./slices/geoGuessSlice";
 import hintSlice from "./slices/hintSlice";
 
 const rootReducer = combineReducers({
     general: generalSlice,
-    country: countrySlice,
+    geoGuess: geoGuessSlice,
     hint: hintSlice,
 });
 

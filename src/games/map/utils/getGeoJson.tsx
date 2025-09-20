@@ -1,7 +1,7 @@
 
 import { useLoadMapData } from "@/lib/contexts/hooks";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setCurrentCountry } from "@/lib/store/slices/countrySlice";
+import { setCurrentCountry } from "@/lib/store/slices/geoGuessSlice";
 import { GameName } from "@/lib/types.lib";
 import {  JSX } from "react"
 import { GeoJSON } from 'react-leaflet';
@@ -17,8 +17,8 @@ export const getGeoJson = (geoData: ReturnType<typeof useLoadMapData>, props: Ga
 const GetGuessCountryGeoJson = ({ geoData }: {geoData: ReturnType<typeof useLoadMapData>}): JSX.Element | null => {
     const dispatch = useAppDispatch();
 
-    const currentCountry = useAppSelector(state => state.country.currentCountry);
-    const userDidWin = useAppSelector(state => state.country.result);
+    const currentCountry = useAppSelector(state => state.geoGuess.currentCountry);
+    const userDidWin = useAppSelector(state => state.geoGuess.result);
 
     return geoData &&
     <GeoJSON

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { GeneralState } from './types.slices';
 
-const initialState = {} as GeneralState;
+const initialState = { gameStarted: false } as GeneralState;
 
 const generalSlice = createSlice({
     name: 'general',
@@ -19,9 +19,13 @@ const generalSlice = createSlice({
             ...state,
             difficulty: action.payload
         }),
-        clearGeneral: () => ({} as GeneralState)
+        setGameStarted: (state, action: {payload: GeneralState['gameStarted']}) => ({
+            ...state,
+            gameStarted: action.payload
+        }),
+        clearGeneral: () => ({gameStarted: false} as GeneralState)
     }
 });
 
-export const { setCounter, decrementCounter, setDifficulty, clearGeneral } = generalSlice.actions;
+export const { setCounter, decrementCounter, setDifficulty, clearGeneral, setGameStarted } = generalSlice.actions;
 export default generalSlice.reducer;

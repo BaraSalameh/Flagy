@@ -1,17 +1,17 @@
 import { Fragment, useEffect, useState } from "react";
 import { Modal, NavButton, Text } from "@/components/ui";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { clearCountry, setGameStarted, setResult } from "@/lib/store/slices/countrySlice";
+import { clearCountry, setResult } from "@/lib/store/slices/geoGuessSlice";
 import { UndoIcon } from "lucide-react";
-import { clearGeneral } from "@/lib/store/slices/generalSlice";
+import { clearGeneral, setGameStarted } from "@/lib/store/slices/generalSlice";
 import { clearHint } from "@/lib/store/slices/hintSlice";
 
 export const WinLose = () => {
     const dispatch = useAppDispatch();
     const counter = useAppSelector(state => state.general.counter);
-    const randomCountry = useAppSelector(state => state.country.randomCountry);
-    const currentCountry = useAppSelector(state => state.country.currentCountry);
-    const result = useAppSelector(state => state.country.result);
+    const randomCountry = useAppSelector(state => state.geoGuess.randomCountry);
+    const currentCountry = useAppSelector(state => state.geoGuess.currentCountry);
+    const result = useAppSelector(state => state.geoGuess.result);
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ message, setMessage ] = useState<string | undefined>(undefined);
 

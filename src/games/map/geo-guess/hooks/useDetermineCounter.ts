@@ -5,7 +5,7 @@ import { useEffect } from "react"
 export const useDetermineCounter = () => {
     const dispatch = useAppDispatch();
     const difficulty = useAppSelector(state => state.general.difficulty);
-    const currentCountry = useAppSelector(state => state.country.currentCountry);
+    const currentCountry = useAppSelector(state => state.geoGuess.currentCountry);
 
     useEffect(() => {
         if (currentCountry) {

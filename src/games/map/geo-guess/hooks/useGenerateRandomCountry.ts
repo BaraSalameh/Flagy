@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setInformations } from "@/lib/store/slices/hintSlice"
 import { InfoData } from "@/lib/store/slices/types.slices";
-import { setRandomCountry } from "@/lib/store/slices/countrySlice";
+import { setRandomCountry } from "@/lib/store/slices/geoGuessSlice";
 
 export const useGenerateRandomCountry = () => {
     const dispatch = useAppDispatch();

@@ -8,7 +8,7 @@ export const Hint = () => {
     const dispatch = useAppDispatch();
     const general = useAppSelector(state => state.general);
     const hintState = useAppSelector(state => state.hint);
-    const userDidWin = useAppSelector(state => state.country.result);
+    const userDidWin = useAppSelector(state => state.geoGuess.result);
 
     const [ isModalOpen, setIsModalOpen ] = useState(false);
 
