@@ -8,6 +8,7 @@ import { clearMapMaster, setResult } from "@/lib/store/slices/mapMasterSlice";
 export const WinLose = () => {
     const dispatch = useAppDispatch();
     const counter = useAppSelector(state => state.mapMaster.counter);
+    const generalCounter = useAppSelector(state => state.general.counter);
     const result = useAppSelector(state => state.mapMaster.result);
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ message, setMessage ] = useState<string | undefined>(undefined);
@@ -22,7 +23,12 @@ export const WinLose = () => {
             dispatch(setResult(true));
             setMessage(`🚀 Good job! Keep it up!`)
         }
-    }, [counter, dispatch]);
+
+        if (generalCounter === 20) {
+            dispatch(setResult(false));
+            setMessage(`😅 You need to be smarter!`);
+        }
+    }, [counter, generalCounter, dispatch]);
 
     useEffect(() => {
         setIsModalOpen(message ? true : false);

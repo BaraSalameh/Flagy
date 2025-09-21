@@ -587,7 +587,7 @@
     "region": "North America",
     "area": 9984670,
     "borders": [
-      "United States"
+      "United States of America"
     ],
     "languages": [
       "English",
@@ -2165,7 +2165,7 @@
     "borders": [
       "Belize",
       "Guatemala",
-      "United States"
+      "United States of America"
     ],
     "languages": [
       "Spanish"
@@ -3594,7 +3594,7 @@
   },
   "US": {
     "countryCode": "US",
-    "countryName": "United States",
+    "countryName": "United States of America",
     "currencyCode": "USD",
     "population": "310232863",
     "capital": "Washington",
