@@ -1,11 +1,12 @@
 import { useLoadInfoData } from "@/lib/contexts/hooks/useLoadMapData";
 import { useAppSelector } from "@/lib/store/hooks";
+import { InfoData } from "@/lib/store/slices/types.slices";
 import { RootState } from "@/lib/store/store";
 
 export const getRandomCountry = (
     info: ReturnType<typeof useLoadInfoData>,
     difficulty?: ReturnType<typeof useAppSelector<RootState['general']['difficulty']>>
-): string | null => {
+): InfoData | null => {
     if (!info) return null;
 
     let candidates = Object.values(info);
@@ -26,5 +27,5 @@ export const getRandomCountry = (
     }
 
     const randomIndex = Math.floor(Math.random() * candidates.length);
-    return candidates[randomIndex].countryName;
+    return candidates[randomIndex];
 };

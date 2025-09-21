@@ -17,7 +17,7 @@ export const useGenerateRandomCountry = () => {
         if (!difficulty || !infoData) return;
 
         if (currentCountry === randomCountry) {
-            const randomCountry = getRandomCountry(infoData, difficulty);
+            const randomCountry = getRandomCountry(infoData, difficulty)?.continentName;
             dispatch(setIsTrueSelection(true));
             dispatch(setRandomCountry(randomCountry as string));
         } else {

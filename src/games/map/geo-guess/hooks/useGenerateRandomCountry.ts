@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setInformations } from "@/lib/store/slices/hintSlice"
 import { InfoData } from "@/lib/store/slices/types.slices";
 import { setRandomCountry } from "@/lib/store/slices/geoGuessSlice";
+import { getRandomCountry } from "../../shared";
 
 export const useGenerateRandomCountry = () => {
     const dispatch = useAppDispatch();
@@ -13,24 +14,22 @@ export const useGenerateRandomCountry = () => {
     useEffect(() => {
         if (difficulty && infoData) {
 
-            const keys = Object.keys(infoData);
-            const randomKey = keys[Math.floor(Math.random() * keys.length)];
-            const record = infoData[randomKey as keyof typeof  infoData];
+            const randomCountry = getRandomCountry(infoData, difficulty);
 
             dispatch(setInformations({
-                countryCode: record.countryCode,
-                currencyCode: record.currencyCode,
-                population: record.population,
-                capital: record.capital,
-                continentName: record.continentName,
-                region: record.region,
-                area: record.area,
-                borders: record.borders,
-                languages: record.languages,
-                flag: record.flag
+                countryCode: randomCountry?.countryCode,
+                currencyCode: randomCountry?.currencyCode,
+                population: randomCountry?.population,
+                capital: randomCountry?.capital,
+                continentName: randomCountry?.continentName,
+                region: randomCountry?.region,
+                area: randomCountry?.area,
+                borders: randomCountry?.borders,
+                languages: randomCountry?.languages,
+                flag: randomCountry?.flag
             } as InfoData));
             
-            dispatch(setRandomCountry(record.countryName))
+            dispatch(setRandomCountry(randomCountry?.countryName as string));
         }
     }, [infoData, difficulty, dispatch]);
 }
