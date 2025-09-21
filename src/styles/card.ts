@@ -1,7 +1,7 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const card = cva(
-    'max-w-sm w-full rounded-2xl shadow-md p-4 flex flex-col gap-4 transition hover:shadow-xl',
+    'max-w-sm w-full rounded-2xl shadow-md flex flex-col gap-4 transition hover:shadow-xl',
     {
         variants: {
             subComponent: {
@@ -11,11 +11,20 @@ export const card = cva(
             scrollable: {
                 true: 'overflow-auto scrollbar-hide max-h-[40vh] sm:max-h-[90vh]',
                 false: null
+            },
+            padding: {
+                none: null,
+                xs: 'p-1',
+                sm: 'p-2',
+                md: 'p-3',
+                lg: 'p-4',
+                xl: 'p-5'
             }
         },
         defaultVariants: {
             subComponent: false,
-            scrollable: true
+            scrollable: true,
+            padding: 'md'
         }
     }
 );

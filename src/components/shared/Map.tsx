@@ -2,13 +2,12 @@
 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer } from 'react-leaflet';
-import { getGeoJson } from '@/games/map/utils';
+import { GeoJsonRenderer } from '@/games/map/shared';
 import { useLoadMapData } from '@/lib/contexts/hooks';
 import { MapProps } from './types.shared';
 
 export const Map = (props: MapProps) => {
     const geoData = useLoadMapData();
-    const geoJSON = getGeoJson(geoData, props.game);
 
     return (
         <MapContainer
@@ -27,7 +26,7 @@ export const Map = (props: MapProps) => {
             maxBoundsViscosity={1.0}
             className="h-full w-full"
         >
-            {geoJSON}
+            <GeoJsonRenderer geoData={geoData} game={props.game} />
         </MapContainer>
     );
 };

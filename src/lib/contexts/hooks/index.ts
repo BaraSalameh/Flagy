@@ -1,2 +1,2 @@
-export { useLoadGeoData, useLoadInfoData } from './useLoadGeoData';
+export { useFetchGeoData, useFetchInfoData } from './useLoadGeoData';
 export { useLoadMapData } from './useLoadMapData'

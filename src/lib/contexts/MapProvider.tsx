@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, ReactNode } from "react";
-import { useLoadGeoData, useLoadInfoData } from "./hooks/useLoadGeoData";
+import { useFetchGeoData, useFetchInfoData } from "./hooks/useLoadGeoData";
 import { MapContextType } from "./types.context";
 
 type Props = { children: ReactNode };
@@ -13,8 +13,8 @@ export const MapContext = createContext<MapContextType>({
 
 export const MapProvider = ({ children }: Props) => {
 
-    const map = useLoadGeoData();
-    const info = useLoadInfoData();
+    const map = useFetchGeoData();
+    const info = useFetchInfoData();
 
     return (
         <MapContext.Provider value={{ map, info }}>

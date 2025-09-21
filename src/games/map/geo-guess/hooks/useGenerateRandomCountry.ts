@@ -1,4 +1,4 @@
-import { useLoadInfoData } from "@/lib/contexts/hooks";
+import { useLoadInfoData } from "@/lib/contexts/hooks/useLoadMapData";
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setInformations } from "@/lib/store/slices/hintSlice"

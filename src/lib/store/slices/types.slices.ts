@@ -29,3 +29,8 @@ export interface CountryState {
     randomCountry: InfoData['countryName'];
     result: boolean;
 }
+
+export interface MapMasterState extends CountryState {
+    counter: number;
+    isTrueSelection: boolean;
+}

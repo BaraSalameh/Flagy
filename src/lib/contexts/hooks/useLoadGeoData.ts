@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { FeatureCollection, Geometry, GeoJsonProperties } from 'geojson';
 import { InfoData } from "@/lib/store/slices/types.slices";
 
-export const useLoadGeoData = () => {
+export const useFetchGeoData = () => {
     const [geoData, setGeoData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | null>(null);
     
     useEffect(() => {
@@ -16,7 +16,7 @@ export const useLoadGeoData = () => {
     return geoData;
 }
 
-export const useLoadInfoData = () => {
+export const useFetchInfoData = () => {
     const [infoData, setInfoData] = useState<Record<string, InfoData> | null>(null);
     
     useEffect(() => {
