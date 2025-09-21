@@ -55,7 +55,7 @@
     "borders": [
       "Montenegro",
       "Greece",
-      "Macedonia",
+      "North Macedonia",
       "UNK"
     ],
     "languages": [
@@ -311,7 +311,7 @@
     "region": "Southern Asia",
     "area": 147570,
     "borders": [
-      "Myanmar [Burma]",
+      "Myanmar",
       "India"
     ],
     "languages": [
@@ -330,7 +330,7 @@
     "area": 110879,
     "borders": [
       "Greece",
-      "Macedonia",
+      "North Macedonia",
       "Romania",
       "Serbia",
       "Turkey"
@@ -650,7 +650,7 @@
     "borders": [
       "Afghanistan",
       "Bhutan",
-      "Myanmar [Burma]",
+      "Myanmar",
       "HKG",
       "India",
       "Kazakhstan",
@@ -1368,7 +1368,7 @@
       "Albania",
       "Bulgaria",
       "Turkey",
-      "Macedonia"
+      "North Macedonia"
     ],
     "languages": [
       "Greek"
@@ -1541,7 +1541,7 @@
     "borders": [
       "Bangladesh",
       "Bhutan",
-      "Myanmar [Burma]",
+      "Myanmar",
       "China",
       "Nepal",
       "Pakistan"
@@ -1866,7 +1866,7 @@
     "region": "South-Eastern Asia",
     "area": 236800,
     "borders": [
-      "Myanmar [Burma]",
+      "Myanmar",
       "Cambodia",
       "China",
       "Thailand",
@@ -2190,7 +2190,7 @@
   },
   "MK": {
     "countryCode": "MK",
-    "countryName": "Macedonia",
+    "countryName": "North Macedonia",
     "currencyCode": "MKD",
     "population": "2062294",
     "capital": "Skopje",
@@ -2205,9 +2205,30 @@
       "Serbia"
     ],
     "languages": [
-      "Macedonian"
+      "North Macedonian"
     ],
     "flag": "🇲🇰"
+  },
+  "XK": {
+    "countryCode": "XK",
+    "countryName": "Kosovo",
+    "currencyCode": "EUR",
+    "population": "1775378",
+    "capital": "Pristina",
+    "continentName": "Europe",
+    "region": "Southeast Europe",
+    "area": 10887,
+    "borders": [
+      "Albania",
+      "North Macedonia",
+      "Montenegro",
+      "Serbia"
+    ],
+    "languages": [
+      "Albanian",
+      "Serbian"
+    ],
+    "flag": "🇽🇰"
   },
   "ML": {
     "countryCode": "ML",
@@ -2250,7 +2271,7 @@
   },
   "MM": {
     "countryCode": "MM",
-    "countryName": "Myanmar [Burma]",
+    "countryName": "Myanmar",
     "currencyCode": "MMK",
     "population": "53414374",
     "capital": "Naypyitaw",
@@ -3076,7 +3097,7 @@
       "Croatia",
       "Hungary",
       "UNK",
-      "Macedonia",
+      "North Macedonia",
       "Montenegro",
       "Romania"
     ],
@@ -3309,7 +3330,7 @@
     "region": "South-Eastern Asia",
     "area": 513120,
     "borders": [
-      "Myanmar [Burma]",
+      "Myanmar",
       "Cambodia",
       "Laos",
       "Malaysia"
