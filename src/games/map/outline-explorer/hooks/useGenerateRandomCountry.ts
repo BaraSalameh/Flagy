@@ -1,24 +1,27 @@
 import { useLoadInfoData } from "@/lib/contexts/hooks/useLoadMapData";
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setIsTrueSelection, setRandomCountry } from "@/lib/store/slices/mapMasterSlice";
+import { setIsTrueSelection, setRandomCountry } from "@/lib/store/slices/outlineExplorerSlice";
 import { getRandomCountry } from "../../shared";
 
 export const useGenerateRandomCountry = () => {
     const dispatch = useAppDispatch();
     const infoData = useLoadInfoData();
     const difficulty = useAppSelector(state => state.general.difficulty);
-    const mapMasterState = useAppSelector(state => state.mapMaster);
-    const currentCountry = mapMasterState.currentCountry;
-    const randomCountry = mapMasterState.randomCountry;
+
+    const outlineExplorerState = useAppSelector(state => state.outlineExplorer);
+    const currentCountry = outlineExplorerState.currentCountry;
+    const randomCountry = outlineExplorerState.randomCountry;
 
     useEffect(() => {
         if (!difficulty || !infoData) return;
 
         if (currentCountry === randomCountry) {
             const randomCountry = getRandomCountry(infoData, difficulty)?.countryName;
-            dispatch(setIsTrueSelection(true));
             dispatch(setRandomCountry(randomCountry as string));
+            if (currentCountry && randomCountry) {
+                dispatch(setIsTrueSelection(true));
+            }
         } else {
             dispatch(setIsTrueSelection(false));
         }
