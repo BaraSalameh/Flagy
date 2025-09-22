@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
 import { MapProvider, ReduxProvider } from '@/lib/contexts';
+import Image from 'next/image';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -23,6 +24,11 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: ReactNode })  => 
     <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <Image
+                src='/earth.avif'
+                alt='Earth image'
+                fill
+            />
             <ReduxProvider>
                 <MapProvider>
                     {children}
