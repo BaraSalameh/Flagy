@@ -34,3 +34,8 @@ export interface MapMasterState extends CountryState {
     counter: number;
     isTrueSelection: boolean;
 }
+
+export interface OutlineExplorerState extends CountryState {
+    counter: number;
+    isTrueSelection: boolean;
+}

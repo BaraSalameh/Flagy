@@ -11,6 +11,8 @@ export const GeoJsonRenderer = ({geoData, game}: {geoData: ReturnType<typeof use
             return <GetGuessCountryGeoJson geoData={geoData} />;
         case 'map-master':
             return <GetMapMasterGeoJson geoData={geoData} />;
+        case 'outline-explorer':
+            return <GetOutlineExplorerGeoJson geoData={geoData} />;
         default: return null;
     }
 }
@@ -48,6 +50,39 @@ const GetGuessCountryGeoJson = ({ geoData }: {geoData: ReturnType<typeof useLoad
 }
 
 const GetMapMasterGeoJson = ({ geoData }: {geoData: ReturnType<typeof useLoadMapData>}) => {
+    const dispatch = useAppDispatch();
+
+    const mapMasterState = useAppSelector(state => state.mapMaster);
+    const currentCountry = mapMasterState.currentCountry;
+    const isTrueSelection = mapMasterState.isTrueSelection;
+
+    return geoData &&
+    <GeoJSON
+        data={geoData}
+        style={(feature) => {
+            const countryName = feature?.properties?.name;
+            const isSelected = countryName === currentCountry;
+
+            return {
+                fillColor: isSelected ? isTrueSelection ? 'green' : 'red' : '#f5f5f5',
+                fillOpacity: isSelected ? 0.7 : 1,
+                color: isSelected ? isTrueSelection ? 'green' : 'red' : '#666',
+                weight: isSelected ? 2 : 1,
+            };
+        }}
+        onEachFeature={(feature, layer) => {
+            if (feature.properties?.name) {
+                layer.on('click', (e) => {
+                    const countryName = feature.properties.name;
+                    dispatch(MMCC(countryName));
+                    layer.bindPopup(`${countryName}`).openPopup(e.latlng);
+                });
+            }
+        }}
+    />
+}
+
+const GetOutlineExplorerGeoJson = ({ geoData }: {geoData: ReturnType<typeof useLoadMapData>}) => {
     const dispatch = useAppDispatch();
 
     const mapMasterState = useAppSelector(state => state.mapMaster);

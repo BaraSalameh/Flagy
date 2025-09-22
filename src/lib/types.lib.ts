@@ -19,4 +19,4 @@ export interface Game {
     component: React.ReactNode;
 }
 export type GameName = MapGameName;
-export type MapGameName = 'geo-guess' | 'map-master';
+export type MapGameName = 'geo-guess' | 'map-master' | 'outline-explorer';
