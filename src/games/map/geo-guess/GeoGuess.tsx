@@ -12,13 +12,13 @@ export const GeoGuess = () => {
       
     return (
         <div className="h-screen">
-            <div className="fixed h-screen left-5 flex items-center z-1000">
+            <Map game="geo-guess" />
+            <div className="fixed h-screen left-5 flex items-center">
                 <Starter />
                 <Hint />
                 <WinLose />
                 <Counter />
             </div>
-            <Map game="geo-guess" />
         </div>
     )
 }

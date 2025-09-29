@@ -24,7 +24,7 @@ export const Map = (props: MapProps) => {
                 [90, 180]
             ]}
             maxBoundsViscosity={1.0}
-            className="h-full w-full"
+            className="h-full w-full z-0"
         >
             <GeoJsonRenderer geoData={geoData} game={props.game} />
         </MapContainer>
