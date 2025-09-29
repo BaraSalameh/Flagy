@@ -16,15 +16,15 @@ export const MapMaster = () => {
     const rc = useAppSelector(state => state.mapMaster.randomCountry);
     return (
         <div className="h-screen flex justify-center">
-            <div className="fixed w-fit top-5 flex justify-center z-1000">
+            <Map game="map-master" />
+            <div className="fixed w-fit top-5 flex justify-center">
                 <ProgressTracker counter={counter} maxCounter={20} content={<Text position='center' size='sm'>Where is {rc}?</Text>} />
             </div>
-            <div className="fixed h-screen left-5 flex items-center z-1000">
+            <div className="fixed h-screen left-5 flex items-center">
                 <Starter />
                 <WinLose />
                 <Counter />
             </div>
-            <Map game="map-master" />
         </div>
     )
 }
