@@ -1,12 +1,7 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { Text } from "../ui";
 import { card } from "@/styles";
-
-interface ProgressProps {
-    counter: number;      // remaining attempts, steps, or time
-    maxCounter: number;   // starting value (finish line)
-    content?: ReactNode
-}
+import { ProgressProps } from "./types.shared";
 
 export const ProgressTracker = ({ counter, maxCounter, content }: ProgressProps) => {
     const progress = (counter / maxCounter) * 100;
