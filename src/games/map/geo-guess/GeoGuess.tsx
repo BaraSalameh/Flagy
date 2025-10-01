@@ -11,14 +11,12 @@ export const GeoGuess = () => {
     useDetermineCounter();
       
     return (
-        <div className="h-screen">
+        <div className="relative h-screen w-screen">
             <Map game="geo-guess" />
-            <div className="fixed h-screen left-5 flex items-center">
-                <Starter />
-                <Hint />
-                <WinLose />
-                <Counter />
-            </div>
+            <Starter />
+            <Hint />
+            <WinLose />
+            <Counter />
         </div>
     )
 }

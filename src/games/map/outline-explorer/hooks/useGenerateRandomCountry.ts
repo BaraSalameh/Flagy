@@ -1,9 +1,8 @@
 import { useLoadInfoData } from "@/lib/contexts/hooks/useLoadMapData";
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setIsTrueSelection, setRandomCountries } from "@/lib/store/slices/outlineExplorerSlice";
 import { getRandomCountry } from "../../shared";
-import { setRandomCountry } from "@/lib/store/slices/outlineExplorerSlice";
+import { setRandomCountries, setRandomCountry } from "@/lib/store/slices/outlineExplorerSlice";
 
 export const useGenerateRandomCountry = () => {
     const dispatch = useAppDispatch();
@@ -18,14 +17,10 @@ export const useGenerateRandomCountry = () => {
         if (!difficulty || !infoData) return;
 
         if (currentCountry === randomCountry) {
-            const randomCountries = getRandomCountry(infoData, difficulty, 4).map(info => info.countryName);
+            const difficultyThreshold = difficulty === 'Beginner' ? 4 : difficulty === 'Expert' ? 6 : 5;
+            const randomCountries = getRandomCountry(infoData, difficulty, difficultyThreshold).map(info => info.countryName);
             dispatch(setRandomCountries(randomCountries));
             dispatch(setRandomCountry(randomCountries[Math.floor(Math.random() * randomCountries.length)]))
-            if (currentCountry && randomCountry) {
-                dispatch(setIsTrueSelection(true));
-            }
-        } else {
-            dispatch(setIsTrueSelection(false));
         }
-    }, [infoData, difficulty, currentCountry, dispatch]);
+    }, [infoData, difficulty, currentCountry, randomCountry, dispatch]);
 }

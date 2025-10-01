@@ -6,11 +6,13 @@ export const Counter = () => {
     const counter = useAppSelector(state => state.general.counter);
 
     return(
-        <NavButton
-            label={`${counter}`}
-            hoverable={false}
-            icon={Clock}
-            onClick={() => {}}
-        />
+        <div className="absolute top-[50%] translate-y-[-50%] left-[5%] flex items-center">
+            <NavButton
+                label={`${counter}`}
+                hoverable={false}
+                icon={Clock}
+                onClick={() => {}}
+            />
+        </div>
     )
 }

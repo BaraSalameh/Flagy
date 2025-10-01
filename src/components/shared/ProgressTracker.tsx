@@ -18,26 +18,28 @@ export const ProgressTracker = ({ counter, maxCounter, content }: ProgressProps)
     }
 
     return (
-        <div className={card()}>
-            <div className={card({ subComponent: true, padding: 'none' })}>
-                <div
-                    className={`h-4 rounded-full transition-all duration-300 ${
-                        progress > 70
-                        ? "bg-green-500"
-                        : progress > 40
-                        ? "bg-yellow-500"
-                        : "bg-red-500"
-                    }`}
-                    style={{ width: `${progress}%` }}
-                />
+        <div className="absolute top-[5%] left-[50%] translate-x-[-50%]">
+            <div className={card()}>
+                <div className={card({ subComponent: true, padding: 'none' })}>
+                    <div
+                        className={`h-4 rounded-full transition-all duration-300 ${
+                            progress > 70
+                            ? "bg-green-500"
+                            : progress > 40
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                        }`}
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
+                <Text size='xs' position='center'>
+                    {status}
+                </Text>
+                <Text position='center' size='xs'>
+                    {counter} / {maxCounter} points
+                </Text>
+                {content}
             </div>
-            <Text size='xs' position='center'>
-                {status}
-            </Text>
-            <Text position='center' size='xs'>
-                {counter} / {maxCounter} points
-            </Text>
-            {content}
         </div>
     );
 };

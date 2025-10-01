@@ -37,6 +37,5 @@ export interface MapMasterState extends CountryState {
 
 export interface OutlineExplorerState extends CountryState {
     counter: number;
-    isTrueSelection: boolean;
     randomCountries: InfoData['countryName'][],
 }

@@ -27,13 +27,9 @@ const outlineExplorerSlice = createSlice({
             ...state,
             result: action.payload
         }),
-        setIsTrueSelection: (state, action: {payload: OutlineExplorerState['isTrueSelection']}) => ({
-            ...state,
-            isTrueSelection: action.payload
-        }),
-        clearMapMaster: () => ({ counter: 10 } as OutlineExplorerState)
+        clearOutlineExplorer: () => ({ counter: 10 } as OutlineExplorerState)
     }
 });
 
-export const { setCurrentCountry, setRandomCountries, setRandomCountry, updateCounter, setResult, clearMapMaster, setIsTrueSelection } = outlineExplorerSlice.actions;
+export const { setCurrentCountry, setRandomCountries, setRandomCountry, updateCounter, setResult, clearOutlineExplorer } = outlineExplorerSlice.actions;
 export default outlineExplorerSlice.reducer;
