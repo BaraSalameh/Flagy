@@ -14,7 +14,7 @@ export const useGenerateRandomCountry = () => {
     useEffect(() => {
         if (difficulty && infoData) {
 
-            const randomCountry = getRandomCountry(infoData, difficulty);
+            const randomCountry = getRandomCountry(infoData, difficulty)[0];
 
             dispatch(setInformations({
                 countryCode: randomCountry?.countryCode,

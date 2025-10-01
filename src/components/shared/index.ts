@@ -7,3 +7,4 @@ export const Map = dynamic(() => import('@/components/shared/Map').then((mod) =>
 export { GameDifficultyMenu } from './GameDifficultyMenu';
 export { Counter } from './Counter';
 export { ProgressTracker } from './ProgressTracker';
+export { CountryMenu } from './CountryMenu';

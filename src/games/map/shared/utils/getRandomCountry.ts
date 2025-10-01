@@ -5,9 +5,10 @@ import { RootState } from "@/lib/store/store";
 
 export const getRandomCountry = (
     info: ReturnType<typeof useLoadInfoData>,
-    difficulty?: ReturnType<typeof useAppSelector<RootState['general']['difficulty']>>
-): InfoData | null => {
-    if (!info) return null;
+    difficulty?: ReturnType<typeof useAppSelector<RootState['general']['difficulty']>>,
+    count: number = 1
+): InfoData[] => {
+    if (!info) return [];
 
     let candidates = Object.values(info);
     
@@ -21,11 +22,12 @@ export const getRandomCountry = (
         candidates = candidates.filter(c => c.area > thresholds[difficulty]);
     }
 
-    if (candidates.length === 0) {
-        console.warn("No candidates match the difficulty filter.");
-        return null;
+    // shuffle candidates (Fisher–Yates)
+    for (let i = candidates.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
     }
 
-    const randomIndex = Math.floor(Math.random() * candidates.length);
-    return candidates[randomIndex];
+    // return up to `count` items
+    return candidates.slice(0, count);
 };

@@ -15,6 +15,10 @@ const outlineExplorerSlice = createSlice({
             ...state,
             randomCountry: action.payload
         }),
+        setRandomCountries: (state, action: {payload: OutlineExplorerState['randomCountries']}) => ({
+            ...state,
+            randomCountries: action.payload
+        }),
         updateCounter: (state, action: {payload: OutlineExplorerState["counter"]}) => ({
             ...state,
             counter: state.counter + action.payload
@@ -31,5 +35,5 @@ const outlineExplorerSlice = createSlice({
     }
 });
 
-export const { setCurrentCountry, setRandomCountry, updateCounter, setResult, clearMapMaster, setIsTrueSelection } = outlineExplorerSlice.actions;
+export const { setCurrentCountry, setRandomCountries, setRandomCountry, updateCounter, setResult, clearMapMaster, setIsTrueSelection } = outlineExplorerSlice.actions;
 export default outlineExplorerSlice.reducer;
