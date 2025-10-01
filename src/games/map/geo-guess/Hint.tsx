@@ -2,40 +2,40 @@ import { Modal, Text } from "@/components/ui"
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks"
 import { RootState } from "@/lib/store/store"
-import { setHint } from "@/lib/store/slices/hintSlice"
+import { setHintMessage } from "@/lib/store/slices/geoGuessSlice"
 
 export const Hint = () => {
     const dispatch = useAppDispatch();
-    const general = useAppSelector(state => state.general);
-    const hintState = useAppSelector(state => state.hint);
-    const userDidWin = useAppSelector(state => state.geoGuess.result);
+    const generalState = useAppSelector(state => state.general);
+    const counter = generalState.counter;
+    const difficulty = generalState.difficulty;
+    const result = generalState.result;
+
+    const geoGuessState = useAppSelector(state => state.geoGuess);
+    const hintInformation = geoGuessState.hint?.information;
+    const hintMessage = geoGuessState.hint?.message;
 
     const [ isModalOpen, setIsModalOpen ] = useState(false);
 
-    const counter = general.counter;
-    const difficulty = general.difficulty;
-    const information = hintState.information;
-    const hint = hintState.hint;
-
     useEffect(() => {
-        if (counter && difficulty && information && !userDidWin) {
-            dispatch(setHint(fillHint(difficulty, counter, information)));
+        if (counter && difficulty && hintInformation && !result) {
+            dispatch(setHintMessage(fillHint(difficulty, counter, hintInformation)));
         }
-    }, [counter, difficulty, information, userDidWin, dispatch]);
+    }, [counter, difficulty, hintInformation, result, dispatch]);
 
     useEffect(() => {
-        setIsModalOpen(!!hint);
-    }, [hint]);
+        setIsModalOpen(!!hintMessage);
+    }, [hintMessage]);
 
     return (
         <Modal
-            subTitle="Hint"
+            subTitle="Hint: Random country"
             modalOpen={isModalOpen}
             setModalOpen={setIsModalOpen}
             isOpenable={false}
             content= {
                 <Text>
-                    {hint}
+                    {hintMessage}
                 </Text>
             }
         />
@@ -45,55 +45,55 @@ export const Hint = () => {
 const fillHint = (
     difficulty: ReturnType<typeof useAppSelector<RootState['general']['difficulty']>>,
     counter: ReturnType<typeof useAppSelector<RootState['general']['counter']>>,
-    information: ReturnType<typeof useAppSelector<RootState['hint']['information']>>
+    hintInformation: ReturnType<typeof useAppSelector<RootState['geoGuess']['hint']['information']>>
 ): string | string[] | undefined => {
-    const population = Number(information.population).toLocaleString("en-US", {notation: "compact"});
-    const area = information.area.toLocaleString("en-US") + " km²";
-    const languages: string | string[] = information.languages.length === 0 ? "A country with no specific language" : information.languages;
-    const neighbors: string | string[] = information.borders.length === 0 ? "A country with no borders" : information.borders;
+    const population = Number(hintInformation.population).toLocaleString("en-US", {notation: "compact"});
+    const area = hintInformation.area.toLocaleString("en-US") + " km²";
+    const languages: string | string[] = hintInformation.languages.length === 0 ? "A country with no specific language" : hintInformation.languages;
+    const neighbors: string | string[] = hintInformation.borders.length === 0 ? "A country with no borders" : hintInformation.borders;
 
     switch (difficulty) {
         case 'Beginner':
-            return counter === 14
+            return counter === 15
             ?   `Population: ${population}`
-            :   counter === 12
+            :   counter === 13
             ?   `Area: ${area}`
-            :   counter === 10
-            ?   `Continent: ${information.continentName}`
-            :   counter === 8
-            ?   `Region: ${information.region}`
-            :   counter === 6
+            :   counter === 11
+            ?   `Continent: ${hintInformation.continentName}`
+            :   counter === 9
+            ?   `Region: ${hintInformation.region}`
+            :   counter === 7
             ?   `Languages: ${languages}`
-            :   counter === 4
+            :   counter === 5
             ?   `Neighbors: ${neighbors}`
-            :   counter === 2 
-            ?   `Capital: ${information.capital}`
+            :   counter === 3 
+            ?   `Capital: ${hintInformation.capital}`
             :   undefined;
 
         case 'Intermediate':
-            return counter === 11
-            ?   `Population: ${information.population}`
-            :   counter === 9
+            return counter === 12
+            ?   `Population: ${population}`
+            :   counter === 10
             ?   `Area: ${area}`
-            :   counter === 7
-            ?   `Continent: ${information.continentName}`
-            :   counter === 5
-            ?   `Region: ${information.region}`
-            :   counter === 3
+            :   counter === 8
+            ?   `Continent: ${hintInformation.continentName}`
+            :   counter === 6
+            ?   `Region: ${hintInformation.region}`
+            :   counter === 4
             ?   `Languages: ${languages}`
-            :   counter === 1
-            ?   `Capital: ${information.capital}`
+            :   counter === 2
+            ?   `Capital: ${hintInformation.capital}`
             :   undefined;
             
         case 'Advanced':
             return counter === 10
-            ?   `Population: ${information.population}`
+            ?   `Population: ${population}`
             :   counter === 8
             ?   `Area: ${area}`
             :   counter === 6
-            ?   `Continent: ${information.continentName}`
+            ?   `Continent: ${hintInformation.continentName}`
             :   counter === 4
-            ?   `Region: ${information.region}`
+            ?   `Region: ${hintInformation.region}`
             :   counter === 2
             ?   `Languages: ${languages}`
             :   undefined;
@@ -104,9 +104,9 @@ const fillHint = (
             :   counter === 5
             ?   `Area: ${area}`
             :   counter === 3
-            ?   `Continent: ${information.continentName}`
+            ?   `Continent: ${hintInformation.continentName}`
             :   counter === 1
-            ?   `Region: ${information.region}`
+            ?   `Region: ${hintInformation.region}`
             :   undefined;
     }
 }

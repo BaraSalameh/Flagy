@@ -23,9 +23,13 @@ const generalSlice = createSlice({
             ...state,
             gameStarted: action.payload
         }),
+        setResult: (state, action: {payload: GeneralState['result']}) => ({
+            ...state,
+            result: action.payload
+        }),
         clearGeneral: () => ({gameStarted: false} as GeneralState)
     }
 });
 
-export const { setCounter, updateCounter, setDifficulty, clearGeneral, setGameStarted } = generalSlice.actions;
+export const { setCounter, updateCounter, setDifficulty, clearGeneral, setGameStarted, setResult } = generalSlice.actions;
 export default generalSlice.reducer;

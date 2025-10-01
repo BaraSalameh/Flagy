@@ -4,10 +4,10 @@ import { useLoadMapData } from "@/lib/contexts/hooks";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setCurrentCountry } from "@/lib/store/slices/geoGuessSlice";
 import { setCurrentCountry as MMCC } from "@/lib/store/slices/mapMasterSlice";
-import { GameName } from "@/lib/types.lib";
 import { useEffect, useRef } from 'react';
+import { GeoJsonRendererProps } from "./types.sharedGameComponents";
 
-export const GeoJsonRenderer = ({geoData, game}: {geoData: ReturnType<typeof useLoadMapData>; game: GameName}) => {
+export const GeoJsonRenderer = ({geoData, game}: GeoJsonRendererProps) => {
     switch (game) {
         case 'geo-guess':
             return <GetGuessCountryGeoJson geoData={geoData} />;
@@ -23,7 +23,7 @@ const GetGuessCountryGeoJson = ({ geoData }: {geoData: ReturnType<typeof useLoad
     const dispatch = useAppDispatch();
 
     const currentCountry = useAppSelector(state => state.geoGuess.currentCountry);
-    const userDidWin = useAppSelector(state => state.geoGuess.result);
+    const userDidWin = useAppSelector(state => state.general.result);
 
     if (!geoData) return null;
     return <GeoJSON

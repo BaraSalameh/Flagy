@@ -1,8 +1,3 @@
-export interface HintState {
-    information: InfoData;
-    hint: string | string[] | undefined;
-}
-
 export interface InfoData {
     countryCode: string;
     countryName: string;
@@ -21,8 +16,19 @@ export interface GeneralState {
     counter: number;
     difficulty: GameDifficulty;
     gameStarted: boolean;
+    result: boolean;
 }
 export type GameDifficulty = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+
+export interface GeoGuessState {
+    currentCountry: InfoData['countryName'];
+    randomCountry: InfoData['countryName'];
+    hint: Hint;
+}
+type Hint = {
+    information: InfoData;
+    message: string | string[] | undefined;
+}
 
 export interface CountryState {
     currentCountry: InfoData['countryName'];

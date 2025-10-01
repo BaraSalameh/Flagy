@@ -1,27 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CountryState } from './types.slices';
+import { GeoGuessState } from './types.slices';
 
-const initialState = {} as CountryState;
+const initialState = {} as GeoGuessState;
 
 const geoGuessSlice = createSlice({
     name: 'geoGuess',
     initialState,
     reducers: {
-        setCurrentCountry: (state, action: {payload: CountryState['currentCountry']}) => ({
+        setCurrentCountry: (state, action: {payload: GeoGuessState['currentCountry']}) => ({
             ...state,
             currentCountry: action.payload
         }),
-        setRandomCountry: (state, action: {payload: CountryState['randomCountry']}) => ({
+        setRandomCountry: (state, action: {payload: GeoGuessState['randomCountry']}) => ({
             ...state,
             randomCountry: action.payload
         }),
-        setResult: (state, action: {payload: CountryState['result']}) => ({
+        setHintInformations: (state, action: {payload: GeoGuessState['hint']['information']}) => ({
             ...state,
-            result: action.payload
+            hint: {
+                ...state.hint,
+                information: action.payload
+            }
         }),
-        clearCountry: () => ({} as CountryState)
+        setHintMessage: (state, action: {payload: GeoGuessState['hint']['message']}) => ({
+            ...state,
+            hint: {
+                ...state.hint,
+                message: action.payload
+            }
+        }),
+        clearGeoGuess: () => ({} as GeoGuessState)
     }
 });
 
-export const { setCurrentCountry, setRandomCountry, setResult, clearCountry } = geoGuessSlice.actions;
+export const { setCurrentCountry, setRandomCountry, setHintInformations, setHintMessage, clearGeoGuess } = geoGuessSlice.actions;
 export default geoGuessSlice.reducer;

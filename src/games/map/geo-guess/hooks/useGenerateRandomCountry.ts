@@ -1,7 +1,7 @@
 import { useLoadInfoData } from "@/lib/contexts/hooks/useLoadMapData";
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setInformations } from "@/lib/store/slices/hintSlice"
+import { setHintInformations } from "@/lib/store/slices/geoGuessSlice"
 import { InfoData } from "@/lib/store/slices/types.slices";
 import { setRandomCountry } from "@/lib/store/slices/geoGuessSlice";
 import { getRandomCountry } from "../../shared";
@@ -16,7 +16,7 @@ export const useGenerateRandomCountry = () => {
 
             const randomCountry = getRandomCountry(infoData, difficulty)[0];
 
-            dispatch(setInformations({
+            dispatch(setHintInformations({
                 countryCode: randomCountry?.countryCode,
                 currencyCode: randomCountry?.currencyCode,
                 population: randomCountry?.population,
