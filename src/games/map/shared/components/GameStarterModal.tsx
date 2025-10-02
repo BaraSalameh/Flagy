@@ -7,14 +7,14 @@ import { redirect } from "next/navigation"
 import { Fragment } from "react"
 import { GameStarterModalProps } from "./types.sharedGameComponents"
 
-export const GameStarterModal = ({ description }: GameStarterModalProps) => {
+export const GameStarterModal = ({ title = 'Description', description }: GameStarterModalProps) => {
 
     const dispatch = useAppDispatch();
     const gameStarted = useAppSelector(state => state.general.gameStarted);
 
     return (
         <Modal
-            subTitle="Game description"
+            subTitle={title}
             modalOpen={!gameStarted}
             isOpenable={false}
             closeOnOutsideClick={false}

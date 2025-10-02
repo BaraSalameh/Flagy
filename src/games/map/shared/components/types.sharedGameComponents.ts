@@ -8,6 +8,7 @@ export interface GeoJsonRendererProps {
 }
 
 export interface GameStarterModalProps {
+    title?: string;
     description: string;
 }
 

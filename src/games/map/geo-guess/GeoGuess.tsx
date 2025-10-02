@@ -33,6 +33,7 @@ export const GeoGuess = () => {
         <div className="relative h-screen w-screen">
             <Map game="geo-guess" />
             <GameStarterModal
+                title="Geo Guess"
                 description={`A country has been randomly selected. Choose your difficulty level and use the hints to guess the country before your counter reaches zero.\n\nSharpen your geography skills with each move!`}
             />
             <Hint />
