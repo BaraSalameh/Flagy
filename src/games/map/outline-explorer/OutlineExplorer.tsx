@@ -1,26 +1,42 @@
 'use client';
 
 import { Counter, CountryMenu, Map, ProgressTracker } from "@/components/shared";
-import { useDetermineOutlineExplorerCounter, useGenerateRandomCountry } from "./hooks";
+import { useGenerateRandomCountry } from "./hooks";
 import { useAppSelector } from "@/lib/store/hooks";
-import { clearOutlineExplorer, setCurrentCountry } from "@/lib/store/slices/outlineExplorerSlice";
+import { clearOutlineExplorer, setCounter, setCurrentCountry, updateCounter } from "@/lib/store/slices/outlineExplorerSlice";
 import { Text } from "@/components/ui";
 import { GameStarterModal } from "../shared/components/GameStarterModal";
-import { useGeneralCounter } from "../shared/hooks/useGeneralCounter";
+import { useCounter } from "../shared/hooks/useCounter";
 import { GameOverModal } from "../shared/components/GameOverModal";
 
 export const OutlineExplorer = () => {
     const generalState = useAppSelector(state => state.general);
+    const difficulty = generalState.difficulty;
     const generalCounter = generalState.counter;
 
     const outlineExplorerState = useAppSelector(state => state.outlineExplorer);
     const currentCountry = outlineExplorerState.currentCountry;
     const randomCountries = outlineExplorerState.randomCountries;
+    const randomCountry = outlineExplorerState.randomCountry;
     const outlineExplorerCounter = outlineExplorerState.counter;
 
+    const incDicThresholds: Record<typeof difficulty, {increment: number; decrement: number}> = {
+        Beginner: { increment: 4, decrement: -1},
+        Intermediate: { increment: 3, decrement: -2},
+        Advanced: { increment: 2, decrement: -3},
+        Expert: { increment: 1, decrement: -4},
+    }
+
+    const getIncDecThreshold = () =>
+        incDicThresholds[difficulty][
+            randomCountry === currentCountry
+            ? "increment"
+            : "decrement"
+        ]
+    
     useGenerateRandomCountry();
-    useDetermineOutlineExplorerCounter();
-    useGeneralCounter(currentCountry);
+    useCounter(currentCountry, 10, getIncDecThreshold, setCounter, updateCounter);
+    useCounter(currentCountry);
 
     return (
         <div className="relative h-screen w-screen">

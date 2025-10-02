@@ -15,6 +15,10 @@ const mapMasterSlice = createSlice({
             ...state,
             randomCountry: action.payload
         }),
+        setCounter: (state, action: {payload: MapMasterState["counter"]}) => ({
+            ...state,
+            counter: action.payload
+        }),
         updateCounter: (state, action: {payload: MapMasterState["counter"]}) => ({
             ...state,
             counter: state.counter + action.payload
@@ -31,5 +35,5 @@ const mapMasterSlice = createSlice({
     }
 });
 
-export const { setCurrentCountry, setRandomCountry, updateCounter, setResult, clearMapMaster, setIsTrueSelection } = mapMasterSlice.actions;
+export const { setCurrentCountry, setRandomCountry, setCounter, updateCounter, setResult, clearMapMaster, setIsTrueSelection } = mapMasterSlice.actions;
 export default mapMasterSlice.reducer;

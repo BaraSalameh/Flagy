@@ -7,7 +7,7 @@ import { GameOverModal } from "../shared/components/GameOverModal";
 import { useAppSelector } from "@/lib/store/hooks";
 import { clearGeoGuess } from "@/lib/store/slices/geoGuessSlice";
 import { GameStarterModal } from "../shared/components/GameStarterModal";
-import { useGeneralCounter } from "../shared/hooks/useGeneralCounter";
+import { useCounter } from "../shared/hooks/useCounter";
 
 export const GeoGuess = () => {
     const generalState= useAppSelector(state => state.general);
@@ -27,7 +27,7 @@ export const GeoGuess = () => {
     : difficulty === 'Advanced'
         ? 10
     : 7;
-    useGeneralCounter(currentCountry, counterStartIndex, -1);
+    useCounter(currentCountry, counterStartIndex, -1);
 
     return (
         <div className="relative h-screen w-screen">

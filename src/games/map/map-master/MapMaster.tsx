@@ -1,16 +1,17 @@
 'use client';
 
 import { Counter, Map, ProgressTracker } from "@/components/shared";
-import { useGenerateRandomCountry, useDetermineMapMasterCounter } from "./hooks";
+import { useGenerateRandomCountry } from "./hooks";
 import { useAppSelector } from "@/lib/store/hooks";
 import { Text } from "@/components/ui";
 import { GameOverModal } from "../shared/components/GameOverModal";
-import { clearMapMaster } from "@/lib/store/slices/mapMasterSlice";
+import { clearMapMaster, setCounter, updateCounter } from "@/lib/store/slices/mapMasterSlice";
 import { GameStarterModal } from "../shared/components/GameStarterModal";
-import { useGeneralCounter } from "../shared/hooks/useGeneralCounter";
+import { useCounter } from "../shared/hooks/useCounter";
 
 export const MapMaster = () => {
     const generalState = useAppSelector(state => state.general);
+    const difficulty = generalState.difficulty;
     const generalCounter = generalState.counter;
     
     const mapMasterState = useAppSelector(state => state.mapMaster);
@@ -18,9 +19,23 @@ export const MapMaster = () => {
     const currentCountry = mapMasterState.currentCountry;
     const randomCountry = mapMasterState.randomCountry;
 
+    const incDicThresholds: Record<typeof difficulty, {increment: number; decrement: number}> = {
+        Beginner: { increment: 4, decrement: -1},
+        Intermediate: { increment: 3, decrement: -2},
+        Advanced: { increment: 2, decrement: -3},
+        Expert: { increment: 1, decrement: -4},
+    }
+
+    const getIncDecThreshold = () =>
+        incDicThresholds[difficulty][
+            randomCountry === currentCountry
+            ? "increment"
+            : "decrement"
+        ]
+
     useGenerateRandomCountry();
-    useDetermineMapMasterCounter();
-    useGeneralCounter(currentCountry);
+    useCounter(currentCountry);
+    useCounter(currentCountry, 10, getIncDecThreshold, setCounter, updateCounter);
 
     return (
         <div className="relative h-screen w-screen">

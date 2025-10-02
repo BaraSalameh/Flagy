@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { OutlineExplorerState } from './types.slices';
 
-const initialState = { counter: 10 } as OutlineExplorerState;
+const initialState = {} as OutlineExplorerState;
 
 const outlineExplorerSlice = createSlice({
     name: 'outlineExplore',
@@ -19,6 +19,10 @@ const outlineExplorerSlice = createSlice({
             ...state,
             randomCountries: action.payload
         }),
+        setCounter: (state, action: {payload: OutlineExplorerState["counter"]}) => ({
+            ...state,
+            counter: action.payload
+        }),
         updateCounter: (state, action: {payload: OutlineExplorerState["counter"]}) => ({
             ...state,
             counter: state.counter + action.payload
@@ -27,9 +31,9 @@ const outlineExplorerSlice = createSlice({
             ...state,
             result: action.payload
         }),
-        clearOutlineExplorer: () => ({ counter: 10 } as OutlineExplorerState)
+        clearOutlineExplorer: () => ({} as OutlineExplorerState)
     }
 });
 
-export const { setCurrentCountry, setRandomCountries, setRandomCountry, updateCounter, setResult, clearOutlineExplorer } = outlineExplorerSlice.actions;
+export const { setCurrentCountry, setRandomCountries, setRandomCountry, setCounter, updateCounter, setResult, clearOutlineExplorer } = outlineExplorerSlice.actions;
 export default outlineExplorerSlice.reducer;
