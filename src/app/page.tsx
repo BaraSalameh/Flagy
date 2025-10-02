@@ -8,29 +8,30 @@ import { redirect } from "next/navigation";
 import { Fragment, useState } from "react";
 
 const Home = () => {
-    const [ isModalOpen, setIsModalOpen ] = useState(false);
+    redirect('/map');
+    // const [ isModalOpen, setIsModalOpen ] = useState(false);
 
-    const handleClick = (gameCategory: GameCategory['path']) => {
-        setIsModalOpen(false);
-        redirect(`/${gameCategory}`);
-    }
+    // const handleClick = (gameCategory: GameCategory['path']) => {
+    //     setIsModalOpen(false);
+    //     redirect(`/${gameCategory}`);
+    // }
 
-    return(
-        <Modal
-            subTitle="Games Category"
-            modalOpen={!isModalOpen}
-            isOpenable={false}
-            closeOnOutsideClick={false}
-            isCloseable={false}
-            content= {
-                <Fragment>
-                    {Object.entries(gamesMap).map(([key, value], idx) =>
-                        <NavButton key={idx} icon={RedoIcon} label={value.name} hoverable={false} onClick={() => handleClick(key as GameCategory['path'])} />
-                    )}
-                </Fragment>
-            }
-        />
-    )
+    // return(
+    //     <Modal
+    //         subTitle="Games Category"
+    //         modalOpen={!isModalOpen}
+    //         isOpenable={false}
+    //         closeOnOutsideClick={false}
+    //         isCloseable={false}
+    //         content= {
+    //             <Fragment>
+    //                 {Object.entries(gamesMap).map(([key, value], idx) =>
+    //                     <NavButton key={idx} icon={RedoIcon} label={value.name} hoverable={false} onClick={() => handleClick(key as GameCategory['path'])} />
+    //                 )}
+    //             </Fragment>
+    //         }
+    //     />
+    // )
 }
 
 export default Home;

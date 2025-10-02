@@ -25,7 +25,7 @@ const GameCategoryPage = () => {
             isOpenable={false}
             closeOnOutsideClick={false}
             isCloseable={false}
-            customHeaderButton={<NavButton icon={UndoIcon} hoverable={false} onClick={() => redirect('/')} />}
+            // customHeaderButton={<NavButton icon={UndoIcon} hoverable={false} onClick={() => redirect('/')} />}
             content= {
                 <Fragment>
                     

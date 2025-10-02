@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: "Flagy",
-    description: "Countrie and flag puzzles",
+    description: "Country puzzles",
 };
 
 const RootLayout = ({ children }: { children: ReactNode })  => 
