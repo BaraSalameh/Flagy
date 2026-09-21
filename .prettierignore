@@ -1,0 +1,8 @@
+node_modules
+.next
+.next-playwright
+coverage
+test-results
+playwright-report
+public/data/*.json
+package-lock.json
