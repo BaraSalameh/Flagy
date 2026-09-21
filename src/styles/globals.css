@@ -1,58 +1,133 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #f3f8fb;
+    --foreground: #102536;
+    --muted: #5d7280;
+    --surface: #ffffff;
+    --surface-raised: #edf7f8;
+    --surface-muted: #dce9ed;
+    --border: #cfe0e5;
+    --accent: #087e8b;
+    --accent-foreground: #ffffff;
+    --ocean: #2786d8;
+    --teal: #18a999;
+    --coral: #f56b5d;
+    --sun: #f4bb44;
+    --danger: #d64352;
+    --ink: #102536;
+    --focus: rgb(24 169 153 / 0.28);
+    --shadow: rgb(21 64 81 / 0.45);
+    --map-country: #f8fbfc;
+    --map-border: #71909b;
+    --map-selected: #18a999;
+    color-scheme: light;
 }
-
+.dark {
+    --background: #071822;
+    --foreground: #edf8f7;
+    --muted: #9fb7be;
+    --surface: #102834;
+    --surface-raised: #183845;
+    --surface-muted: #244653;
+    --border: #315563;
+    --accent: #42d3be;
+    --accent-foreground: #06252a;
+    --ocean: #5db0ef;
+    --teal: #42d3be;
+    --coral: #ff887c;
+    --sun: #ffd166;
+    --danger: #ff6675;
+    --ink: #06151d;
+    --focus: rgb(66 211 190 / 0.32);
+    --shadow: rgb(0 0 0 / 0.7);
+    --map-country: #173541;
+    --map-border: #5d7e89;
+    --map-selected: #42d3be;
+    color-scheme: dark;
+}
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-muted: var(--muted);
+    --color-surface: var(--surface);
+    --color-surface-raised: var(--surface-raised);
+    --color-surface-muted: var(--surface-muted);
+    --color-border: var(--border);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-ocean: var(--ocean);
+    --color-teal: var(--teal);
+    --color-coral: var(--coral);
+    --color-sun: var(--sun);
+    --color-danger: var(--danger);
+    --color-ink: var(--ink);
+    --color-focus: var(--focus);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+    box-sizing: border-box;
 }
-
-@theme {
-  --color-dark-background: oklch(13% 0.028 261.692); 
-  --color-light-background: oklch(98.5% 0 0);
-
-  --color-dark-component: oklch(21% 0.034 264.665);
-  --color-light-component: oklch(97% 0 0);
-
-  --color-dark-sub-component: oklch(27.8% 0.033 256.848);
-  --color-light-sub-component: oklch(92.2% 0 0);
-
-  --color-dark-primary: oklch(96.7% 0.003 264.542);
-  --color-light-primary: oklch(20.5% 0 0);
-
-  --color-dark-secondary: oklch(70.7% 0.022 261.325);
-  --color-light-Secondary: oklch(43.9% 0 0);
-
-  --color-success: oklch(62.7% 0.194 149.214);
-  
-  --color-danger: oklch(58.6% 0.253 17.585);
-
-  --color-dark-bg-hover: oklch(37.3% 0.034 259.733);
-  --color-light-bg-hover: oklch(92.2% 0 0);
-
-  --color-dark-border-hover: oklch(27.8% 0.033 256.848);
-  --color-light-border-hover: oklch(87% 0 0);
+html {
+    background: var(--background);
 }
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    min-height: 100dvh;
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    text-rendering: optimizeLegibility;
 }
-
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+::selection {
+    background: var(--sun);
+    color: var(--ink);
+}
+.atlas-grid {
+    background-image:
+        linear-gradient(rgb(39 134 216 / 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(39 134 216 / 0.06) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+.leaflet-container {
+    background: #bfe1ed;
+    font-family: var(--font-geist-sans), sans-serif;
+}
+.dark .leaflet-container {
+    background: #0b2532;
+}
+.leaflet-control-attribution {
+    border-radius: 12px 0 0 0;
+    background: color-mix(in srgb, var(--surface) 88%, transparent) !important;
+    color: var(--muted);
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: var(--surface);
+    color: var(--foreground);
+}
+.leaflet-popup-content-wrapper {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 16px 40px -20px var(--shadow);
+}
+.leaflet-interactive:focus {
+    outline: 3px solid var(--sun);
+    outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
