@@ -1,46 +1,63 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { InfoData } from "@/shared/types/country";
-interface Hint {
-    information: InfoData | null;
-    message: string | string[] | undefined;
-}
+import type { GameDifficulty, GameStatus } from "@/shared/types/game";
+import { GEO_GUESS_RULES } from "./rules";
+
 interface GeoGuessState {
-    currentCountry: string;
-    randomCountry: string;
-    hint: Hint;
+    status: GameStatus;
+    difficulty: GameDifficulty;
+    target: InfoData | null;
+    guesses: string[];
+    remainingGuesses: number;
 }
-const initialGeoGuessState: GeoGuessState = {
-    currentCountry: "",
-    randomCountry: "",
-    hint: { information: null, message: undefined },
+
+const initialState: GeoGuessState = {
+    status: "idle",
+    difficulty: "Beginner",
+    target: null,
+    guesses: [],
+    remainingGuesses: 0,
 };
+
 const slice = createSlice({
     name: "geoGuess",
-    initialState: initialGeoGuessState,
+    initialState,
     reducers: {
-        setCurrentCountry: (state, action: PayloadAction<string>) => {
-            state.currentCountry = action.payload;
+        startRound: (
+            _state,
+            {
+                payload,
+            }: PayloadAction<{ country: InfoData; difficulty: GameDifficulty }>,
+        ): GeoGuessState => ({
+            status: "playing",
+            difficulty: payload.difficulty,
+            target: payload.country,
+            guesses: [],
+            remainingGuesses: GEO_GUESS_RULES[payload.difficulty].guesses,
+        }),
+        submitGuess: (state, { payload: code }: PayloadAction<string>) => {
+            if (
+                state.status !== "playing" ||
+                !state.target ||
+                !code ||
+                state.guesses.includes(code)
+            )
+                return;
+            state.guesses.push(code);
+            state.remainingGuesses -= 1;
+            if (code === state.target.countryCode) state.status = "won";
+            else if (state.remainingGuesses === 0) state.status = "lost";
         },
-        setRandomCountry: (state, action: PayloadAction<string>) => {
-            state.randomCountry = action.payload;
+        // Keep the previous target only to avoid an immediate repeat on replay.
+        prepareRound: (state) => {
+            state.status = "idle";
+            state.guesses = [];
+            state.remainingGuesses = 0;
         },
-        setHintInformations: (state, action: PayloadAction<InfoData>) => {
-            state.hint.information = action.payload;
-        },
-        setHintMessage: (
-            state,
-            action: PayloadAction<string | string[] | undefined>,
-        ) => {
-            state.hint.message = action.payload;
-        },
-        clearGeoGuess: () => initialGeoGuessState,
+        clearGeoGuess: () => initialState,
     },
 });
-export const {
-    setCurrentCountry,
-    setRandomCountry,
-    setHintInformations,
-    setHintMessage,
-    clearGeoGuess,
-} = slice.actions;
+
+export const { startRound, submitGuess, prepareRound, clearGeoGuess } =
+    slice.actions;
 export default slice.reducer;

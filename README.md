@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flagy
 
-## Getting Started
+An interactive geography game built with Next.js, React, Redux Toolkit, and Leaflet.
+The game hub offers Geo Guess, Map Master, and Outline Explorer.
 
-First, run the development server:
+## Run locally
 
-```bash
+```sh
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [localhost:3000](http://localhost:3000). For a production build, run
+`npm run build`, then `npm start`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Geo Guess
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Find a mystery country using progressively revealed clues. Choose a difficulty,
+then select countries on the map or use the country-name selector. There is no
+timer: each distinct guess uses one attempt, and repeated guesses are free.
 
-## Learn More
+| Difficulty   | Guesses | Clues | Eligible area    |
+| ------------ | ------: | ----: | ---------------- |
+| Beginner     |      15 |     7 | Over 200,000 km² |
+| Intermediate |      12 |     6 | Over 100,000 km² |
+| Advanced     |      10 |     5 | Over 20,000 km²  |
+| Expert       |       7 |     4 | Any size         |
 
-To learn more about Next.js, take a look at the following resources:
+The first clue appears immediately and another unlocks after every two guesses.
+Previous clues and guesses remain available. A correct selection wins, including
+on the last attempt. At the end, explore the highlighted answer or play again.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Country identity uses ISO2 codes so differences in display names do not affect
+correctness. Only countries present in both atlas datasets can be selected as
+targets. Replay starts a fresh round and avoids the last target when possible.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Map Master
 
-## Deploy on Vercel
+Find each named country on the map. Start at 10 points and reach 20 within
+20 guesses. There is no timer. Correct answers advance to the next country;
+wrong answers keep the current target. A score of zero ends the challenge.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Difficulty   | Correct | Incorrect |
+| ------------ | ------: | --------: |
+| Beginner     |      +4 |        −1 |
+| Intermediate |      +3 |        −2 |
+| Advanced     |      +2 |        −3 |
+| Expert       |      +1 |        −4 |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Country-size eligibility matches Geo Guess. Repeated wrong guesses for the same
+target are free, and accidental double clicks after a correct answer are ignored.
+Score, remaining guesses, feedback, and guess history stay available. Explore the
+last answer at the end or start a fresh challenge at any difficulty.
+
+## Outline Explorer
+
+Choose the name of the highlighted country. The score and guess limit match
+Map Master; Beginner offers up to four choices, Intermediate/Advanced five, and
+Expert six. Wrong choices are disabled after one attempt. Correct answers show
+feedback and wait for **Next country** before advancing.
+
+The outline is framed automatically. Zoom or use **Center outline** to inspect
+small countries. At the end, explore the answer or replay at any difficulty.
+
+## Code organization
+
+- `src/features/games/geo-guess/model/rules.ts`: difficulty settings, clue
+  formatting, and eligible-country selection.
+- `src/features/games/geo-guess/model/geo-guess-slice.ts`: atomic round
+  initialization, guesses, outcomes, and reset behavior.
+- `src/features/games/geo-guess/GeoGuess.tsx`: onboarding, results, and game flow.
+- `src/features/games/geo-guess/GuessPanel.tsx`: persistent clues and name entry.
+- `src/features/games/map-master/model`: scoring, challenge decks, round state,
+  and regression tests.
+- `src/features/games/map-master/ChallengePanel.tsx`: target, score, and feedback.
+- `src/features/games/outline-explorer/model`: choice generation, scoring, round
+  state, and regression tests.
+- `src/features/games/outline-explorer/OutlineMap.tsx`: highlighting and framing.
+- `src/features/map/CountrySelectionMap.tsx`: shared Geo Guess/Map Master map
+  selection, keyboard controls, highlighting, and answer reveal.
+- `src/lib/contexts/MapProvider.tsx`: atlas loading and retry.
+- `public/data`: bundled country information and map geometry.
+
+## Verify
+
+```sh
+npm run typecheck
+npm run lint
+npm test
+npx playwright install chromium
+npm run test:e2e
+```
+
+The browser suite builds and serves the production app on port 3010 using a
+separate `.next-playwright` output directory. It covers desktop and mobile,
+keyboard interaction, accessibility, data retry, and same-difficulty replay.
+
+See the [Geo Guess roadmap](docs/geo-guess-improvements.md),
+[Map Master roadmap](docs/map-master-improvements.md), and
+[Outline Explorer roadmap](docs/outline-explorer-improvements.md) for changes,
+design proposals, and outstanding geography-data limitations.

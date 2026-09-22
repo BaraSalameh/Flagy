@@ -6,7 +6,7 @@ export const gameDefinitions: readonly GameDefinition[] = [
         title: "Geo Guess",
         eyebrow: "Follow the clues",
         description:
-            "Read smart hints and uncover a mystery country before time runs out.",
+            "Follow the clues and uncover a mystery country before your guesses run out.",
         icon: Compass,
         accent: "ocean",
         difficulties,
@@ -20,7 +20,7 @@ export const gameDefinitions: readonly GameDefinition[] = [
         title: "Map Master",
         eyebrow: "Test your map memory",
         description:
-            "Find named countries quickly and build a winning score streak.",
+            "Find named countries on the map and reach 20 points within 20 guesses.",
         icon: MapPinned,
         accent: "coral",
         difficulties,

@@ -107,6 +107,10 @@ a {
     background: color-mix(in srgb, var(--surface) 88%, transparent) !important;
     color: var(--muted);
 }
+.leaflet-top .leaflet-control-zoom {
+    margin-top: 96px;
+    margin-left: 20px;
+}
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
     background: var(--surface);

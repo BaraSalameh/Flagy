@@ -1,0 +1,70 @@
+# Geo Guess quality pass
+
+## Rules
+
+Each round selects one country from the loaded atlas. Beginner, Intermediate,
+Advanced, and Expert allow 15, 12, 10, and 7 guesses respectively. Area eligibility
+and clue order live in `src/features/games/geo-guess/model/rules.ts`.
+
+The first clue is visible immediately; each two distinct guesses reveal another.
+All revealed clues remain available. Clicking a country or submitting its name
+uses one guess. Repeating a country is free. A correct final guess still wins.
+Completed rounds cannot accept more guesses.
+
+Replay returns to difficulty selection, then starts a fresh round even if the
+difficulty is unchanged. The previous target is excluded when another eligible
+country exists. Leaving Geo Guess clears its session.
+
+## Fixed
+
+- Empty rounds on same-difficulty replay: target selection now runs from the
+  start event, and the reducer initializes the whole round in one action.
+- Name mismatches between map and clue data: selections use ISO2 country codes.
+- Guesses consumed inconsistently by repeated clicks: distinct guesses are
+  tracked explicitly and validated in the reducer.
+- Disappearing clues: clue history is derived from the target and guess count.
+- Misleading timer: the interface now states guesses remaining and the rules.
+- Atlas retry hidden behind onboarding: loading and retry are handled inside
+  the starting dialog; play waits for usable data.
+- Mobile dialogs that can exceed the screen: dialogs have bounded scrolling.
+
+## Experience improvements
+
+- Difficulty choices explain attempts, clue counts, and eligible country size.
+- Map highlighting retains incorrect guesses and reveals the answer at the end.
+- Name selection provides keyboard and small-country access.
+- Clue and guess history support deduction without relying on memory.
+- Feedback names the incorrect guess and announces remaining attempts.
+- Results include country, capital, and region, with an option to explore the map.
+
+## Suggested next iterations
+
+1. **Refresh and document the geography dataset.** The checked-in data has no
+   source date and includes old country names and unresolved neighbor codes
+   such as `UNK`. Add provenance, update dates, validation, and a documented
+   territory policy before treating facts as current. Approximate population
+   formatting does not solve stale source data.
+2. **Playtest clue order and pacing.** Population alone is a weak first clue.
+   Compare a continent-first learning mode against the present sequence, and
+   test an optional “reveal next clue” action with a clearly stated attempt cost.
+3. **Add short challenge sessions.** Five-round runs, difficulty-specific best
+   results, and a daily seeded puzzle could give players a reason to return.
+   Define scoring and fair comparison rules before adding leaderboards.
+4. **Add optional directional feedback.** Distance and bearing can make wrong
+   guesses informative. Define how islands and overseas territories are handled
+   before selecting country centers.
+5. **Optimize atlas delivery.** The current GeoJSON is about 11.2 MB uncompressed.
+   Measure mobile loading/rendering, then simplify geometry while preserving
+   small-country selection and accurate answer reveals.
+
+These are proposals; this pass does not add accounts, analytics, leaderboards,
+external services, or a new geography source.
+
+## Verification
+
+- `npm test`: round transitions, replay, final-attempt wins, frozen results,
+  duplicate guesses, persistent clues, and difficulty eligibility.
+- `npm run typecheck` and `npm run lint`.
+- `npm run test:e2e`: builds the production app, tests desktop/mobile gameplay,
+  same-difficulty replay through a second win, map aliases, clue retention,
+  keyboard controls, accessibility, and atlas retry.

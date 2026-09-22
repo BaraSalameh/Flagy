@@ -1,97 +1,168 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { Map } from "@/features/map/Map";
-import { GameHud } from "@/features/game-shell/GameHud";
-import { ProgressTracker } from "@/features/game-shell/components/ProgressTracker";
-import { CountryMenu } from "./CountryMenu";
-import { useGenerateRandomCountry } from "./hooks";
-import { useAppSelector } from "@/lib/store/hooks";
+import { GameShell } from "@/features/game-shell/GameShell";
+import { useMapDataState } from "@/lib/contexts/hooks/useLoadMapData";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { Button, ButtonLink, Dialog } from "@/shared/ui";
+import { difficulties, type GameDifficulty } from "@/shared/types/game";
 import {
     clearOutlineExplorer,
-    setCounter,
-    setCurrentCountry,
-    updateCounter,
-} from "@/features/games/outline-explorer/model/outline-explorer-slice";
-import { GameStarterModal } from "@/features/game-shell/components/GameStarterModal";
-import { useCounter } from "@/features/game-shell/hooks/useCounter";
-import { GameOverModal } from "@/features/game-shell/components/GameOverModal";
-import { GameShell } from "@/features/game-shell/GameShell";
+    getChallenge,
+    prepareRound,
+    startRound,
+} from "./model/outline-explorer-slice";
+import {
+    buildChallenges,
+    OUTLINE_RULES,
+    MAX_GUESSES,
+    STARTING_SCORE,
+    WINNING_SCORE,
+} from "./model/rules";
+import { OutlinePanel } from "./OutlinePanel";
 
 export const OutlineExplorer = () => {
-    const generalState = useAppSelector((state) => state.general);
-    const difficulty = generalState.difficulty;
-    const generalCounter = generalState.counter;
-
-    const outlineExplorerState = useAppSelector(
-        (state) => state.outlineExplorer,
+    const dispatch = useAppDispatch();
+    const round = useAppSelector((state) => state.outlineExplorer);
+    const { map, info, status, error, retry } = useMapDataState();
+    const [resultDismissed, setResultDismissed] = useState(false);
+    const target = getChallenge(round)?.target;
+    const countries = useMemo(() => {
+        const codes = new Set(
+            map?.features.map((feature) => feature.properties?.ISO2),
+        );
+        return Object.values(info ?? {}).filter((country) =>
+            codes.has(country.countryCode),
+        );
+    }, [info, map]);
+    useEffect(
+        () => () => {
+            dispatch(clearOutlineExplorer());
+        },
+        [dispatch],
     );
-    const currentCountry = outlineExplorerState.currentCountry;
-    const randomCountries = outlineExplorerState.randomCountries;
-    const randomCountry = outlineExplorerState.randomCountry;
-    const outlineExplorerCounter = outlineExplorerState.counter;
 
-    const incDicThresholds: Record<
-        typeof difficulty,
-        { increment: number; decrement: number }
-    > = {
-        Beginner: { increment: 4, decrement: -1 },
-        Intermediate: { increment: 3, decrement: -2 },
-        Advanced: { increment: 2, decrement: -3 },
-        Expert: { increment: 1, decrement: -4 },
+    const start = (difficulty: GameDifficulty) => {
+        const challenges = buildChallenges(
+            countries,
+            difficulty,
+            target?.countryCode,
+        );
+        if (!challenges.length) return;
+        setResultDismissed(false);
+        dispatch(startRound({ challenges, difficulty }));
     };
-
-    const getIncDecThreshold = () =>
-        incDicThresholds[difficulty][
-            randomCountry === currentCountry ? "increment" : "decrement"
-        ];
-
-    useGenerateRandomCountry();
-    useCounter(
-        currentCountry,
-        10,
-        getIncDecThreshold,
-        setCounter,
-        updateCounter,
-    );
-    useCounter(currentCountry);
+    const finished = round.status === "won" || round.status === "lost";
+    const correctCount = round.history.filter((guess) => guess.correct).length;
 
     return (
         <GameShell game="outline-explorer">
             <Map game="outline-explorer" />
-            <GameStarterModal
+            <Dialog
                 title="Outline Explorer"
-                description={`Test your geography skills in Outline Explorer! Each round, you’ll see the outline of a mystery country. Can you guess its name before time runs out?`}
-            />
-            <GameHud />
-            <GameOverModal
-                thresholds={[
-                    {
-                        condition: outlineExplorerCounter <= 0,
-                        result: false,
-                        message: `😅 Work harder!`,
-                    },
-                    {
-                        condition: outlineExplorerCounter >= 20,
-                        result: true,
-                        message: `🚀 Good job! Keep it up!`,
-                    },
-                    {
-                        condition: generalCounter === 20,
-                        result: false,
-                        message: `😅 You need to be smarter!`,
-                    },
-                ]}
-                onClear={clearOutlineExplorer}
-            />
-            <ProgressTracker
-                counter={outlineExplorerCounter}
-                maxCounter={20}
-                content={<p>Mystery country?</p>}
-            />
-            <CountryMenu
-                randomCountries={randomCountries}
-                onAction={setCurrentCountry}
-            />
+                open={round.status === "idle"}
+                closeable={false}
+                description={`Name the highlighted country by choosing an answer. Start with ${STARTING_SCORE} points and reach ${WINNING_SCORE} within ${MAX_GUESSES} guesses. Correct answers earn points; wrong answers cost points. There is no timer.`}
+            >
+                {status === "error" ? (
+                    <div role="alert">
+                        <p className="mb-3 text-sm text-muted">{error}</p>
+                        <Button onClick={retry}>Try again</Button>
+                    </div>
+                ) : (
+                    <>
+                        <p className="mb-3 text-xs font-black uppercase tracking-widest text-accent">
+                            Choose your difficulty
+                        </p>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                            {difficulties.map((difficulty) => {
+                                const rules = OUTLINE_RULES[difficulty];
+                                const count = countries.filter(
+                                    (country) =>
+                                        country.area > rules.minimumArea,
+                                ).length;
+                                return (
+                                    <Button
+                                        key={difficulty}
+                                        variant="secondary"
+                                        disabled={
+                                            status !== "ready" || count < 2
+                                        }
+                                        onClick={() => start(difficulty)}
+                                        className="h-auto flex-col items-start gap-1 text-left"
+                                    >
+                                        <span>{difficulty}</span>
+                                        <span className="text-xs font-medium text-muted">
+                                            +{rules.reward} correct · −
+                                            {rules.penalty} incorrect
+                                        </span>
+                                        <span className="text-xs font-medium text-muted">
+                                            Up to {rules.choices} choices ·{" "}
+                                            {rules.minimumArea
+                                                ? `over ${rules.minimumArea.toLocaleString("en-US")} km²`
+                                                : "any country size"}
+                                        </span>
+                                    </Button>
+                                );
+                            })}
+                        </div>
+                        {status === "loading" ? (
+                            <p
+                                role="status"
+                                className="mt-3 text-sm text-muted"
+                            >
+                                Loading the atlas…
+                            </p>
+                        ) : null}
+                        {status === "ready" && countries.length < 2 ? (
+                            <div role="alert" className="mt-3">
+                                <p className="mb-2 text-sm text-muted">
+                                    At least two playable countries are needed.
+                                </p>
+                                <Button onClick={retry}>Reload atlas</Button>
+                            </div>
+                        ) : null}
+                    </>
+                )}
+                <ButtonLink href="/" variant="ghost" className="mt-3 w-full">
+                    Game hub
+                </ButtonLink>
+            </Dialog>
+            {round.status !== "idle" && target ? <OutlinePanel /> : null}
+            <Dialog
+                title={
+                    round.status === "won"
+                        ? "Brilliant journey!"
+                        : "A little detour"
+                }
+                open={finished && !resultDismissed}
+                closeable={false}
+                description={
+                    round.status === "won"
+                        ? `You reached ${WINNING_SCORE} points and identified ${correctCount} ${correctCount === 1 ? "outline" : "outlines"}!`
+                        : `${round.score === 0 ? "Your score reached zero." : "You used all 20 guesses."} The highlighted country was ${target?.countryName}. Take a look, then try a fresh challenge.`
+                }
+            >
+                <p className="mb-5 text-sm text-muted">
+                    Final score: {round.score}/{WINNING_SCORE} · {correctCount}{" "}
+                    correct of {round.history.length}
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                    <Button onClick={() => dispatch(prepareRound())}>
+                        Play again
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setResultDismissed(true)}
+                    >
+                        Explore answer
+                    </Button>
+                </div>
+                <ButtonLink href="/" variant="ghost" className="mt-2 w-full">
+                    Game hub
+                </ButtonLink>
+            </Dialog>
         </GameShell>
     );
 };

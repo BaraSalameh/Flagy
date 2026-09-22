@@ -14,8 +14,20 @@ export function GameShell({
     game: GameSlug;
     children: ReactNode;
 }) {
-    const difficulty = useAppSelector((state) => state.general.difficulty);
-    const gameStarted = useAppSelector((state) => state.general.gameStarted);
+    const difficulty = useAppSelector((state) =>
+        game === "geo-guess"
+            ? state.geoGuess.difficulty
+            : game === "map-master"
+              ? state.mapMaster.difficulty
+              : state.outlineExplorer.difficulty,
+    );
+    const gameStarted = useAppSelector((state) =>
+        game === "geo-guess"
+            ? state.geoGuess.status !== "idle"
+            : game === "map-master"
+              ? state.mapMaster.status !== "idle"
+              : state.outlineExplorer.status !== "idle",
+    );
     const definition = {
         "geo-guess": {
             title: "Geo Guess",
@@ -63,9 +75,9 @@ export function GameShell({
                         </p>
                     </div>
                     {gameStarted ? (
-                        <Badge className="ml-1 hidden sm:inline-flex">
-                            {difficulty}
-                        </Badge>
+                        <div className="ml-1 hidden sm:block">
+                            <Badge>{difficulty}</Badge>
+                        </div>
                     ) : null}
                 </div>
                 <div className="pointer-events-auto">

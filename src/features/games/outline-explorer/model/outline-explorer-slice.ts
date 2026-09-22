@@ -1,44 +1,112 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { GameDifficulty, GameStatus } from "@/shared/types/game";
+import {
+    MAX_GUESSES,
+    OUTLINE_RULES,
+    STARTING_SCORE,
+    WINNING_SCORE,
+    type OutlineChallenge,
+} from "./rules";
+
 interface OutlineExplorerState {
-    currentCountry: string;
-    randomCountry: string;
-    counter: number;
-    randomCountries: string[];
+    status: GameStatus;
+    difficulty: GameDifficulty;
+    challenges: OutlineChallenge[];
+    challengeIndex: number;
+    score: number;
+    solved: boolean;
+    incorrectCodes: string[];
+    history: {
+        countryName: string;
+        targetName: string;
+        correct: boolean;
+        points: number;
+    }[];
 }
-const initialOutlineExplorerState: OutlineExplorerState = {
-    currentCountry: "",
-    randomCountry: "",
-    counter: 0,
-    randomCountries: [],
+const initialState: OutlineExplorerState = {
+    status: "idle",
+    difficulty: "Beginner",
+    challenges: [],
+    challengeIndex: 0,
+    score: STARTING_SCORE,
+    solved: false,
+    incorrectCodes: [],
+    history: [],
 };
+export const getChallenge = (state: OutlineExplorerState) =>
+    state.challenges[state.challengeIndex];
+
 const slice = createSlice({
-    name: "outlineExplore",
-    initialState: initialOutlineExplorerState,
+    name: "outlineExplorer",
+    initialState,
     reducers: {
-        setCurrentCountry: (state, action: PayloadAction<string>) => {
-            state.currentCountry = action.payload;
+        startRound: (
+            _state,
+            {
+                payload,
+            }: PayloadAction<{
+                challenges: OutlineChallenge[];
+                difficulty: GameDifficulty;
+            }>,
+        ): OutlineExplorerState => ({
+            ...initialState,
+            status: payload.challenges.length ? "playing" : "idle",
+            difficulty: payload.difficulty,
+            challenges: payload.challenges,
+        }),
+        submitGuess: (state, { payload: code }: PayloadAction<string>) => {
+            const challenge = getChallenge(state);
+            const choice = challenge?.choices.find(
+                (country) => country.countryCode === code,
+            );
+            if (
+                state.status !== "playing" ||
+                state.solved ||
+                !challenge ||
+                !choice ||
+                state.incorrectCodes.includes(code)
+            )
+                return;
+            const correct = code === challenge.target.countryCode;
+            const rules = OUTLINE_RULES[state.difficulty];
+            const nextScore = Math.max(
+                0,
+                Math.min(
+                    WINNING_SCORE,
+                    state.score + (correct ? rules.reward : -rules.penalty),
+                ),
+            );
+            state.history.push({
+                countryName: choice.countryName,
+                targetName: challenge.target.countryName,
+                correct,
+                points: nextScore - state.score,
+            });
+            state.score = nextScore;
+            state.solved = correct;
+            if (!correct) state.incorrectCodes.push(code);
+            if (nextScore === WINNING_SCORE) state.status = "won";
+            else if (nextScore === 0 || state.history.length === MAX_GUESSES)
+                state.status = "lost";
         },
-        setRandomCountry: (state, action: PayloadAction<string>) => {
-            state.randomCountry = action.payload;
+        nextChallenge: (state) => {
+            if (state.status !== "playing" || !state.solved) return;
+            state.challengeIndex =
+                (state.challengeIndex + 1) % state.challenges.length;
+            state.incorrectCodes = [];
+            state.solved = false;
         },
-        setRandomCountries: (state, action: PayloadAction<string[]>) => {
-            state.randomCountries = action.payload;
+        prepareRound: (state) => {
+            state.status = "idle";
         },
-        setCounter: (state, action: PayloadAction<number>) => {
-            state.counter = action.payload;
-        },
-        updateCounter: (state, action: PayloadAction<number>) => {
-            state.counter += action.payload;
-        },
-        clearOutlineExplorer: () => initialOutlineExplorerState,
+        clearOutlineExplorer: () => initialState,
     },
 });
 export const {
-    setCurrentCountry,
-    setRandomCountries,
-    setRandomCountry,
-    setCounter,
-    updateCounter,
+    startRound,
+    submitGuess,
+    nextChallenge,
+    prepareRound,
     clearOutlineExplorer,
 } = slice.actions;
 export default slice.reducer;

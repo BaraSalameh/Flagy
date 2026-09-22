@@ -53,7 +53,7 @@ export function Dialog({
                             }}
                         >
                             <motion.div
-                                className="fixed left-1/2 top-1/2 z-[1001] w-[min(92vw,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-border bg-surface p-5 shadow-[0_32px_100px_-24px_var(--shadow)] sm:p-7"
+                                className="fixed left-1/2 top-1/2 z-[1001] max-h-[90dvh] w-[min(92vw,34rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-[2rem] border border-border bg-surface p-5 shadow-[0_32px_100px_-24px_var(--shadow)] sm:p-7"
                                 initial={
                                     reduceMotion
                                         ? false

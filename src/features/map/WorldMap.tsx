@@ -44,8 +44,8 @@ export function WorldMap(props: WorldMapProps) {
         <MapContainer
             center={[20, 0]}
             zoom={3}
-            minZoom={2}
-            maxZoom={10}
+            minZoom={props.game === "outline-explorer" ? 0 : 2}
+            maxZoom={props.game === "outline-explorer" ? 18 : 10}
             dragging
             zoomControl={false}
             scrollWheelZoom

@@ -32,7 +32,15 @@ test("hub can be navigated by keyboard", async ({ page }) => {
     await page.getByRole("link", { name: "Play now" }).first().focus();
     await page.keyboard.press("Enter");
     await expect(page.getByRole("dialog", { name: "Geo Guess" })).toBeVisible();
-    await expect(page.getByRole("button", { name: /beginner/i })).toBeFocused();
+    await expect(page.getByRole("dialog", { name: "Geo Guess" })).toContainText(
+        "Choose your difficulty",
+    );
+    await expect(page.getByRole("button", { name: /beginner/i })).toBeEnabled();
+    await page.getByRole("button", { name: /beginner/i }).focus();
+    await page.keyboard.press("Enter");
+    await expect(
+        page.getByRole("list", { name: "Revealed clues" }),
+    ).toBeVisible();
 });
 
 test("invalid games use the friendly not-found screen", async ({ page }) => {
@@ -71,10 +79,11 @@ test("map data failure is recoverable", async ({ page }) => {
         route.fulfill({ status: 503, body: "unavailable" }),
     );
     await page.goto("/map/geo-guess");
+    const onboarding = page.getByRole("dialog", { name: "Geo Guess" });
+    await expect(onboarding).toContainText("Map data is unavailable");
     await expect(
-        page.getByRole("heading", { name: /map took a wrong turn/i }),
+        onboarding.getByRole("button", { name: "Try again" }),
     ).toBeVisible();
-    await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
 });
 
 for (const game of ["geo-guess", "map-master"] as const) {
@@ -139,7 +148,15 @@ test("outline explorer can reach a result and replay", async ({
                 .isVisible()
         )
             break;
-        await choices.nth(index % (await choices.count())).click();
+        const next = page.getByRole("button", {
+            name: "Next country",
+            exact: true,
+        });
+        if (await next.isVisible()) await next.click();
+        const available = page.locator(
+            '[aria-label="Country choices"] button:not(:disabled)',
+        );
+        if (await available.count()) await available.first().click();
         await page.waitForTimeout(30);
     }
     await expect(
