@@ -302,8 +302,14 @@ a {
     box-shadow: 0 16px 40px -20px var(--shadow);
 }
 .leaflet-interactive:focus {
-    outline: 3px solid var(--sun);
-    outline-offset: 2px;
+    outline: none;
+}
+.leaflet-interactive:focus-visible {
+    stroke: var(--sun);
+    stroke-width: 3;
+    filter: drop-shadow(
+        0 0 4px color-mix(in srgb, var(--sun) 72%, transparent)
+    );
 }
 @media (prefers-reduced-motion: reduce) {
     *,

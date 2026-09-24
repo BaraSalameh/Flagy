@@ -1,6 +1,7 @@
 "use client";
 import "leaflet/dist/leaflet.css";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import L from "leaflet";
 import { MapContainer } from "react-leaflet";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { GeoJsonRenderer } from "./GeoJsonRenderer";
@@ -12,6 +13,7 @@ import { GameLoadingOverlay } from "./GameLoadingOverlay";
 export function WorldMap(props: WorldMapProps) {
     const { map: geoData, status, error, retry } = useMapDataState();
     const [readyData, setReadyData] = useState<typeof geoData>(null);
+    const vectorRenderer = useMemo(() => L.svg({ padding: 1 }), []);
     const reportReady = useCallback(() => {
         setReadyData(geoData);
     }, [geoData]);
@@ -47,6 +49,7 @@ export function WorldMap(props: WorldMapProps) {
                 zoomControl={false}
                 scrollWheelZoom
                 doubleClickZoom
+                renderer={vectorRenderer}
                 maxBounds={[
                     [-90, -180],
                     [90, 180],

@@ -62,7 +62,8 @@ test("map aliases use country codes and guesses preserve clues", async ({
     await page.keyboard.press("Enter");
     await expect(panel).toContainText("14 guesses left");
     await expect(clues.getByRole("listitem")).toHaveCount(1);
-    // A repeated click/key press cannot consume another attempt.
+    await expect(canada).toHaveCSS("outline-style", "none");
+    // A repeated key press cannot consume another attempt or show a box outline.
     await page.keyboard.press("Enter");
     await expect(panel).toContainText("14 guesses left");
     await page.getByLabel("Guess by name").selectOption("CN");
@@ -79,6 +80,43 @@ test("map aliases use country codes and guesses preserve clues", async ({
     await expect(
         page.getByRole("dialog", { name: "Brilliant journey!" }),
     ).toContainText("Vatican City");
+});
+
+test("the SVG renderer stays buffered while the map is moving", async ({
+    page,
+}) => {
+    await page.goto("/map/geo-guess");
+    await page.getByRole("button", { name: /beginner/i }).click();
+
+    const map = page.locator(".leaflet-container");
+    const renderer = page.locator(".leaflet-overlay-pane svg");
+    const mapBounds = await map.boundingBox();
+    const rendererBounds = await renderer.boundingBox();
+    expect(mapBounds).not.toBeNull();
+    expect(rendererBounds).not.toBeNull();
+    expect(rendererBounds!.width).toBeGreaterThanOrEqual(
+        mapBounds!.width * 2.9,
+    );
+    expect(rendererBounds!.height).toBeGreaterThanOrEqual(
+        mapBounds!.height * 2.9,
+    );
+
+    await page.mouse.move(
+        mapBounds!.x + mapBounds!.width * 0.35,
+        mapBounds!.y + mapBounds!.height * 0.5,
+    );
+    await page.mouse.down();
+    await page.mouse.move(
+        mapBounds!.x + mapBounds!.width * 0.8,
+        mapBounds!.y + mapBounds!.height * 0.5,
+        { steps: 12 },
+    );
+    expect(
+        await page
+            .locator('.leaflet-overlay-pane svg path:not([d="M0 0"])')
+            .count(),
+    ).toBeGreaterThan(0);
+    await page.mouse.up();
 });
 
 test("atlas failures can be retried from onboarding", async ({ page }) => {
