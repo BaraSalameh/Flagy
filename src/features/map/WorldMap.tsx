@@ -1,28 +1,22 @@
 "use client";
 import "leaflet/dist/leaflet.css";
+import { useCallback, useState } from "react";
 import { MapContainer } from "react-leaflet";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { GeoJsonRenderer } from "./GeoJsonRenderer";
 import { useMapDataState } from "@/lib/contexts/hooks/useLoadMapData";
 import type { WorldMapProps } from "./types";
 import { Button, Card } from "@/shared/ui";
+import { GameLoadingOverlay } from "./GameLoadingOverlay";
 
 export function WorldMap(props: WorldMapProps) {
     const { map: geoData, status, error, retry } = useMapDataState();
-    if (status === "loading")
-        return (
-            <div
-                className="grid h-full w-full place-items-center bg-surface-raised"
-                role="status"
-            >
-                <div className="text-center">
-                    <div className="mx-auto size-11 animate-spin rounded-full border-4 border-surface-muted border-t-accent" />
-                    <p className="mt-4 font-bold text-muted">
-                        Unfolding the atlas…
-                    </p>
-                </div>
-            </div>
-        );
+    const [readyData, setReadyData] = useState<typeof geoData>(null);
+    const reportReady = useCallback(() => {
+        setReadyData(geoData);
+    }, [geoData]);
+
+    if (status === "loading") return <GameLoadingOverlay />;
     if (status === "error" || !geoData)
         return (
             <div className="grid h-full w-full place-items-center bg-surface-raised p-4">
@@ -40,25 +34,34 @@ export function WorldMap(props: WorldMapProps) {
                 </Card>
             </div>
         );
+    const ready = readyData === geoData;
+
     return (
-        <MapContainer
-            center={[20, 0]}
-            zoom={3}
-            minZoom={props.game === "outline-explorer" ? 0 : 2}
-            maxZoom={props.game === "outline-explorer" ? 18 : 10}
-            dragging
-            zoomControl={false}
-            scrollWheelZoom
-            doubleClickZoom
-            maxBounds={[
-                [-90, -180],
-                [90, 180],
-            ]}
-            maxBoundsViscosity={1}
-            className="h-full w-full z-0"
-            aria-label="Interactive world map"
-        >
-            <GeoJsonRenderer geoData={geoData} game={props.game} />
-        </MapContainer>
+        <div className="relative h-full w-full">
+            <MapContainer
+                center={[20, 0]}
+                zoom={3}
+                minZoom={props.game === "outline-explorer" ? 0 : 2}
+                maxZoom={props.game === "outline-explorer" ? 18 : 10}
+                dragging
+                zoomControl={false}
+                scrollWheelZoom
+                doubleClickZoom
+                maxBounds={[
+                    [-90, -180],
+                    [90, 180],
+                ]}
+                maxBoundsViscosity={1}
+                className="h-full w-full z-0"
+                aria-label="Interactive world map"
+            >
+                <GeoJsonRenderer
+                    geoData={geoData}
+                    game={props.game}
+                    onReady={reportReady}
+                />
+            </MapContainer>
+            {!ready ? <GameLoadingOverlay /> : null}
+        </div>
     );
 }

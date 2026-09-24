@@ -74,6 +74,46 @@ for (const game of [
     });
 }
 
+for (const game of [
+    { slug: "geo-guess", title: "Geo Guess" },
+    { slug: "map-master", title: "Map Master" },
+    { slug: "outline-explorer", title: "Outline Explorer" },
+]) {
+    test(`${game.title} keeps the loading overlay until the atlas is painted`, async ({
+        page,
+    }) => {
+        let releaseAtlas: () => void = () => undefined;
+        const atlasGate = new Promise<void>((resolve) => {
+            releaseAtlas = () => resolve();
+        });
+        await page.route("**/data/countries.*.json", async (route) => {
+            await atlasGate;
+            await route.continue();
+        });
+
+        await page.goto(`/map/${game.slug}`);
+        const onboarding = page.getByRole("dialog", { name: game.title });
+        const loadingOverlay = page.getByRole("status", {
+            name: "Preparing your game…",
+        });
+        await expect(onboarding).toBeVisible();
+        await expect(loadingOverlay).toBeVisible();
+        await expect(
+            onboarding.getByRole("button", { name: /beginner/i }),
+        ).toBeDisabled();
+
+        releaseAtlas();
+
+        await expect(loadingOverlay).toBeHidden();
+        expect(
+            await page.locator(".leaflet-overlay-pane svg path").count(),
+        ).toBeGreaterThan(0);
+        await expect(
+            onboarding.getByRole("button", { name: /beginner/i }),
+        ).toBeEnabled();
+    });
+}
+
 test("map data failure is recoverable", async ({ page }) => {
     await page.route("**/data/countries.geo.json", (route) =>
         route.fulfill({ status: 503, body: "unavailable" }),
@@ -84,6 +124,40 @@ test("map data failure is recoverable", async ({ page }) => {
     await expect(
         onboarding.getByRole("button", { name: "Try again" }),
     ).toBeVisible();
+
+    await page.unroute("**/data/countries.geo.json");
+    let releaseRetry: () => void = () => undefined;
+    const retryGate = new Promise<void>((resolve) => {
+        releaseRetry = () => resolve();
+    });
+    await page.route("**/data/countries.*.json", async (route) => {
+        await retryGate;
+        await route.continue();
+    });
+    await onboarding.getByRole("button", { name: "Try again" }).click();
+    await expect(
+        page.getByRole("status", {
+            name: "Preparing your game…",
+        }),
+    ).toBeVisible();
+    releaseRetry();
+    await expect(
+        onboarding.getByRole("button", { name: /beginner/i }),
+    ).toBeEnabled();
+});
+
+test("game loading indicator honors reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.route("**/data/countries.*.json", () => undefined);
+    await page.goto("/map/geo-guess");
+    const loadingOverlay = page.getByRole("status", {
+        name: "Preparing your game…",
+    });
+    await expect(loadingOverlay).toBeVisible();
+    const activeAnimations = await loadingOverlay
+        .locator(".game-loading-indicator__orbit--outer")
+        .evaluate((element) => element.getAnimations().length);
+    expect(activeAnimations).toBe(0);
 });
 
 for (const game of ["geo-guess", "map-master"] as const) {
