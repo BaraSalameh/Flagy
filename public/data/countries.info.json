@@ -1036,7 +1036,6 @@
     "borders": [
       "Palestine",
       "Libya",
-      "PSE",
       "Sudan"
     ],
     "languages": [
@@ -2780,6 +2779,26 @@
       "Korean"
     ],
     "flag": "🇰🇵"
+  },
+  "PS": {
+    "countryCode": "PS",
+    "countryName": "Palestine",
+    "currencyCode": "JOD",
+    "population": "5101414",
+    "capital": "Jerusalem",
+    "continentName": "Asia",
+    "region": "Western Asia",
+    "area": 27000,
+    "borders": [
+      "Egypt",
+      "Jordan",
+      "Lebanon",
+      "Syria"
+    ],
+    "languages": [
+      "Arabic"
+    ],
+    "flag": "🇵🇸"
   },
   "PT": {
     "countryCode": "PT",

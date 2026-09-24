@@ -24,7 +24,7 @@ export function GuessPanel({ countries }: { countries: readonly InfoData[] }) {
     return (
         <section
             aria-label="Round clues and guesses"
-            className="absolute inset-x-3 bottom-5 z-[750] max-h-[44dvh] overflow-y-auto rounded-3xl border border-border bg-surface/95 p-4 shadow-xl backdrop-blur-xl sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-24 sm:max-h-[calc(100dvh-116px)] sm:w-80"
+            className="absolute inset-x-3 bottom-3 z-[750] max-h-[34dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-surface/95 p-3 shadow-xl backdrop-blur-xl sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-24 sm:max-h-[calc(100dvh-116px)] sm:w-80 sm:rounded-3xl sm:p-4"
         >
             <div className="flex items-center justify-between gap-3">
                 <h2 className="font-black">
@@ -42,7 +42,7 @@ export function GuessPanel({ countries }: { countries: readonly InfoData[] }) {
             <p
                 role="status"
                 aria-live="polite"
-                className="mt-2 text-sm text-muted"
+                className="mt-1.5 text-sm text-muted sm:mt-2"
             >
                 {playing
                     ? lastGuess
@@ -56,7 +56,7 @@ export function GuessPanel({ countries }: { countries: readonly InfoData[] }) {
                 aria-label="Revealed clues"
                 aria-live="polite"
                 aria-relevant="additions"
-                className="mt-3 space-y-2 text-sm"
+                className="mt-2 space-y-2 text-sm sm:mt-3"
             >
                 {clues.map((clue) => (
                     <li
@@ -77,7 +77,7 @@ export function GuessPanel({ countries }: { countries: readonly InfoData[] }) {
                         Repeated guesses are free.
                     </p>
                     <form
-                        className="mt-4"
+                        className="mt-3 sm:mt-4"
                         onSubmit={(event) => {
                             event.preventDefault();
                             if (selectedCode)

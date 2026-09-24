@@ -53,20 +53,20 @@ export function GameShell({
             <motion.header
                 initial={reduceMotion ? false : { opacity: 0, y: -14 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="pointer-events-none absolute inset-x-0 top-0 z-[800] flex items-start justify-between gap-3 p-3 sm:p-5"
+                className="pointer-events-none absolute inset-x-0 top-0 z-[1100] flex items-start justify-between gap-3 p-3 sm:z-[800] sm:p-5"
             >
-                <div className="pointer-events-auto flex min-w-0 items-center gap-2 rounded-[1.4rem] border border-border bg-surface/90 p-1.5 pr-3 shadow-xl backdrop-blur-xl">
+                <div className="pointer-events-auto flex min-w-0 items-center gap-2 rounded-[1.4rem] border border-border bg-surface/90 p-1 shadow-xl backdrop-blur-xl sm:p-1.5 sm:pr-3">
                     <Link
                         aria-label="Back to game hub"
                         href="/"
-                        className="grid size-11 place-items-center rounded-2xl text-muted transition hover:bg-surface-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-focus"
+                        className="grid size-11 shrink-0 place-items-center rounded-2xl text-foreground transition hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-focus"
                     >
                         <ArrowLeft className="size-5" />
                     </Link>
                     <span className="hidden size-8 place-items-center rounded-xl bg-accent text-accent-foreground sm:grid">
                         <Icon className="size-4" />
                     </span>
-                    <div className="min-w-0">
+                    <div className="hidden min-w-0 sm:block">
                         <p className="truncate text-sm font-black sm:text-base">
                             {definition.title}
                         </p>

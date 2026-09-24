@@ -16,13 +16,13 @@ export function ChallengePanel() {
     return (
         <section
             aria-label="Map Master challenge"
-            className="absolute inset-x-3 bottom-5 z-[750] max-h-[44dvh] overflow-y-auto rounded-3xl border border-border bg-surface/95 p-4 shadow-xl backdrop-blur-xl sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-24 sm:max-h-[calc(100dvh-116px)] sm:w-80"
+            className="absolute inset-x-3 bottom-3 z-[750] max-h-[34dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-surface/95 p-3 shadow-xl backdrop-blur-xl sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-24 sm:max-h-[calc(100dvh-116px)] sm:w-80 sm:rounded-3xl sm:p-4"
         >
             <div role="status" aria-live="polite" aria-atomic="true">
                 <p className="text-xs font-black uppercase tracking-widest text-accent">
                     {playing ? "Find on the map" : "Last country"}
                 </p>
-                <h2 className="mt-1 text-xl font-black">
+                <h2 className="mt-0.5 text-lg font-black sm:mt-1 sm:text-xl">
                     {target.countryName}
                 </h2>
             </div>
@@ -30,7 +30,7 @@ export function ChallengePanel() {
                 value={round.score}
                 max={WINNING_SCORE}
                 label="Score"
-                className="mt-4"
+                className="mt-2 sm:mt-4"
             />
             <p className="mt-2 text-xs font-bold text-muted">
                 {remaining} {remaining === 1 ? "guess" : "guesses"} left · +
@@ -39,7 +39,7 @@ export function ChallengePanel() {
             <p
                 role="status"
                 aria-live="polite"
-                className="mt-3 rounded-xl bg-surface-raised px-3 py-2 text-sm"
+                className="mt-2 rounded-xl bg-surface-raised px-3 py-2 text-sm sm:mt-3"
             >
                 {lastGuess
                     ? lastGuess.correct

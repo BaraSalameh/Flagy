@@ -17,6 +17,29 @@ async function selectTarget(page: Page) {
     return name;
 }
 
+test("Palestine is a single clickable feature and mobile back stays available", async ({
+    page,
+}) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route("**/data/countries.info.json", (route) =>
+        route.fulfill({ json: { PS: countries.PS } }),
+    );
+    await page.goto("/map/map-master");
+    await page.locator('a[aria-label="Back to game hub"]').click();
+    await expect(page).toHaveURL(/\/$/);
+
+    await page.goto("/map/map-master");
+    await page.getByRole("button", { name: /advanced/i }).click();
+    const palestine = page.getByRole("button", {
+        name: "Select Palestine",
+        exact: true,
+    });
+    await expect(palestine).toHaveCount(1);
+    await palestine.focus();
+    await page.keyboard.press("Enter");
+    await expect(panel(page)).toContainText("Correct! Palestine earned");
+});
+
 test("correct scores, persistent feedback, and same-difficulty replay through another win", async ({
     page,
 }) => {

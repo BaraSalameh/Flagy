@@ -22,7 +22,7 @@ export function OutlinePanel() {
     return (
         <section
             aria-label="Outline challenge"
-            className="absolute inset-x-3 bottom-5 z-[750] max-h-[48dvh] overflow-y-auto rounded-3xl border border-border bg-surface/95 p-4 shadow-xl backdrop-blur-xl sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-24 sm:max-h-[calc(100dvh-116px)] sm:w-80"
+            className="absolute inset-x-3 bottom-3 z-[750] max-h-[36dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-surface/95 p-3 shadow-xl backdrop-blur-xl sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-24 sm:max-h-[calc(100dvh-116px)] sm:w-80 sm:rounded-3xl sm:p-4"
         >
             <h2 className="text-lg font-black">
                 {reveal
@@ -33,7 +33,7 @@ export function OutlinePanel() {
                 value={round.score}
                 max={WINNING_SCORE}
                 label="Score"
-                className="mt-3"
+                className="mt-2 sm:mt-3"
             />
             <p className="mt-2 text-xs font-bold text-muted">
                 {remaining} {remaining === 1 ? "guess" : "guesses"} left · +
@@ -42,7 +42,7 @@ export function OutlinePanel() {
             <p
                 role="status"
                 aria-live="polite"
-                className="mt-3 text-sm text-muted"
+                className="mt-2 text-sm text-muted sm:mt-3"
             >
                 {reveal
                     ? round.solved
@@ -55,7 +55,7 @@ export function OutlinePanel() {
             <div
                 role="group"
                 aria-label="Country choices"
-                className="mt-3 grid grid-cols-2 gap-2"
+                className="mt-2 grid grid-cols-2 gap-2 sm:mt-3"
             >
                 {challenge.choices.map((country) => {
                     const incorrect = round.incorrectCodes.includes(

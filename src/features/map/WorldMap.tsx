@@ -51,10 +51,10 @@ export function WorldMap(props: WorldMapProps) {
                 doubleClickZoom
                 renderer={vectorRenderer}
                 maxBounds={[
-                    [-90, -180],
-                    [90, 180],
+                    [-90, -270],
+                    [90, 270],
                 ]}
-                maxBoundsViscosity={1}
+                maxBoundsViscosity={0.7}
                 className="h-full w-full z-0"
                 aria-label="Interactive world map"
             >

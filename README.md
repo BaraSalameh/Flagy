@@ -81,6 +81,12 @@ small countries. At the end, explore the answer or replay at any difficulty.
 - `src/lib/contexts/MapProvider.tsx`: atlas loading and retry.
 - `public/data`: bundled country information and map geometry.
 
+The historical Palestine polygon and its adjoining Syrian, Lebanese,
+Jordanian, and Egyptian boundaries in `countries.geo.json` come from GeoMolg's
+Historical Palestine feature layer. Run
+`node scripts/update-palestine-geometry.mjs` to refresh and dissolve those
+source geometries for the game atlas while preserving shared border vertices.
+
 ## Verify
 
 ```sh
