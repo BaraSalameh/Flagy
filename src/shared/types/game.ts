@@ -18,6 +18,6 @@ export interface GameDefinition {
     description: string;
     icon: LucideIcon;
     accent: "ocean" | "coral" | "sun";
-    difficulties: readonly GameDifficulty[];
+    difficulties: readonly (GameDifficulty | "Extreme")[];
     load: () => Promise<{ default: ComponentType }>;
 }

@@ -6,7 +6,7 @@ import {
     prepareRound,
     submitGuess,
 } from "./model/outline-explorer-slice";
-import { MAX_GUESSES, OUTLINE_RULES, WINNING_SCORE } from "./model/rules";
+import { getOutlineAnswer, OUTLINE_RULES, WINNING_SCORE } from "./model/rules";
 
 export function OutlinePanel() {
     const dispatch = useAppDispatch();
@@ -16,8 +16,8 @@ export function OutlinePanel() {
     const playing = round.status === "playing";
     const last = round.history.at(-1);
     const rules = OUTLINE_RULES[round.difficulty];
-    const remaining = MAX_GUESSES - round.history.length;
     const reveal = round.solved || !playing;
+    const capitalMode = rules.answer === "capital";
 
     return (
         <section
@@ -26,8 +26,12 @@ export function OutlinePanel() {
         >
             <h2 className="text-lg font-black">
                 {reveal
-                    ? challenge.target.countryName
-                    : "Which country is highlighted?"}
+                    ? capitalMode
+                        ? `${challenge.target.capital}, ${challenge.target.countryName}`
+                        : challenge.target.countryName
+                    : capitalMode
+                      ? "What is this country's capital?"
+                      : "Which country is highlighted?"}
             </h2>
             <Progress
                 value={round.score}
@@ -36,7 +40,8 @@ export function OutlinePanel() {
                 className="mt-2 sm:mt-3"
             />
             <p className="mt-2 text-xs font-bold text-muted">
-                {remaining} {remaining === 1 ? "guess" : "guesses"} left · +
+                {round.history.length}{" "}
+                {round.history.length === 1 ? "guess" : "guesses"} made · +
                 {rules.reward} correct / −{rules.penalty} incorrect
             </p>
             <p
@@ -46,11 +51,13 @@ export function OutlinePanel() {
             >
                 {reveal
                     ? round.solved
-                        ? `Correct! ${challenge.target.countryName} earned +${last?.points ?? 0} points.`
-                        : `The answer is ${challenge.target.countryName}.`
+                        ? `Correct! ${getOutlineAnswer(challenge.target, round.difficulty)} earned +${last?.points ?? 0} points.`
+                        : `The answer is ${getOutlineAnswer(challenge.target, round.difficulty)}.`
                     : round.incorrectCodes.length
-                      ? `${last?.countryName} isn’t the highlighted country. Try another choice.`
-                      : "Study the highlighted outline, then choose its name."}
+                      ? `${last?.countryName} isn’t the correct ${capitalMode ? "capital" : "country"}. Try another choice.`
+                      : capitalMode
+                        ? "Study the highlighted outline, then choose its capital."
+                        : "Study the highlighted outline, then choose its name."}
             </p>
             <div
                 role="group"
@@ -74,7 +81,9 @@ export function OutlinePanel() {
                             }
                             className="h-auto min-h-12 flex-col gap-1 break-words px-2 py-2 text-center text-xs"
                         >
-                            <span>{country.countryName}</span>
+                            <span>
+                                {getOutlineAnswer(country, round.difficulty)}
+                            </span>
                             {incorrect || answer ? (
                                 <span className="text-[10px] font-medium">
                                     {answer
@@ -101,8 +110,8 @@ export function OutlinePanel() {
                 </p>
             ) : (
                 <p className="mt-3 text-xs text-muted">
-                    Each wrong choice is charged once. Use zoom or Center
-                    outline for a closer look.
+                    Each wrong choice is charged once. The round ends only at
+                    zero points. Use zoom or Center outline for a closer look.
                 </p>
             )}
             {!playing ? (

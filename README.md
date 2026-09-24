@@ -57,15 +57,17 @@ last answer at the end or start a fresh challenge at any difficulty.
 
 ## Outline Explorer
 
-Choose the name of the highlighted country. The score and guess limit match
-Map Master; Beginner offers up to three choices, Intermediate four, Advanced
-five, and Expert six. Intermediate prioritizes distractors from the same
-continent; Advanced and Expert prioritize the same region, then continent.
-Wrong choices are disabled after one attempt. Correct answers show feedback and
-wait for **Next country** before advancing.
+Choose the name of the highlighted country. Beginner offers up to three choices,
+Intermediate four, and Advanced, Expert, and Extreme up to six. Intermediate
+prioritizes distractors from the same continent; Advanced through Extreme
+prioritize the same region, then continent. Wrong choices are disabled after one
+attempt. Correct answers show feedback and wait for **Next country** before
+advancing.
 
 The outline is framed automatically. Zoom or use **Center outline** to inspect
-small countries. At the end, explore the answer or replay at any difficulty.
+small countries. Extreme mode asks for the capital of the highlighted country
+instead of its name. There is no guess limit: the round is lost only when the
+score reaches zero. At the end, explore the answer or replay at any difficulty.
 
 ## Code organization
 
@@ -102,8 +104,10 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The browser suite builds and serves the production app on port 3010 using a
-separate `.next-playwright` output directory. It covers desktop and mobile,
+The development server uses `.next`, production builds use `.next-build`, and
+the browser suite builds and serves the production app on port 3010 using a
+separate `.next-playwright` output directory. This keeps builds and tests from
+invalidating a running development server. The suite covers desktop and mobile,
 keyboard interaction, accessibility, data retry, and same-difficulty replay.
 
 See the [Geo Guess roadmap](docs/geo-guess-improvements.md),

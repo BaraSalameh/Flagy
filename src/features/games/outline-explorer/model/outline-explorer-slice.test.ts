@@ -9,18 +9,18 @@ import reducer, {
 } from "./outline-explorer-slice";
 import {
     buildChallenges,
-    MAX_GUESSES,
+    getOutlineAnswer,
+    outlineDifficulties,
     OUTLINE_RULES,
     type OutlineCountry,
     type OutlineChallenge,
 } from "./rules";
-import { difficulties } from "@/shared/types/game";
 import type { InfoData } from "@/shared/types/country";
 
 const country = (code: string): OutlineCountry => ({
     countryCode: code,
     countryName: code,
-    capital: "Capital",
+    capital: `${code} Capital`,
     region: "Region",
     continentName: "Continent",
 });
@@ -31,7 +31,7 @@ const challenges: OutlineChallenge[] = [
 ];
 
 describe("Outline Explorer rounds", () => {
-    it.each(difficulties)(
+    it.each(outlineDifficulties)(
         "scores %s exactly once and pauses after a correct answer",
         (difficulty) => {
             let state = reducer(
@@ -87,7 +87,7 @@ describe("Outline Explorer rounds", () => {
         expect(reducer(lost, nextChallenge())).toEqual(lost);
     });
 
-    it("awards a win on the final allowed guess", () => {
+    it("can win after using 15 guesses", () => {
         let state = reducer(
             undefined,
             startRound({ challenges, difficulty: "Intermediate" }),
@@ -104,11 +104,11 @@ describe("Outline Explorer rounds", () => {
             state,
             submitGuess(getChallenge(state)!.target.countryCode),
         );
-        expect(state.history).toHaveLength(MAX_GUESSES);
+        expect(state.history).toHaveLength(15);
         expect(state.status).toBe("won");
     });
 
-    it("ends at the guess limit when the positive score is below the goal", () => {
+    it("keeps playing after 15 guesses while the score is positive", () => {
         let state = reducer(
             undefined,
             startRound({ challenges, difficulty: "Beginner" }),
@@ -126,9 +126,28 @@ describe("Outline Explorer rounds", () => {
             );
             state = reducer(state, nextChallenge());
         }
-        expect(state.history).toHaveLength(MAX_GUESSES);
+        expect(state.history).toHaveLength(15);
         expect(state.score).toBe(10);
-        expect(state.status).toBe("lost");
+        expect(state.status).toBe("playing");
+    });
+
+    it("uses capital answers in Extreme", () => {
+        let state = reducer(
+            undefined,
+            startRound({ challenges, difficulty: "Extreme" }),
+        );
+        state = reducer(state, submitGuess("BR"));
+        expect(state.history.at(-1)).toMatchObject({
+            countryName: "BR Capital",
+            targetName: "CA Capital",
+            correct: false,
+        });
+        state = reducer(state, submitGuess("CA"));
+        expect(state.history.at(-1)).toMatchObject({
+            countryName: "CA Capital",
+            targetName: "CA Capital",
+            correct: true,
+        });
     });
 
     it("resets replay at the same difficulty and clears on exit", () => {
@@ -181,12 +200,12 @@ describe("Outline challenge generation", () => {
         languages: [],
         flag: "",
     }));
-    it.each(difficulties)(
+    it.each(outlineDifficulties)(
         "always includes the answer once in %s choices",
         (difficulty) => {
             const before = structuredClone(info);
             const result = buildChallenges(info, difficulty, "CA");
-            expect(result).toHaveLength(MAX_GUESSES);
+            expect(result).toHaveLength(info.length);
             expect(result[0].target.countryCode).not.toBe("CA");
             expect(
                 new Set(
@@ -236,7 +255,7 @@ describe("Outline challenge generation", () => {
         ].map(([countryCode, region, continentName]) => ({
             countryCode,
             countryName: countryCode,
-            capital: "Capital",
+            capital: `${countryCode} Capital`,
             region,
             continentName,
             area: 500_000,
@@ -283,8 +302,24 @@ describe("Outline challenge generation", () => {
         }
     });
 
+    it("builds Extreme choices from unique, non-empty capitals", () => {
+        const withDuplicateAndEmpty = [
+            ...info,
+            { ...info[0], countryCode: "XX", capital: info[0].capital },
+            { ...info[1], countryCode: "YY", capital: "" },
+        ];
+        const result = buildChallenges(withDuplicateAndEmpty, "Extreme");
+        expect(result).toHaveLength(info.length);
+        for (const challenge of result) {
+            const answers = challenge.choices.map((choice) =>
+                getOutlineAnswer(choice, "Extreme"),
+            );
+            expect(answers.every(Boolean)).toBe(true);
+            expect(new Set(answers).size).toBe(answers.length);
+        }
+    });
+
     it("uses the balanced score, choice, and session settings", () => {
-        expect(MAX_GUESSES).toBe(15);
         expect(OUTLINE_RULES).toMatchObject({
             Beginner: {
                 reward: 4,
@@ -309,6 +344,13 @@ describe("Outline challenge generation", () => {
                 penalty: 3,
                 minimumArea: 0,
                 choices: 6,
+            },
+            Extreme: {
+                reward: 2,
+                penalty: 3,
+                minimumArea: 0,
+                choices: 6,
+                answer: "capital",
             },
         });
     });

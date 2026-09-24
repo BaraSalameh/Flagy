@@ -1,5 +1,6 @@
 import { Compass, MapPinned, ScanSearch } from "lucide-react";
 import { difficulties, type GameDefinition } from "@/shared/types/game";
+import { outlineDifficulties } from "@/features/games/outline-explorer/model/rules";
 export const gameDefinitions: readonly GameDefinition[] = [
     {
         slug: "geo-guess",
@@ -36,7 +37,7 @@ export const gameDefinitions: readonly GameDefinition[] = [
         description: "Match a highlighted outline to the right country name.",
         icon: ScanSearch,
         accent: "sun",
-        difficulties,
+        difficulties: outlineDifficulties,
         load: () =>
             import("@/features/games/outline-explorer/OutlineExplorer").then(
                 ({ OutlineExplorer }) => ({ default: OutlineExplorer }),

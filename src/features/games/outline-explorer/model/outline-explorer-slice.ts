@@ -1,16 +1,17 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { GameDifficulty, GameStatus } from "@/shared/types/game";
+import type { GameStatus } from "@/shared/types/game";
 import {
-    MAX_GUESSES,
+    getOutlineAnswer,
     OUTLINE_RULES,
     STARTING_SCORE,
     WINNING_SCORE,
     type OutlineChallenge,
+    type OutlineDifficulty,
 } from "./rules";
 
 interface OutlineExplorerState {
     status: GameStatus;
-    difficulty: GameDifficulty;
+    difficulty: OutlineDifficulty;
     challenges: OutlineChallenge[];
     challengeIndex: number;
     score: number;
@@ -46,7 +47,7 @@ const slice = createSlice({
                 payload,
             }: PayloadAction<{
                 challenges: OutlineChallenge[];
-                difficulty: GameDifficulty;
+                difficulty: OutlineDifficulty;
             }>,
         ): OutlineExplorerState => ({
             ...initialState,
@@ -77,8 +78,11 @@ const slice = createSlice({
                 ),
             );
             state.history.push({
-                countryName: choice.countryName,
-                targetName: challenge.target.countryName,
+                countryName: getOutlineAnswer(choice, state.difficulty),
+                targetName: getOutlineAnswer(
+                    challenge.target,
+                    state.difficulty,
+                ),
                 correct,
                 points: nextScore - state.score,
             });
@@ -86,8 +90,7 @@ const slice = createSlice({
             state.solved = correct;
             if (!correct) state.incorrectCodes.push(code);
             if (nextScore === WINNING_SCORE) state.status = "won";
-            else if (nextScore === 0 || state.history.length === MAX_GUESSES)
-                state.status = "lost";
+            else if (nextScore === 0) state.status = "lost";
         },
         nextChallenge: (state) => {
             if (state.status !== "playing" || !state.solved) return;

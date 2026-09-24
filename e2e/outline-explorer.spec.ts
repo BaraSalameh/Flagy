@@ -100,7 +100,7 @@ test("scoring, readable feedback, tiny outlines, and same-difficulty replay", as
     await result.getByRole("button", { name: "Play again" }).click();
     await page.getByRole("button", { name: /beginner/i }).click();
     await expect(score).toHaveAttribute("aria-valuenow", "10");
-    await expect(panel(page)).toContainText("15 guesses left");
+    await expect(panel(page)).toContainText("0 guesses made");
     expect((await highlightedCountry(page)).countryCode).not.toBe(
         last.countryCode,
     );
@@ -179,6 +179,37 @@ test("expert loss reveals the answer and navigation resets the session", async (
     await expect(
         page.getByRole("dialog", { name: "Outline Explorer" }),
     ).toBeVisible();
+});
+
+test("Extreme asks for the highlighted country's capital", async ({ page }) => {
+    await useFixture(page);
+    await page.goto("/map/outline-explorer");
+    await page.getByRole("button", { name: /extreme/i }).click();
+    const target = await highlightedCountry(page);
+    const other = target.countryCode === "JO" ? countries.VA : countries.JO;
+
+    await expect(panel(page).getByRole("heading")).toHaveText(
+        "What is this country's capital?",
+    );
+    await expect(
+        choices(page).getByRole("button", {
+            name: target.capital,
+            exact: true,
+        }),
+    ).toBeVisible();
+    await expect(
+        choices(page).getByRole("button", {
+            name: other.capital,
+            exact: true,
+        }),
+    ).toBeVisible();
+
+    await choices(page)
+        .getByRole("button", { name: target.capital, exact: true })
+        .click();
+    await expect(panel(page).getByRole("heading")).toHaveText(
+        `${target.capital}, ${target.countryName}`,
+    );
 });
 
 test("loading recovery, accessible choices, and narrow layouts", async ({

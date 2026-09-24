@@ -6,7 +6,6 @@ import { GameShell } from "@/features/game-shell/GameShell";
 import { useMapDataState } from "@/lib/contexts/hooks/useLoadMapData";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { Button, ButtonLink, Dialog } from "@/shared/ui";
-import { difficulties, type GameDifficulty } from "@/shared/types/game";
 import {
     clearOutlineExplorer,
     getChallenge,
@@ -15,10 +14,11 @@ import {
 } from "./model/outline-explorer-slice";
 import {
     buildChallenges,
+    outlineDifficulties,
     OUTLINE_RULES,
-    MAX_GUESSES,
     STARTING_SCORE,
     WINNING_SCORE,
+    type OutlineDifficulty,
 } from "./model/rules";
 import { OutlinePanel } from "./OutlinePanel";
 
@@ -43,7 +43,7 @@ export const OutlineExplorer = () => {
         [dispatch],
     );
 
-    const start = (difficulty: GameDifficulty) => {
+    const start = (difficulty: OutlineDifficulty) => {
         const challenges = buildChallenges(
             countries,
             difficulty,
@@ -63,7 +63,7 @@ export const OutlineExplorer = () => {
                 title="Outline Explorer"
                 open={round.status === "idle"}
                 closeable={false}
-                description={`Name the highlighted country by choosing an answer. Start with ${STARTING_SCORE} points and reach ${WINNING_SCORE} within ${MAX_GUESSES} guesses. Correct answers earn points; wrong answers cost points. Harder levels favor choices from the same continent or region. There is no timer.`}
+                description={`Identify the highlighted country—or choose its capital on Extreme. Start with ${STARTING_SCORE} points and reach ${WINNING_SCORE}. Correct answers earn points; wrong answers cost points, and the round ends only if your score reaches zero. There is no timer or guess limit.`}
             >
                 {status === "error" ? (
                     <div role="alert">
@@ -76,7 +76,7 @@ export const OutlineExplorer = () => {
                             Choose your difficulty
                         </p>
                         <div className="grid gap-2 sm:grid-cols-2">
-                            {difficulties.map((difficulty) => {
+                            {outlineDifficulties.map((difficulty) => {
                                 const rules = OUTLINE_RULES[difficulty];
                                 const count = countries.filter(
                                     (country) =>
@@ -108,7 +108,9 @@ export const OutlineExplorer = () => {
                                                 ? "Mixed distractors"
                                                 : difficulty === "Intermediate"
                                                   ? "Same-continent distractors first"
-                                                  : "Same-region distractors first"}
+                                                  : difficulty === "Extreme"
+                                                    ? "Guess the highlighted country's capital"
+                                                    : "Same-region distractors first"}
                                         </span>
                                     </Button>
                                 );
@@ -148,7 +150,7 @@ export const OutlineExplorer = () => {
                 description={
                     round.status === "won"
                         ? `You reached ${WINNING_SCORE} points by identifying ${correctCount} ${correctCount === 1 ? "outline" : "outlines"} in ${round.history.length} ${round.history.length === 1 ? "guess" : "guesses"}. Your eye for borders carried the round!`
-                        : `${round.score === 0 ? `Your score fell to zero before you could reach ${WINNING_SCORE} points.` : `All ${MAX_GUESSES} guesses are used, and you finished with ${round.score} of ${WINNING_SCORE} points.`} The final silhouette belonged to ${target?.countryName}. Study its shape, then return for another challenge.`
+                        : `Your score fell to zero before you could reach ${WINNING_SCORE} points. The final silhouette belonged to ${target?.countryName}. Study its shape, then return for another challenge.`
                 }
             >
                 <p className="mb-5 text-sm text-muted">
