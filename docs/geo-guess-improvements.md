@@ -3,13 +3,16 @@
 ## Rules
 
 Each round selects one country from the loaded atlas. Beginner, Intermediate,
-Advanced, and Expert allow 15, 12, 10, and 7 guesses respectively. Area eligibility
-and clue order live in `src/features/games/geo-guess/model/rules.ts`.
+Advanced, and Expert allow 12, 10, 8, and 6 guesses respectively. Area
+eligibility, clue order, and reveal thresholds live in
+`src/features/games/geo-guess/model/rules.ts`.
 
-The first clue is visible immediately; each two distinct guesses reveal another.
-All revealed clues remain available. Clicking a country or submitting its name
-uses one guess. Repeating a country is free. A correct final guess still wins.
-Completed rounds cannot accept more guesses.
+The first clue is visible immediately. Later clues unlock at guesses 1, 2, 3,
+5, 7, and 9 for Beginner; 2, 4, 6, 8, and 9 for Intermediate; 2, 4, 6, and 7
+for Advanced; and 2, 4, and 5 for Expert. Easier levels reveal more direct clues
+earlier. All revealed clues remain available. Clicking a country or submitting
+its name uses one guess. Repeating a country is free. A correct final guess still
+wins. Completed rounds cannot accept more guesses.
 
 Replay returns to difficulty selection, then starts a fresh round even if the
 difficulty is unchanged. The previous target is excluded when another eligible
@@ -44,9 +47,9 @@ country exists. Leaving Geo Guess clears its session.
    such as `UNK`. Add provenance, update dates, validation, and a documented
    territory policy before treating facts as current. Approximate population
    formatting does not solve stale source data.
-2. **Playtest clue order and pacing.** Population alone is a weak first clue.
-   Compare a continent-first learning mode against the present sequence, and
-   test an optional “reveal next clue” action with a clearly stated attempt cost.
+2. **Playtest clue order and pacing.** The current progression starts Beginner
+   with continent and capital while harder levels delay or omit direct clues.
+   Measure completion rates before adding an optional paid clue reveal.
 3. **Add short challenge sessions.** Five-round runs, difficulty-specific best
    results, and a daily seeded puzzle could give players a reason to return.
    Define scoring and fair comparison rules before adding leaderboards.

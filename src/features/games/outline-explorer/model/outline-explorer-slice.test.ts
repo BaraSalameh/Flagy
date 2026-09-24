@@ -9,6 +9,7 @@ import reducer, {
 } from "./outline-explorer-slice";
 import {
     buildChallenges,
+    MAX_GUESSES,
     OUTLINE_RULES,
     type OutlineCountry,
     type OutlineChallenge,
@@ -21,6 +22,7 @@ const country = (code: string): OutlineCountry => ({
     countryName: code,
     capital: "Capital",
     region: "Region",
+    continentName: "Continent",
 });
 const choices = ["CA", "CN", "BR", "AU", "IN", "DE"].map(country);
 const challenges: OutlineChallenge[] = [
@@ -77,7 +79,7 @@ describe("Outline Explorer rounds", () => {
             undefined,
             startRound({ challenges, difficulty: "Expert" }),
         );
-        for (const code of ["BR", "AU", "IN"])
+        for (const code of ["BR", "AU", "IN", "DE"])
             lost = reducer(lost, submitGuess(code));
         expect(lost.score).toBe(0);
         expect(lost.status).toBe("lost");
@@ -85,12 +87,12 @@ describe("Outline Explorer rounds", () => {
         expect(reducer(lost, nextChallenge())).toEqual(lost);
     });
 
-    it("awards a win on the twentieth guess", () => {
+    it("awards a win on the final allowed guess", () => {
         let state = reducer(
             undefined,
             startRound({ challenges, difficulty: "Intermediate" }),
         );
-        for (let index = 0; index < 10; index += 1) {
+        for (let index = 0; index < 7; index += 1) {
             state = reducer(state, submitGuess("BR"));
             state = reducer(
                 state,
@@ -98,17 +100,25 @@ describe("Outline Explorer rounds", () => {
             );
             state = reducer(state, nextChallenge());
         }
-        expect(state.history).toHaveLength(20);
+        state = reducer(
+            state,
+            submitGuess(getChallenge(state)!.target.countryCode),
+        );
+        expect(state.history).toHaveLength(MAX_GUESSES);
         expect(state.status).toBe("won");
     });
 
-    it("ends at twenty guesses when the positive score is below the goal", () => {
+    it("ends at the guess limit when the positive score is below the goal", () => {
         let state = reducer(
             undefined,
             startRound({ challenges, difficulty: "Beginner" }),
         );
-        for (let index = 0; index < 5; index += 1) {
-            for (const code of ["BR", "AU", "IN"])
+        for (let index = 0; index < 3; index += 1) {
+            const targetCode = getChallenge(state)!.target.countryCode;
+            for (const code of choices
+                .map((item) => item.countryCode)
+                .filter((code) => code !== targetCode)
+                .slice(0, 4))
                 state = reducer(state, submitGuess(code));
             state = reducer(
                 state,
@@ -116,8 +126,8 @@ describe("Outline Explorer rounds", () => {
             );
             state = reducer(state, nextChallenge());
         }
-        expect(state.history).toHaveLength(20);
-        expect(state.score).toBe(15);
+        expect(state.history).toHaveLength(MAX_GUESSES);
+        expect(state.score).toBe(10);
         expect(state.status).toBe("lost");
     });
 
@@ -176,7 +186,7 @@ describe("Outline challenge generation", () => {
         (difficulty) => {
             const before = structuredClone(info);
             const result = buildChallenges(info, difficulty, "CA");
-            expect(result).toHaveLength(20);
+            expect(result).toHaveLength(MAX_GUESSES);
             expect(result[0].target.countryCode).not.toBe("CA");
             expect(
                 new Set(
@@ -213,5 +223,93 @@ describe("Outline challenge generation", () => {
         expect(
             buildChallenges(info.slice(0, 2), "Beginner")[0].choices,
         ).toHaveLength(2);
+    });
+
+    it("prioritizes continent and region distractors before fallbacks", () => {
+        const groupedInfo: InfoData[] = [
+            ["AA", "R1", "X"],
+            ["AB", "R1", "X"],
+            ["AC", "R2", "X"],
+            ["BA", "R3", "Y"],
+            ["BB", "R3", "Y"],
+            ["CA", "R4", "Z"],
+        ].map(([countryCode, region, continentName]) => ({
+            countryCode,
+            countryName: countryCode,
+            capital: "Capital",
+            region,
+            continentName,
+            area: 500_000,
+            population: "100",
+            currencyCode: "",
+            borders: [],
+            languages: [],
+            flag: "",
+        }));
+
+        for (const difficulty of [
+            "Intermediate",
+            "Advanced",
+            "Expert",
+        ] as const) {
+            for (const challenge of buildChallenges(groupedInfo, difficulty)) {
+                const sameContinent = groupedInfo.filter(
+                    (item) =>
+                        item.continentName === challenge.target.continentName,
+                ).length;
+                expect(
+                    challenge.choices.filter(
+                        (item) =>
+                            item.continentName ===
+                            challenge.target.continentName,
+                    ),
+                ).toHaveLength(
+                    Math.min(OUTLINE_RULES[difficulty].choices, sameContinent),
+                );
+
+                if (difficulty !== "Intermediate") {
+                    const sameRegion = groupedInfo.filter(
+                        (item) => item.region === challenge.target.region,
+                    ).length;
+                    expect(
+                        challenge.choices.filter(
+                            (item) => item.region === challenge.target.region,
+                        ),
+                    ).toHaveLength(
+                        Math.min(OUTLINE_RULES[difficulty].choices, sameRegion),
+                    );
+                }
+            }
+        }
+    });
+
+    it("uses the balanced score, choice, and session settings", () => {
+        expect(MAX_GUESSES).toBe(15);
+        expect(OUTLINE_RULES).toMatchObject({
+            Beginner: {
+                reward: 4,
+                penalty: 1,
+                minimumArea: 200_000,
+                choices: 3,
+            },
+            Intermediate: {
+                reward: 3,
+                penalty: 2,
+                minimumArea: 100_000,
+                choices: 4,
+            },
+            Advanced: {
+                reward: 2,
+                penalty: 2,
+                minimumArea: 20_000,
+                choices: 5,
+            },
+            Expert: {
+                reward: 2,
+                penalty: 3,
+                minimumArea: 0,
+                choices: 6,
+            },
+        });
     });
 });

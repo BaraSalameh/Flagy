@@ -92,13 +92,15 @@ test("scoring, readable feedback, tiny outlines, and same-difficulty replay", as
             );
         }
     }
-    const result = page.getByRole("dialog", { name: "Brilliant journey!" });
+    const result = page.getByRole("dialog", {
+        name: "Outline decoded — you win!",
+    });
     await expect(result).toContainText("3 correct of 4");
     const last = await highlightedCountry(page);
     await result.getByRole("button", { name: "Play again" }).click();
     await page.getByRole("button", { name: /beginner/i }).click();
     await expect(score).toHaveAttribute("aria-valuenow", "10");
-    await expect(panel(page)).toContainText("20 guesses left");
+    await expect(panel(page)).toContainText("15 guesses left");
     expect((await highlightedCountry(page)).countryCode).not.toBe(
         last.countryCode,
     );
@@ -158,12 +160,12 @@ test("expert loss reveals the answer and navigation resets the session", async (
     const target = pool[targetIndex];
     for (const country of pool
         .filter((country) => country.countryCode !== target.countryCode)
-        .slice(0, 3))
+        .slice(0, 4))
         await choices(page)
             .getByRole("button", { name: country.countryName, exact: true })
             .click();
     const result = page.getByRole("dialog", {
-        name: "A little detour",
+        name: "Silhouette slipped away — round lost",
     });
     await expect(result).toContainText("Final score: 0/20");
     await expect(result).toContainText(target.countryName);
@@ -203,7 +205,7 @@ test("loading recovery, accessible choices, and narrow layouts", async ({
             .violations,
     ).toEqual([]);
     await beginner.click();
-    await expect(choices(page).getByRole("button")).toHaveCount(4);
+    await expect(choices(page).getByRole("button")).toHaveCount(3);
     expect(
         (
             await new AxeBuilder({ page })

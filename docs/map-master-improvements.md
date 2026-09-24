@@ -2,16 +2,16 @@
 
 ## Rules
 
-Start at 10 points. Reach 20 points within 20 guesses to win. A score of zero or
-using all 20 guesses without reaching 20 ends the challenge. A winning twentieth
+Start at 10 points. Reach 20 points within 15 guesses to win. A score of zero or
+using all 15 guesses without reaching 20 ends the challenge. A winning fifteenth
 guess takes precedence over the guess limit. Scores stay between 0 and 20.
 
 | Difficulty   | Correct answer | Wrong answer | Target eligibility    |
 | ------------ | -------------: | -----------: | --------------------- |
 | Beginner     |             +4 |           −1 | Area over 200,000 km² |
 | Intermediate |             +3 |           −2 | Area over 100,000 km² |
-| Advanced     |             +2 |           −3 | Area over 20,000 km²  |
-| Expert       |             +1 |           −4 | Any size              |
+| Advanced     |             +2 |           −2 | Area over 20,000 km²  |
+| Expert       |             +2 |           −3 | Any size              |
 
 Correct answers advance to the next named country. Wrong answers keep the current
 target and mark the selected country. Repeating a wrong guess for that target is
@@ -54,8 +54,8 @@ reuse its sole target. The real atlas has multiple targets at every difficulty.
 3. **Short sessions and personal bests:** offer five- or ten-country runs with
    accuracy and streak records. Store records locally before adding accounts.
 4. **Better difficulty calibration:** country size alone does not capture how
-   recognizable a country is. Playtest the country pools and reward/penalty
-   values, especially Expert's +1/−4 balance.
+   recognizable a country is. Playtest the rebalanced rewards and penalties,
+   then consider curated pools only if completion data shows a need.
 5. **Map usability and data:** provide a fair small-island interaction design,
    measure mobile rendering of the roughly 11.2 MB GeoJSON, and document country
    data sources and territory policy. The existing dataset has undated facts
@@ -65,7 +65,7 @@ reuse its sole target. The real atlas has multiple targets at every difficulty.
 
 Unit coverage checks all four scoring rules, target progression, duplicate
 selection protection, country aliases, score clamping, win/loss freezes, a win
-on guess 20, positive-score exhaustion at guess 20, replay, empty pools, and
+on guess 15, positive-score exhaustion at guess 15, replay, empty pools, and
 eligible deck selection.
 
 The production-browser suite checks desktop and mobile scoring, a second win

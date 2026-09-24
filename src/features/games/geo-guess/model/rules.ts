@@ -14,43 +14,48 @@ interface DifficultyRules {
     guesses: number;
     minimumArea: number;
     clues: readonly ClueKey[];
+    revealAt: readonly number[];
 }
 
 export const GEO_GUESS_RULES: Record<GameDifficulty, DifficultyRules> = {
     Beginner: {
-        guesses: 15,
+        guesses: 12,
         minimumArea: 200_000,
         clues: [
-            "population",
+            "continentName",
+            "capital",
+            "region",
+            "languages",
+            "borders",
             "area",
+            "population",
+        ],
+        revealAt: [0, 1, 2, 3, 5, 7, 9],
+    },
+    Intermediate: {
+        guesses: 10,
+        minimumArea: 100_000,
+        clues: [
             "continentName",
             "region",
             "languages",
             "borders",
-            "capital",
-        ],
-    },
-    Intermediate: {
-        guesses: 12,
-        minimumArea: 100_000,
-        clues: [
-            "population",
             "area",
-            "continentName",
-            "region",
-            "languages",
-            "capital",
+            "population",
         ],
+        revealAt: [0, 2, 4, 6, 8, 9],
     },
     Advanced: {
-        guesses: 10,
+        guesses: 8,
         minimumArea: 20_000,
-        clues: ["population", "area", "continentName", "region", "languages"],
+        clues: ["region", "languages", "borders", "area", "population"],
+        revealAt: [0, 2, 4, 6, 7],
     },
     Expert: {
-        guesses: 7,
+        guesses: 6,
         minimumArea: 0,
-        clues: ["population", "area", "continentName", "region"],
+        clues: ["area", "population", "region", "languages"],
+        revealAt: [0, 2, 4, 5],
     },
 };
 
@@ -68,8 +73,13 @@ export function getClues(
         borders: `Neighbors: ${country.borders.join(", ") || "No land borders"}`,
         capital: `Capital: ${country.capital || "Not available"}`,
     };
-    return GEO_GUESS_RULES[difficulty].clues
-        .slice(0, Math.floor(guessesUsed / 2) + 1)
+    const rules = GEO_GUESS_RULES[difficulty];
+    const visibleClues = Math.max(
+        1,
+        rules.revealAt.filter((threshold) => guessesUsed >= threshold).length,
+    );
+    return rules.clues
+        .slice(0, visibleClues)
         .map((key) => ({ key, text: values[key] }));
 }
 

@@ -63,7 +63,7 @@ export const OutlineExplorer = () => {
                 title="Outline Explorer"
                 open={round.status === "idle"}
                 closeable={false}
-                description={`Name the highlighted country by choosing an answer. Start with ${STARTING_SCORE} points and reach ${WINNING_SCORE} within ${MAX_GUESSES} guesses. Correct answers earn points; wrong answers cost points. There is no timer.`}
+                description={`Name the highlighted country by choosing an answer. Start with ${STARTING_SCORE} points and reach ${WINNING_SCORE} within ${MAX_GUESSES} guesses. Correct answers earn points; wrong answers cost points. Harder levels favor choices from the same continent or region. There is no timer.`}
             >
                 {status === "error" ? (
                     <div role="alert">
@@ -103,6 +103,13 @@ export const OutlineExplorer = () => {
                                                 ? `over ${rules.minimumArea.toLocaleString("en-US")} km²`
                                                 : "any country size"}
                                         </span>
+                                        <span className="text-xs font-medium text-muted">
+                                            {difficulty === "Beginner"
+                                                ? "Mixed distractors"
+                                                : difficulty === "Intermediate"
+                                                  ? "Same-continent distractors first"
+                                                  : "Same-region distractors first"}
+                                        </span>
                                     </Button>
                                 );
                             })}
@@ -133,15 +140,15 @@ export const OutlineExplorer = () => {
             <Dialog
                 title={
                     round.status === "won"
-                        ? "Brilliant journey!"
-                        : "A little detour"
+                        ? "Outline decoded — you win!"
+                        : "Silhouette slipped away — round lost"
                 }
                 open={finished && !resultDismissed}
                 closeable={false}
                 description={
                     round.status === "won"
-                        ? `You reached ${WINNING_SCORE} points and identified ${correctCount} ${correctCount === 1 ? "outline" : "outlines"}!`
-                        : `${round.score === 0 ? "Your score reached zero." : "You used all 20 guesses."} The highlighted country was ${target?.countryName}. Take a look, then try a fresh challenge.`
+                        ? `You reached ${WINNING_SCORE} points by identifying ${correctCount} ${correctCount === 1 ? "outline" : "outlines"} in ${round.history.length} ${round.history.length === 1 ? "guess" : "guesses"}. Your eye for borders carried the round!`
+                        : `${round.score === 0 ? `Your score fell to zero before you could reach ${WINNING_SCORE} points.` : `All ${MAX_GUESSES} guesses are used, and you finished with ${round.score} of ${WINNING_SCORE} points.`} The final silhouette belonged to ${target?.countryName}. Study its shape, then return for another challenge.`
                 }
             >
                 <p className="mb-5 text-sm text-muted">

@@ -3,16 +3,20 @@
 ## Rules
 
 Identify the highlighted country by selecting its name. Start with 10 points and
-reach 20 within 20 guesses. A score of zero or exhausting the guess allowance
+reach 20 within 15 guesses. A score of zero or exhausting the guess allowance
 without reaching 20 ends the session. A winning final guess still wins. There is
 no timer.
 
 | Difficulty   | Correct | Incorrect | Choices | Target eligibility    |
 | ------------ | ------: | --------: | ------: | --------------------- |
-| Beginner     |      +4 |        −1 | Up to 4 | Area over 200,000 km² |
-| Intermediate |      +3 |        −2 | Up to 5 | Area over 100,000 km² |
-| Advanced     |      +2 |        −3 | Up to 5 | Area over 20,000 km²  |
-| Expert       |      +1 |        −4 | Up to 6 | Any size              |
+| Beginner     |      +4 |        −1 | Up to 3 | Area over 200,000 km² |
+| Intermediate |      +3 |        −2 | Up to 4 | Area over 100,000 km² |
+| Advanced     |      +2 |        −2 | Up to 5 | Area over 20,000 km²  |
+| Expert       |      +2 |        −3 | Up to 6 | Any size              |
+
+Beginner uses mixed distractors. Intermediate prioritizes countries from the
+same continent. Advanced and Expert prioritize the same region, then the same
+continent, and finally fall back to the full eligible pool.
 
 A wrong choice costs points once and becomes disabled. A correct answer freezes
 the choices, shows the country's name, capital, and region, and offers **Next
@@ -49,8 +53,8 @@ countries cannot start; small pools use fewer choices.
 1. **Silhouette-only challenge:** optionally hide surrounding countries to test
    shape recognition without location clues. Keep the contextual map as a
    separate learning mode.
-2. **More useful distractors:** compare random choices with countries of similar
-   shape or from the same region. Playtest difficulty before making this default.
+2. **More useful distractors:** the current regional priority makes harder choice
+   sets more plausible. Compare it with shape-similar distractors in playtests.
 3. **Revisit mistakes:** offer a short review of missed outlines after a session,
    then repeat them later to reinforce learning.
 4. **Short sessions and personal bests:** track accuracy and streaks by difficulty

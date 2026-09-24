@@ -6,7 +6,12 @@ import reducer, {
     startRound,
     submitGuess,
 } from "./map-master-slice";
-import { buildChallengeDeck, MAP_MASTER_RULES, type MapCountry } from "./rules";
+import {
+    buildChallengeDeck,
+    MAP_MASTER_RULES,
+    MAX_GUESSES,
+    type MapCountry,
+} from "./rules";
 import { difficulties } from "@/shared/types/game";
 import type { InfoData } from "@/shared/types/country";
 
@@ -101,7 +106,7 @@ describe("Map Master rounds", () => {
             undefined,
             startRound({ deck, difficulty: "Expert" }),
         );
-        for (const code of ["BR", "JO", "DE"])
+        for (const code of ["BR", "JO", "DE", "AU"])
             lost = reducer(
                 lost,
                 submitGuess({ countryCode: code, countryName: code }),
@@ -111,26 +116,27 @@ describe("Map Master rounds", () => {
         expect(reducer(lost, submitGuess(canada))).toEqual(lost);
     });
 
-    it("wins on the twentieth guess when that guess reaches the goal", () => {
+    it("wins on the final allowed guess when that guess reaches the goal", () => {
         let state = reducer(
             undefined,
             startRound({ deck, difficulty: "Intermediate" }),
         );
-        for (let index = 0; index < 10; index += 1) {
+        for (let index = 0; index < 7; index += 1) {
             state = reducer(state, submitGuess(wrongCountry));
             state = reducer(state, submitGuess(getTarget(state)!));
         }
-        expect(state.history).toHaveLength(20);
+        state = reducer(state, submitGuess(getTarget(state)!));
+        expect(state.history).toHaveLength(MAX_GUESSES);
         expect(state.score).toBe(20);
         expect(state.status).toBe("won");
     });
 
-    it("ends at twenty guesses even if the score is still positive", () => {
+    it("ends at the guess limit even if the score is still positive", () => {
         let state = reducer(
             undefined,
             startRound({ deck, difficulty: "Beginner" }),
         );
-        for (let index = 0; index < 4; index += 1) {
+        for (let index = 0; index < 3; index += 1) {
             for (const code of ["BR", "JO", "DE", "AU"])
                 state = reducer(
                     state,
@@ -138,7 +144,7 @@ describe("Map Master rounds", () => {
                 );
             state = reducer(state, submitGuess(getTarget(state)!));
         }
-        expect(state.history).toHaveLength(20);
+        expect(state.history).toHaveLength(MAX_GUESSES);
         expect(state.score).toBe(10);
         expect(state.status).toBe("lost");
     });
@@ -208,5 +214,15 @@ describe("Map Master challenge selection", () => {
         expect(buildChallengeDeck([countries[0]], "Beginner", "CA")).toEqual([
             canada,
         ]);
+    });
+
+    it("uses the balanced score table and fifteen-guess session", () => {
+        expect(MAX_GUESSES).toBe(15);
+        expect(MAP_MASTER_RULES).toMatchObject({
+            Beginner: { reward: 4, penalty: 1, minimumArea: 200_000 },
+            Intermediate: { reward: 3, penalty: 2, minimumArea: 100_000 },
+            Advanced: { reward: 2, penalty: 2, minimumArea: 20_000 },
+            Expert: { reward: 2, penalty: 3, minimumArea: 0 },
+        });
     });
 });

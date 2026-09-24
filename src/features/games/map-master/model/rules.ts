@@ -3,7 +3,7 @@ import type { GameDifficulty } from "@/shared/types/game";
 
 export const STARTING_SCORE = 10;
 export const WINNING_SCORE = 20;
-export const MAX_GUESSES = 20;
+export const MAX_GUESSES = 15;
 
 export type MapCountry = Pick<
     InfoData,
@@ -16,8 +16,8 @@ export const MAP_MASTER_RULES: Record<
 > = {
     Beginner: { reward: 4, penalty: 1, minimumArea: 200_000 },
     Intermediate: { reward: 3, penalty: 2, minimumArea: 100_000 },
-    Advanced: { reward: 2, penalty: 3, minimumArea: 20_000 },
-    Expert: { reward: 1, penalty: 4, minimumArea: 0 },
+    Advanced: { reward: 2, penalty: 2, minimumArea: 20_000 },
+    Expert: { reward: 2, penalty: 3, minimumArea: 0 },
 };
 
 // Randomness belongs to the start event, keeping all reducer transitions pure.

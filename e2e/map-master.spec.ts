@@ -68,12 +68,14 @@ test("correct scores, persistent feedback, and same-difficulty replay through an
     await selectTarget(page);
     await expect(score).toHaveAttribute("aria-valuenow", "17");
     const last = await selectTarget(page);
-    const result = page.getByRole("dialog", { name: "Brilliant journey!" });
+    const result = page.getByRole("dialog", {
+        name: "Map mastered — you win!",
+    });
     await expect(result).toContainText("3 countries in 4 guesses");
     await result.getByRole("button", { name: "Play again" }).click();
     await page.getByRole("button", { name: /beginner/i }).click();
     await expect(score).toHaveAttribute("aria-valuenow", "10");
-    await expect(panel(page)).toContainText("20 guesses left");
+    await expect(panel(page)).toContainText("15 guesses left");
     await expect(panel(page).getByRole("heading")).not.toHaveText(last);
     for (let index = 0; index < 3; index += 1) await selectTarget(page);
     await expect(result).toContainText("3 countries in 3 guesses");
@@ -95,6 +97,7 @@ test("country aliases work and score exhaustion reveals the answer", async ({
                 JO: countries.JO,
                 DE: { ...countries.DE, area: 1 },
                 BR: { ...countries.BR, area: 1 },
+                CA: { ...countries.CA, area: 1 },
             },
         }),
     );
@@ -109,12 +112,14 @@ test("country aliases work and score exhaustion reveals the answer", async ({
     await page.getByRole("link", { name: "Play now" }).nth(1).click();
     await page.getByRole("button", { name: /expert/i }).click();
     const target = await panel(page).getByRole("heading").innerText();
-    const wrong = ["Vatican City", "Jordan", "Germany", "Brazil"].filter(
-        (name) => name !== target,
-    );
+    const wrong = ["Vatican City", "Jordan", "Germany", "Brazil", "Canada"]
+        .filter((name) => name !== target)
+        .slice(0, 4);
     for (const name of wrong) await selectCountry(page, name);
-    const result = page.getByRole("dialog", { name: "A little detour" });
-    await expect(result).toContainText(`The last country was ${target}`);
+    const result = page.getByRole("dialog", {
+        name: "Expedition over — round lost",
+    });
+    await expect(result).toContainText(`The final challenge was ${target}`);
     await expect(result).toContainText("Final score: 0/20");
     await result.getByRole("button", { name: "Explore answer" }).click();
     await expect(panel(page)).toContainText(target);

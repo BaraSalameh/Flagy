@@ -9,24 +9,32 @@ test("same-difficulty replay selects a new country, restores clues, and can be w
         route.fulfill({ json: { CA: countries.CA, CN: countries.CN } }),
     );
     await page.goto("/map/geo-guess");
+    await expect(
+        page
+            .getByRole("dialog", { name: "Geo Guess" })
+            .getByText(/^Clues: start,/),
+    ).toHaveCount(4);
     await page.getByRole("button", { name: /beginner/i }).click();
     const panel = page.getByRole("region", { name: "Round clues and guesses" });
     const clues = page.getByRole("list", { name: "Revealed clues" });
     await expect(clues.getByRole("listitem")).toHaveCount(1);
     const firstClue = await clues.innerText();
-    const canadaPopulation = Number(countries.CA.population).toLocaleString(
-        "en-US",
-        { notation: "compact" },
-    );
-    const firstCode = firstClue.includes(canadaPopulation) ? "CA" : "CN";
+    const firstCode = firstClue.includes(countries.CA.continentName)
+        ? "CA"
+        : "CN";
     const secondCode = firstCode === "CA" ? "CN" : "CA";
     await page.getByLabel("Guess by name").selectOption(firstCode);
     await page.getByRole("button", { name: "Guess", exact: true }).click();
-    const result = page.getByRole("dialog", { name: "Brilliant journey!" });
+    const result = page.getByRole("dialog", {
+        name: "Mystery solved — you win!",
+    });
     await expect(result).toContainText(countries[firstCode].countryName);
+    await expect(result).toContainText(
+        `${countries[firstCode].capital} · ${countries[firstCode].countryName}`,
+    );
     await result.getByRole("button", { name: "Play again" }).click();
     await page.getByRole("button", { name: /beginner/i }).click();
-    await expect(panel).toContainText("15 guesses left");
+    await expect(panel).toContainText("12 guesses left");
     await expect(clues.getByRole("listitem")).toHaveCount(1);
     await expect(clues).not.toHaveText(firstClue);
     await page.getByLabel("Guess by name").selectOption(secondCode);
@@ -60,15 +68,15 @@ test("map aliases use country codes and guesses preserve clues", async ({
     });
     await canada.focus();
     await page.keyboard.press("Enter");
-    await expect(panel).toContainText("14 guesses left");
-    await expect(clues.getByRole("listitem")).toHaveCount(1);
+    await expect(panel).toContainText("11 guesses left");
+    await expect(clues.getByRole("listitem")).toHaveCount(2);
     await expect(canada).toHaveCSS("outline-style", "none");
     // A repeated key press cannot consume another attempt or show a box outline.
     await page.keyboard.press("Enter");
-    await expect(panel).toContainText("14 guesses left");
+    await expect(panel).toContainText("11 guesses left");
     await page.getByLabel("Guess by name").selectOption("CN");
     await page.getByRole("button", { name: "Guess", exact: true }).click();
-    await expect(clues.getByRole("listitem")).toHaveCount(2);
+    await expect(clues.getByRole("listitem")).toHaveCount(3);
     const accessibility = await new AxeBuilder({ page })
         .include('[aria-label="Round clues and guesses"]')
         .analyze();
@@ -78,7 +86,7 @@ test("map aliases use country codes and guesses preserve clues", async ({
         .focus();
     await page.keyboard.press("Enter");
     await expect(
-        page.getByRole("dialog", { name: "Brilliant journey!" }),
+        page.getByRole("dialog", { name: "Mystery solved — you win!" }),
     ).toContainText("Vatican City");
 });
 

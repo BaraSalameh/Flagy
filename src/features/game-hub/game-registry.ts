@@ -20,7 +20,7 @@ export const gameDefinitions: readonly GameDefinition[] = [
         title: "Map Master",
         eyebrow: "Test your map memory",
         description:
-            "Find named countries on the map and reach 20 points within 20 guesses.",
+            "Find named countries on the map and reach 20 points within 15 guesses.",
         icon: MapPinned,
         accent: "coral",
         difficulties,

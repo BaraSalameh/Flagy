@@ -21,14 +21,17 @@ timer: each distinct guess uses one attempt, and repeated guesses are free.
 
 | Difficulty   | Guesses | Clues | Eligible area    |
 | ------------ | ------: | ----: | ---------------- |
-| Beginner     |      15 |     7 | Over 200,000 km² |
-| Intermediate |      12 |     6 | Over 100,000 km² |
-| Advanced     |      10 |     5 | Over 20,000 km²  |
-| Expert       |       7 |     4 | Any size         |
+| Beginner     |      12 |     7 | Over 200,000 km² |
+| Intermediate |      10 |     6 | Over 100,000 km² |
+| Advanced     |       8 |     5 | Over 20,000 km²  |
+| Expert       |       6 |     4 | Any size         |
 
-The first clue appears immediately and another unlocks after every two guesses.
-Previous clues and guesses remain available. A correct selection wins, including
-on the last attempt. At the end, explore the highlighted answer or play again.
+The first clue appears immediately. Later clues unlock at guesses 1, 2, 3, 5,
+7, and 9 for Beginner; 2, 4, 6, 8, and 9 for Intermediate; 2, 4, 6, and 7 for
+Advanced; and 2, 4, and 5 for Expert. Beginner starts with continent and reveals
+capital early, while the harder levels provide fewer, less direct clues. Previous
+clues and guesses remain available. A correct selection wins, including on the
+last attempt. At the end, explore the highlighted answer or play again.
 
 Country identity uses ISO2 codes so differences in display names do not affect
 correctness. Only countries present in both atlas datasets can be selected as
@@ -37,15 +40,15 @@ targets. Replay starts a fresh round and avoids the last target when possible.
 ## Map Master
 
 Find each named country on the map. Start at 10 points and reach 20 within
-20 guesses. There is no timer. Correct answers advance to the next country;
+15 guesses. There is no timer. Correct answers advance to the next country;
 wrong answers keep the current target. A score of zero ends the challenge.
 
 | Difficulty   | Correct | Incorrect |
 | ------------ | ------: | --------: |
 | Beginner     |      +4 |        −1 |
 | Intermediate |      +3 |        −2 |
-| Advanced     |      +2 |        −3 |
-| Expert       |      +1 |        −4 |
+| Advanced     |      +2 |        −2 |
+| Expert       |      +2 |        −3 |
 
 Country-size eligibility matches Geo Guess. Repeated wrong guesses for the same
 target are free, and accidental double clicks after a correct answer are ignored.
@@ -55,9 +58,11 @@ last answer at the end or start a fresh challenge at any difficulty.
 ## Outline Explorer
 
 Choose the name of the highlighted country. The score and guess limit match
-Map Master; Beginner offers up to four choices, Intermediate/Advanced five, and
-Expert six. Wrong choices are disabled after one attempt. Correct answers show
-feedback and wait for **Next country** before advancing.
+Map Master; Beginner offers up to three choices, Intermediate four, Advanced
+five, and Expert six. Intermediate prioritizes distractors from the same
+continent; Advanced and Expert prioritize the same region, then continent.
+Wrong choices are disabled after one attempt. Correct answers show feedback and
+wait for **Next country** before advancing.
 
 The outline is framed automatically. Zoom or use **Center outline** to inspect
 small countries. At the end, explore the answer or replay at any difficulty.

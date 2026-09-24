@@ -43,7 +43,11 @@ describe("Geo Guess rounds", () => {
             );
             expect(
                 getClues(state.target!, difficulty, state.guesses.length),
-            ).toEqual([{ key: "population", text: "Population: about 40M" }]);
+            ).toHaveLength(1);
+            expect(
+                getClues(state.target!, difficulty, state.guesses.length)[0]
+                    .key,
+            ).toBe(GEO_GUESS_RULES[difficulty].clues[0]);
         },
     );
 
@@ -67,9 +71,9 @@ describe("Geo Guess rounds", () => {
         );
         expect(state.status).toBe("playing");
         expect(state.guesses).toEqual([]);
-        expect(state.remainingGuesses).toBe(15);
+        expect(state.remainingGuesses).toBe(12);
         expect(getClues(state.target!, state.difficulty, 0)[0].text).toBe(
-            "Population: about 1.4B",
+            "Continent: North America",
         );
         expect(reducer(state, submitGuess("CN")).status).toBe("won");
     });
@@ -82,7 +86,7 @@ describe("Geo Guess rounds", () => {
         for (const code of ["CN", "AU", "CN", "CN"])
             state = reducer(state, submitGuess(code));
         expect(state.guesses).toEqual(["CN", "AU"]);
-        expect(state.remainingGuesses).toBe(5);
+        expect(state.remainingGuesses).toBe(4);
     });
 
     it("accepts a correct final guess and freezes completed rounds", () => {
@@ -90,7 +94,7 @@ describe("Geo Guess rounds", () => {
             undefined,
             startRound({ country: canada, difficulty: "Expert" }),
         );
-        for (const code of ["CN", "AU", "BR", "US", "JO", "IN"])
+        for (const code of ["CN", "AU", "BR", "US", "JO"])
             state = reducer(state, submitGuess(code));
         const won = reducer(state, submitGuess("CA"));
         expect(won.status).toBe("won");
@@ -116,21 +120,85 @@ describe("Geo Guess rounds", () => {
 });
 
 describe("Geo Guess rules", () => {
-    it("keeps earlier clues visible between unlocks and formats lists readably", () => {
-        const first = getClues(canada, "Beginner", 0);
-        expect(getClues(canada, "Beginner", 1)).toEqual(first);
-        expect(getClues(canada, "Beginner", 2)).toHaveLength(2);
-        expect(getClues(canada, "Beginner", 2)[0]).toEqual(first[0]);
-        expect(getClues(canada, "Beginner", 12)).toContainEqual({
+    const expectedRules = {
+        Beginner: {
+            guesses: 12,
+            clues: [
+                "continentName",
+                "capital",
+                "region",
+                "languages",
+                "borders",
+                "area",
+                "population",
+            ],
+            revealAt: [0, 1, 2, 3, 5, 7, 9],
+        },
+        Intermediate: {
+            guesses: 10,
+            clues: [
+                "continentName",
+                "region",
+                "languages",
+                "borders",
+                "area",
+                "population",
+            ],
+            revealAt: [0, 2, 4, 6, 8, 9],
+        },
+        Advanced: {
+            guesses: 8,
+            clues: ["region", "languages", "borders", "area", "population"],
+            revealAt: [0, 2, 4, 6, 7],
+        },
+        Expert: {
+            guesses: 6,
+            clues: ["area", "population", "region", "languages"],
+            revealAt: [0, 2, 4, 5],
+        },
+    } as const;
+
+    it.each(difficulties)(
+        "always reveals the first %s clue before any guess",
+        (difficulty) => {
+            expect(getClues(canada, difficulty, 0)).toHaveLength(1);
+            expect(getClues(canada, difficulty, 0)[0].key).toBe(
+                GEO_GUESS_RULES[difficulty].clues[0],
+            );
+        },
+    );
+
+    it.each(difficulties)(
+        "uses the complete %s clue order and reveal schedule",
+        (difficulty) => {
+            const expected = expectedRules[difficulty];
+            expect(GEO_GUESS_RULES[difficulty]).toMatchObject(expected);
+            for (
+                let guessesUsed = 0;
+                guessesUsed <= expected.guesses;
+                guessesUsed += 1
+            ) {
+                expect(
+                    getClues(canada, difficulty, guessesUsed).map(
+                        (clue) => clue.key,
+                    ),
+                ).toEqual(
+                    expected.clues.slice(
+                        0,
+                        expected.revealAt.filter(
+                            (threshold) => guessesUsed >= threshold,
+                        ).length,
+                    ),
+                );
+            }
+        },
+    );
+
+    it("keeps earlier clues visible and formats lists readably", () => {
+        expect(getClues(canada, "Beginner", 3)).toContainEqual({
             key: "languages",
             text: "Languages: English, French",
         });
-        expect(getClues(canada, "Expert", 6).map((clue) => clue.key)).toEqual([
-            "population",
-            "area",
-            "continentName",
-            "region",
-        ]);
     });
 
     it("filters by area, handles empty pools, and allows the only eligible country on replay", () => {

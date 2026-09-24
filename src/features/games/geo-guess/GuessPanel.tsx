@@ -19,7 +19,13 @@ export function GuessPanel({ countries }: { countries: readonly InfoData[] }) {
     const lastGuess = countries.find(
         (country) => country.countryCode === round.guesses.at(-1),
     );
-    const nextClueIn = 2 - (round.guesses.length % 2);
+    const nextClueAt = GEO_GUESS_RULES[round.difficulty].revealAt.find(
+        (threshold) => threshold > round.guesses.length,
+    );
+    const nextClueIn =
+        nextClueAt === undefined
+            ? undefined
+            : nextClueAt - round.guesses.length;
 
     return (
         <section
@@ -70,8 +76,7 @@ export function GuessPanel({ countries }: { countries: readonly InfoData[] }) {
             {playing ? (
                 <>
                     <p className="mt-2 text-xs text-muted">
-                        {clues.length <
-                        GEO_GUESS_RULES[round.difficulty].clues.length
+                        {nextClueIn !== undefined
                             ? `Next clue in ${nextClueIn} ${nextClueIn === 1 ? "guess" : "guesses"}.`
                             : "All clues revealed."}{" "}
                         Repeated guesses are free.

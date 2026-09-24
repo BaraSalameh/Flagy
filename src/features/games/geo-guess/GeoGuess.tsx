@@ -55,7 +55,7 @@ export const GeoGuess = () => {
                 title="Geo Guess"
                 open={round.status === "idle"}
                 closeable={false}
-                description="Find a mystery country using clues. Select it on the map or guess by name. Every new guess uses one attempt; another clue unlocks after every two guesses. Take your time."
+                description="Find a mystery country using progressively revealed clues. The first clue is ready before your first guess. Select the country on the map or guess by name. Every distinct guess uses one attempt; repeated guesses are free. Later clue timing depends on difficulty, and there is no timer."
             >
                 {status === "error" ? (
                     <div role="alert">
@@ -90,9 +90,13 @@ export const GeoGuess = () => {
                                             {rules.clues.length} clues
                                         </span>
                                         <span className="text-xs font-medium text-muted">
+                                            Clues: start,{" "}
+                                            {rules.revealAt.slice(1).join(", ")}
+                                        </span>
+                                        <span className="text-xs font-medium text-muted">
                                             {rules.minimumArea
-                                                ? `Countries over ${rules.minimumArea.toLocaleString("en-US")} km²`
-                                                : "Countries of any size"}
+                                                ? `Area: >${rules.minimumArea.toLocaleString("en-US")} km²`
+                                                : "Area: any"}
                                         </span>
                                     </Button>
                                 );
@@ -126,19 +130,19 @@ export const GeoGuess = () => {
             <Dialog
                 title={
                     round.status === "won"
-                        ? "Brilliant journey!"
-                        : "A little detour"
+                        ? "Mystery solved — you win!"
+                        : "Mystery escaped — round lost"
                 }
                 open={isFinished && !resultDismissed}
                 closeable={false}
                 description={
                     round.status === "won"
-                        ? `You found ${round.target?.countryName} in ${round.guesses.length} ${round.guesses.length === 1 ? "guess" : "guesses"}.`
-                        : `The mystery country was ${round.target?.countryName}. Every round is a chance to learn.`
+                        ? `${round.target?.countryName} was the mystery country. You followed the clues and found it in ${round.guesses.length} ${round.guesses.length === 1 ? "guess" : "guesses"}, with ${round.remainingGuesses} ${round.remainingGuesses === 1 ? "attempt" : "attempts"} still in your pocket.`
+                        : `You used every guess, but the trail led to ${round.target?.countryName}. Explore where it sits on the map, remember the clues, and return for another mystery.`
                 }
             >
                 <p className="mb-5 text-sm text-muted">
-                    {round.target?.capital} · {round.target?.region}
+                    {round.target?.capital} · {round.target?.countryName}
                 </p>
                 <div className="grid gap-2 sm:grid-cols-2">
                     <Button onClick={() => dispatch(prepareRound())}>

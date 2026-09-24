@@ -133,15 +133,15 @@ export const MapMaster = () => {
             <Dialog
                 title={
                     round.status === "won"
-                        ? "Brilliant journey!"
-                        : "A little detour"
+                        ? "Map mastered — you win!"
+                        : "Expedition over — round lost"
                 }
                 open={finished && !resultDismissed}
                 closeable={false}
                 description={
                     round.status === "won"
-                        ? `You reached ${WINNING_SCORE} points! You found ${correctCount} ${correctCount === 1 ? "country" : "countries"} in ${round.history.length} guesses.`
-                        : `${round.score === 0 ? "Your score reached zero." : "You used all 20 guesses."} The last country was ${target?.countryName}. Explore it, then try a fresh challenge.`
+                        ? `You reached ${WINNING_SCORE} points and charted ${correctCount} ${correctCount === 1 ? "country" : "countries"} in ${round.history.length} ${round.history.length === 1 ? "guess" : "guesses"}. A sharp trip around the world!`
+                        : `${round.score === 0 ? `Your score fell to zero before you could reach ${WINNING_SCORE} points.` : `All ${MAX_GUESSES} guesses are used, and you finished with ${round.score} of ${WINNING_SCORE} points.`} The final challenge was ${target?.countryName}. Explore its place on the map, then begin a new expedition.`
                 }
             >
                 <p className="mb-5 text-sm text-muted">
