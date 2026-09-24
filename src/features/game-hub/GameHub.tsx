@@ -28,6 +28,11 @@ const gameStyles = {
         icon: "bg-[#d8ff52] text-[#172000] dark:bg-[#d8ff52] dark:text-[#172000]",
         wash: "from-[#d8ff52]/30 via-[#d8ff52]/5 to-transparent dark:from-[#d8ff52]/20",
     },
+    teal: {
+        number: "text-[#087f72] dark:text-[#63dfca]",
+        icon: "bg-[#087f72] text-white dark:bg-[#63dfca] dark:text-[#06211d]",
+        wash: "from-[#16a791]/20 via-[#16a791]/5 to-transparent dark:from-[#63dfca]/20",
+    },
 } as const;
 
 export function GameHub() {
@@ -110,7 +115,7 @@ export function GameHub() {
                     <div className="mt-12 grid grid-cols-3 border-t border-[var(--hub-line)] pt-5">
                         <div>
                             <p className="text-2xl font-black tracking-[-0.05em]">
-                                03
+                                04
                             </p>
                             <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-[var(--hub-faint)]">
                                 Games
@@ -161,7 +166,8 @@ export function GameHub() {
                         {gameDefinitions.map((game, index) => {
                             const Icon = game.icon;
                             const style = gameStyles[game.accent];
-                            const featured = index === 0;
+                            const featured =
+                                gameDefinitions.length % 2 === 1 && index === 0;
 
                             return (
                                 <motion.article
@@ -270,7 +276,7 @@ export function GameHub() {
             <footer className="relative mx-auto mt-5 flex max-w-[90rem] flex-col gap-3 border-t border-[var(--hub-line)] pt-4 text-xs font-bold uppercase tracking-[0.14em] text-[var(--hub-faint)] sm:flex-row sm:items-center sm:justify-between">
                 <p className="flex items-center gap-2">
                     <MoveUpRight aria-hidden="true" className="size-4" />
-                    Three ways to read the world
+                    Four ways to read the world
                 </p>
                 <p className="flex items-center gap-2">
                     Follow your curiosity

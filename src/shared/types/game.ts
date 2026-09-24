@@ -9,7 +9,8 @@ export const difficulties = [
 ] as const;
 export type GameDifficulty = (typeof difficulties)[number];
 export type GameStatus = "idle" | "playing" | "won" | "lost";
-export type GameSlug = "geo-guess" | "map-master" | "outline-explorer";
+export type GameSlug =
+    "geo-guess" | "map-master" | "outline-explorer" | "border-hop";
 
 export interface GameDefinition {
     slug: GameSlug;
@@ -17,7 +18,7 @@ export interface GameDefinition {
     eyebrow: string;
     description: string;
     icon: LucideIcon;
-    accent: "ocean" | "coral" | "sun";
+    accent: "ocean" | "coral" | "sun" | "teal";
     difficulties: readonly (GameDifficulty | "Extreme")[];
     load: () => Promise<{ default: ComponentType }>;
 }

@@ -1,4 +1,4 @@
-import { Compass, MapPinned, ScanSearch } from "lucide-react";
+import { Compass, MapPinned, Route, ScanSearch } from "lucide-react";
 import { difficulties, type GameDefinition } from "@/shared/types/game";
 import { outlineDifficulties } from "@/features/games/outline-explorer/model/rules";
 export const gameDefinitions: readonly GameDefinition[] = [
@@ -41,6 +41,20 @@ export const gameDefinitions: readonly GameDefinition[] = [
         load: () =>
             import("@/features/games/outline-explorer/OutlineExplorer").then(
                 ({ OutlineExplorer }) => ({ default: OutlineExplorer }),
+            ),
+    },
+    {
+        slug: "border-hop",
+        title: "Border Hop",
+        eyebrow: "Connect the countries",
+        description:
+            "Build a land route between two countries, one shared border at a time.",
+        icon: Route,
+        accent: "teal",
+        difficulties,
+        load: () =>
+            import("@/features/games/border-hop/BorderHop").then(
+                ({ BorderHop }) => ({ default: BorderHop }),
             ),
     },
 ] as const;

@@ -1,7 +1,7 @@
 # flagy.
 
 An interactive geography game built with Next.js, React, Redux Toolkit, and Leaflet.
-The game hub offers Geo Guess, Map Master, and Outline Explorer.
+The game hub offers Geo Guess, Map Master, Outline Explorer, and Border Hop.
 
 ## Run locally
 
@@ -69,6 +69,25 @@ small countries. Extreme mode asks for the capital of the highlighted country
 instead of its name. There is no guess limit: the round is lost only when the
 score reaches zero. At the end, explore the answer or replay at any difficulty.
 
+## Border Hop
+
+Build a land route from the blue starting country to the coral destination.
+Every new stop must share a border with the current country. Selecting an
+earlier stop backtracks, and invalid border jumps do not spend a move. There is
+no timer.
+
+| Difficulty   | Shortest distance | Extra moves | Hints |
+| ------------ | ----------------: | ----------: | ----: |
+| Beginner     |                 2 |           4 |     2 |
+| Intermediate |               3–4 |           3 |     1 |
+| Advanced     |               5–6 |           2 |     1 |
+| Expert       |               7–9 |           1 |     0 |
+
+Beginner and Intermediate reveal the shortest distance; harder levels hide it.
+Players can undo or reset their route at any point. Giving up reveals one
+shortest path across the map, while reaching the destination reports whether
+the chosen path was optimal.
+
 ## Code organization
 
 - `src/features/games/geo-guess/model/rules.ts`: difficulty settings, clue
@@ -83,6 +102,10 @@ score reaches zero. At the end, explore the answer or replay at any difficulty.
 - `src/features/games/outline-explorer/model`: choice generation, scoring, round
   state, and regression tests.
 - `src/features/games/outline-explorer/OutlineMap.tsx`: highlighting and framing.
+- `src/features/games/border-hop/model`: border graph construction, shortest-path
+  generation, route state, and regression tests.
+- `src/features/games/border-hop/BorderHopMap.tsx`: route selection, highlighting,
+  framing, and keyboard controls.
 - `src/features/map/CountrySelectionMap.tsx`: shared Geo Guess/Map Master map
   selection, keyboard controls, highlighting, and answer reveal.
 - `src/lib/contexts/MapProvider.tsx`: atlas loading and retry.

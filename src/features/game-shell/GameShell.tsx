@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, Compass, MapPinned, ScanSearch } from "lucide-react";
+import { ArrowLeft, Compass, MapPinned, Route, ScanSearch } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useAppSelector } from "@/lib/store/hooks";
 import type { GameSlug } from "@/shared/types/game";
@@ -19,14 +19,18 @@ export function GameShell({
             ? state.geoGuess.difficulty
             : game === "map-master"
               ? state.mapMaster.difficulty
-              : state.outlineExplorer.difficulty,
+              : game === "outline-explorer"
+                ? state.outlineExplorer.difficulty
+                : state.borderHop.difficulty,
     );
     const gameStarted = useAppSelector((state) =>
         game === "geo-guess"
             ? state.geoGuess.status !== "idle"
             : game === "map-master"
               ? state.mapMaster.status !== "idle"
-              : state.outlineExplorer.status !== "idle",
+              : game === "outline-explorer"
+                ? state.outlineExplorer.status !== "idle"
+                : state.borderHop.status !== "idle",
     );
     const definition = {
         "geo-guess": {
@@ -43,6 +47,11 @@ export function GameShell({
             title: "Outline Explorer",
             eyebrow: "Read the silhouette",
             icon: ScanSearch,
+        },
+        "border-hop": {
+            title: "Border Hop",
+            eyebrow: "Connect the countries",
+            icon: Route,
         },
     }[game];
     const Icon = definition.icon;

@@ -54,6 +54,7 @@ for (const game of [
     { slug: "geo-guess", title: "Geo Guess" },
     { slug: "map-master", title: "Map Master" },
     { slug: "outline-explorer", title: "Outline Explorer" },
+    { slug: "border-hop", title: "Border Hop" },
 ]) {
     test(`${game.title} starts with a responsive game shell`, async ({
         page,
@@ -78,6 +79,7 @@ for (const game of [
     { slug: "geo-guess", title: "Geo Guess" },
     { slug: "map-master", title: "Map Master" },
     { slug: "outline-explorer", title: "Outline Explorer" },
+    { slug: "border-hop", title: "Border Hop" },
 ]) {
     test(`${game.title} keeps the loading overlay until the atlas is painted`, async ({
         page,
@@ -239,6 +241,31 @@ test("outline explorer can reach a result and replay", async ({
     await page.getByRole("button", { name: "Play again" }).click();
     await expect(
         page.getByRole("dialog", { name: "Outline Explorer" }),
+    ).toBeVisible();
+});
+
+test("border hop can complete a beginner route with hints", async ({
+    page,
+}, testInfo) => {
+    test.skip(
+        testInfo.project.name !== "desktop",
+        "Covered once; responsive startup is tested separately.",
+    );
+    await page.goto("/map/border-hop");
+    await page.getByRole("button", { name: /beginner/i }).click();
+    const routePanel = page.getByRole("region", { name: "Border Hop route" });
+    await expect(routePanel).toBeVisible();
+    await expect(
+        routePanel.getByText(/shortest route takes 2 moves/i),
+    ).toBeVisible();
+    await routePanel.getByRole("button", { name: /hint \(2\)/i }).click();
+    await routePanel.getByRole("button", { name: /hint \(1\)/i }).click();
+    await expect(
+        page.getByRole("dialog", { name: "Perfect route!" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "New route" }).click();
+    await expect(
+        page.getByRole("dialog", { name: "Border Hop" }),
     ).toBeVisible();
 });
 

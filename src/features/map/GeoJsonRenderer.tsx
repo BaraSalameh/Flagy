@@ -5,6 +5,7 @@ import { useMap } from "react-leaflet";
 import { GeoGuessMap } from "@/features/games/geo-guess/GeoGuessMap";
 import { MapMasterMap } from "@/features/games/map-master/MapMasterMap";
 import { OutlineMap } from "@/features/games/outline-explorer/OutlineMap";
+import { BorderHopMap } from "@/features/games/border-hop/BorderHopMap";
 import type { GeoJsonRendererProps } from "./types";
 
 function MapPaintReporter({
@@ -52,6 +53,9 @@ export const GeoJsonRenderer = ({
             break;
         case "outline-explorer":
             renderer = <OutlineMap geoData={geoData} />;
+            break;
+        case "border-hop":
+            renderer = <BorderHopMap geoData={geoData} />;
             break;
     }
 
