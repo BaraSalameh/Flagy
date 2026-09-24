@@ -4,8 +4,8 @@
     "private": true,
     "scripts": {
         "dev": "next dev --turbopack",
-        "build": "cross-env NEXT_DIST_DIR=.next-build next build --turbopack",
-        "start": "cross-env NEXT_DIST_DIR=.next-build next start",
+        "build": "next build --turbopack",
+        "start": "next start",
         "lint": "eslint",
         "format": "prettier --write .",
         "format:check": "prettier --check .",

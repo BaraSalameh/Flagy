@@ -104,11 +104,12 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The development server uses `.next`, production builds use `.next-build`, and
-the browser suite builds and serves the production app on port 3010 using a
-separate `.next-playwright` output directory. This keeps builds and tests from
-invalidating a running development server. The suite covers desktop and mobile,
-keyboard interaction, accessibility, data retry, and same-difficulty replay.
+Development and production builds use Next.js's standard `.next` directory so
+deployments work with hosting adapters such as Vercel. The browser suite builds
+and serves the production app on port 3010 using a separate `.next-playwright`
+output directory. This keeps browser tests from invalidating a running
+development server. The suite covers desktop and mobile, keyboard interaction,
+accessibility, data retry, and same-difficulty replay.
 
 See the [Geo Guess roadmap](docs/geo-guess-improvements.md),
 [Map Master roadmap](docs/map-master-improvements.md), and

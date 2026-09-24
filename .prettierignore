@@ -1,6 +1,5 @@
 node_modules
 .next
-.next-build
 .next-playwright
 coverage
 test-results
