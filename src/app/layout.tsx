@@ -15,9 +15,13 @@ const geistMono = Geist_Mono({
     display: "swap",
 });
 export const metadata: Metadata = {
-    title: { default: "Flagy — Explore the world", template: "%s · Flagy" },
+    title: { default: "flagy. — Explore the world", template: "%s · flagy." },
     description:
         "Play colorful geography games and learn the world one country at a time.",
+    icons: {
+        icon: [{ url: "/icon.png", type: "image/png" }],
+        shortcut: "/icon.png",
+    },
 };
 export const viewport: Viewport = {
     width: "device-width",

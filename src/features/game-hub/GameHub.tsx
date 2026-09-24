@@ -5,13 +5,12 @@ import {
     ArrowUpRight,
     Asterisk,
     ChevronRight,
-    Globe2,
     Layers3,
     MoveUpRight,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { gameDefinitions } from "./game-registry";
-import { ThemeToggle } from "@/shared/ui";
+import { LogoMark, ThemeToggle } from "@/shared/ui";
 
 const gameStyles = {
     ocean: {
@@ -43,15 +42,19 @@ export function GameHub() {
                     href="/"
                     className="group flex items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-focus"
                 >
-                    <span className="grid size-10 place-items-center rounded-full bg-[var(--hub-ink)] text-[var(--hub-bg)] transition-transform duration-300 group-hover:rotate-12">
-                        <Globe2 aria-hidden="true" className="size-5" />
-                    </span>
+                    <LogoMark
+                        aria-hidden="true"
+                        className="size-11 shrink-0 drop-shadow-[0_8px_14px_rgb(22_34_29_/_0.18)] transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105"
+                    />
                     <span>
                         <span className="block text-[0.65rem] font-bold uppercase leading-none tracking-[0.28em] text-[var(--hub-faint)]">
                             World games
                         </span>
-                        <span className="mt-1 block text-lg font-black leading-none tracking-[-0.04em]">
-                            FLAGY
+                        <span className="mt-1 block text-xl font-black leading-none tracking-[-0.06em]">
+                            flagy
+                            <span className="text-[#1769ff] dark:text-[#7c9cff]">
+                                .
+                            </span>
                         </span>
                     </span>
                 </Link>

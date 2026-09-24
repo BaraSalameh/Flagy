@@ -1,4 +1,4 @@
-# Flagy
+# flagy.
 
 An interactive geography game built with Next.js, React, Redux Toolkit, and Leaflet.
 The game hub offers Geo Guess, Map Master, and Outline Explorer.
