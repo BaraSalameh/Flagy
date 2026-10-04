@@ -1,7 +1,14 @@
 "use client";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, Compass, MapPinned, Route, ScanSearch } from "lucide-react";
+import {
+    ArrowLeft,
+    Compass,
+    Flag,
+    MapPinned,
+    Route,
+    ScanSearch,
+} from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useAppSelector } from "@/lib/store/hooks";
 import type { GameSlug } from "@/shared/types/game";
@@ -14,24 +21,34 @@ export function GameShell({
     game: GameSlug;
     children: ReactNode;
 }) {
-    const difficulty = useAppSelector((state) =>
-        game === "geo-guess"
-            ? state.geoGuess.difficulty
-            : game === "map-master"
-              ? state.mapMaster.difficulty
-              : game === "outline-explorer"
-                ? state.outlineExplorer.difficulty
-                : state.borderHop.difficulty,
-    );
-    const gameStarted = useAppSelector((state) =>
-        game === "geo-guess"
-            ? state.geoGuess.status !== "idle"
-            : game === "map-master"
-              ? state.mapMaster.status !== "idle"
-              : game === "outline-explorer"
-                ? state.outlineExplorer.status !== "idle"
-                : state.borderHop.status !== "idle",
-    );
+    const difficulty = useAppSelector((state) => {
+        switch (game) {
+            case "geo-guess":
+                return state.geoGuess.difficulty;
+            case "map-master":
+                return state.mapMaster.difficulty;
+            case "outline-explorer":
+                return state.outlineExplorer.difficulty;
+            case "border-hop":
+                return state.borderHop.difficulty;
+            case "flag-finder":
+                return state.flagFinder.difficulty;
+        }
+    });
+    const gameStarted = useAppSelector((state) => {
+        switch (game) {
+            case "geo-guess":
+                return state.geoGuess.status !== "idle";
+            case "map-master":
+                return state.mapMaster.status !== "idle";
+            case "outline-explorer":
+                return state.outlineExplorer.status !== "idle";
+            case "border-hop":
+                return state.borderHop.status !== "idle";
+            case "flag-finder":
+                return state.flagFinder.status !== "idle";
+        }
+    });
     const definition = {
         "geo-guess": {
             title: "Geo Guess",
@@ -52,6 +69,11 @@ export function GameShell({
             title: "Border Hop",
             eyebrow: "Connect the countries",
             icon: Route,
+        },
+        "flag-finder": {
+            title: "Flag Finder",
+            eyebrow: "Follow the colors",
+            icon: Flag,
         },
     }[game];
     const Icon = definition.icon;

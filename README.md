@@ -1,7 +1,8 @@
 # flagy.
 
 An interactive geography game built with Next.js, React, Redux Toolkit, and Leaflet.
-The game hub offers Geo Guess, Map Master, Outline Explorer, and Border Hop.
+The game hub offers Geo Guess, Map Master, Outline Explorer, Border Hop, and
+Flag Finder.
 
 ## Run locally
 
@@ -88,6 +89,24 @@ Players can undo or reset their route at any point. Giving up reveals one
 shortest path across the map, while reaching the destination reports whether
 the chosen path was optimal.
 
+## Flag Finder
+
+Study a flag and locate its country on the world map. Each correct answer grows
+an endless streak and waits for **Next flag** before continuing. Wrong countries
+stay marked and repeated selections are free. Running out of attempts reveals
+the answer and ends the streak. There is no timer.
+
+| Difficulty   | Eligible area    | Attempts | Static borders |
+| ------------ | ---------------- | -------: | -------------- |
+| Beginner     | Over 200,000 km² |        4 | Full           |
+| Intermediate | Over 100,000 km² |        3 | 50% opacity    |
+| Advanced     | Over 20,000 km²  |        2 | 18% opacity    |
+| Expert       | Any size         |        1 | Hidden         |
+
+Flags are bundled SVG assets, so they render consistently without a network
+request. Hovering or focusing a country temporarily restores its outline even
+when static borders are faint or hidden.
+
 ## Code organization
 
 - `src/features/games/geo-guess/model/rules.ts`: difficulty settings, clue
@@ -106,6 +125,10 @@ the chosen path was optimal.
   generation, route state, and regression tests.
 - `src/features/games/border-hop/BorderHopMap.tsx`: route selection, highlighting,
   framing, and keyboard controls.
+- `src/features/games/flag-finder/model`: difficulty rules, shuffled flag decks,
+  streak state, attempts, and regression tests.
+- `src/features/games/flag-finder/FlagPanel.tsx`: bundled flag display, feedback,
+  streak progress, and explicit round advancement.
 - `src/features/map/CountrySelectionMap.tsx`: shared Geo Guess/Map Master map
   selection, keyboard controls, highlighting, and answer reveal.
 - `src/lib/contexts/MapProvider.tsx`: atlas loading and retry.

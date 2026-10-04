@@ -17,6 +17,7 @@
     "dependencies": {
         "@radix-ui/react-dialog": "^1.1.23",
         "@reduxjs/toolkit": "^2.9.0",
+        "flag-icons": "^7.5.0",
         "leaflet": "^1.9.4",
         "lucide-react": "^0.544.0",
         "motion": "^13.4.0",

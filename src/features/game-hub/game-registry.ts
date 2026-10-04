@@ -1,4 +1,4 @@
-import { Compass, MapPinned, Route, ScanSearch } from "lucide-react";
+import { Compass, Flag, MapPinned, Route, ScanSearch } from "lucide-react";
 import { difficulties, type GameDefinition } from "@/shared/types/game";
 import { outlineDifficulties } from "@/features/games/outline-explorer/model/rules";
 export const gameDefinitions: readonly GameDefinition[] = [
@@ -55,6 +55,20 @@ export const gameDefinitions: readonly GameDefinition[] = [
         load: () =>
             import("@/features/games/border-hop/BorderHop").then(
                 ({ BorderHop }) => ({ default: BorderHop }),
+            ),
+    },
+    {
+        slug: "flag-finder",
+        title: "Flag Finder",
+        eyebrow: "Follow the colors",
+        description:
+            "Study each flag and find its country on the map before your attempts run out.",
+        icon: Flag,
+        accent: "violet",
+        difficulties,
+        load: () =>
+            import("@/features/games/flag-finder/FlagFinder").then(
+                ({ FlagFinder }) => ({ default: FlagFinder }),
             ),
     },
 ] as const;

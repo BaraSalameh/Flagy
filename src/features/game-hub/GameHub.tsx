@@ -33,6 +33,11 @@ const gameStyles = {
         icon: "bg-[#087f72] text-white dark:bg-[#63dfca] dark:text-[#06211d]",
         wash: "from-[#16a791]/20 via-[#16a791]/5 to-transparent dark:from-[#63dfca]/20",
     },
+    violet: {
+        number: "text-[#7656c8] dark:text-[#b9a1ff]",
+        icon: "bg-[#7656c8] text-white dark:bg-[#b9a1ff] dark:text-[#1b1035]",
+        wash: "from-[#7656c8]/20 via-[#7656c8]/5 to-transparent dark:from-[#b9a1ff]/20",
+    },
 } as const;
 
 export function GameHub() {
@@ -106,7 +111,7 @@ export function GameHub() {
                         </h1>
 
                         <p className="mt-8 max-w-sm text-base font-medium leading-7 text-[var(--hub-muted)] sm:text-lg">
-                            Pick a route through borders, clues, and
+                            Pick a route through flags, borders, clues, and
                             silhouettes. Every round makes the map feel a little
                             smaller.
                         </p>
@@ -115,7 +120,7 @@ export function GameHub() {
                     <div className="mt-12 grid grid-cols-3 border-t border-[var(--hub-line)] pt-5">
                         <div>
                             <p className="text-2xl font-black tracking-[-0.05em]">
-                                04
+                                05
                             </p>
                             <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-[var(--hub-faint)]">
                                 Games
@@ -276,7 +281,7 @@ export function GameHub() {
             <footer className="relative mx-auto mt-5 flex max-w-[90rem] flex-col gap-3 border-t border-[var(--hub-line)] pt-4 text-xs font-bold uppercase tracking-[0.14em] text-[var(--hub-faint)] sm:flex-row sm:items-center sm:justify-between">
                 <p className="flex items-center gap-2">
                     <MoveUpRight aria-hidden="true" className="size-4" />
-                    Four ways to read the world
+                    Five ways to read the world
                 </p>
                 <p className="flex items-center gap-2">
                     Follow your curiosity

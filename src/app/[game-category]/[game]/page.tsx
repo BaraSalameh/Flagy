@@ -4,12 +4,16 @@ import { getGameDefinition } from "@/features/game-hub/game-registry";
 import { MapProvider } from "@/lib/contexts";
 type Params = Promise<{ "game-category": string; game: string }>;
 export function generateStaticParams() {
-    return ["geo-guess", "map-master", "outline-explorer", "border-hop"].map(
-        (game) => ({
-            "game-category": "map",
-            game,
-        }),
-    );
+    return [
+        "geo-guess",
+        "map-master",
+        "outline-explorer",
+        "border-hop",
+        "flag-finder",
+    ].map((game) => ({
+        "game-category": "map",
+        game,
+    }));
 }
 export async function generateMetadata({
     params,

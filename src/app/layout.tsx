@@ -1,4 +1,5 @@
 import "leaflet/dist/leaflet.css";
+import "flag-icons/css/flag-icons.min.css";
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";

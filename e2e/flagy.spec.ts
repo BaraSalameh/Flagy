@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import countriesData from "../public/data/countries.info.json";
 
 test("hub navigation, theme, and onboarding are accessible", async ({
     page,
@@ -55,6 +56,7 @@ for (const game of [
     { slug: "map-master", title: "Map Master" },
     { slug: "outline-explorer", title: "Outline Explorer" },
     { slug: "border-hop", title: "Border Hop" },
+    { slug: "flag-finder", title: "Flag Finder" },
 ]) {
     test(`${game.title} starts with a responsive game shell`, async ({
         page,
@@ -80,6 +82,7 @@ for (const game of [
     { slug: "map-master", title: "Map Master" },
     { slug: "outline-explorer", title: "Outline Explorer" },
     { slug: "border-hop", title: "Border Hop" },
+    { slug: "flag-finder", title: "Flag Finder" },
 ]) {
     test(`${game.title} keeps the loading overlay until the atlas is painted`, async ({
         page,
@@ -170,30 +173,48 @@ for (const game of ["geo-guess", "map-master"] as const) {
             testInfo.project.name !== "desktop",
             "Covered once; mobile startup is tested separately.",
         );
+        await page.route("**/data/countries.info.json", (route) =>
+            route.fulfill({
+                json:
+                    game === "geo-guess"
+                        ? { CA: countriesData.CA }
+                        : {
+                              CA: countriesData.CA,
+                              CN: countriesData.CN,
+                              BR: countriesData.BR,
+                          },
+            }),
+        );
         await page.goto(`/map/${game}`);
         await page.getByRole("button", { name: /beginner/i }).click();
-        const countries = page.locator(
-            '[role="button"][aria-label^="Select "]',
-        );
-        await expect(countries.first()).toBeVisible();
-        const maxSelections = game === "geo-guess" ? 24 : 20;
-        for (let index = 0; index < maxSelections; index += 1) {
-            if (
-                await page
-                    .getByRole("dialog", {
-                        name: /brilliant journey|little detour/i,
-                    })
-                    .isVisible()
-            )
-                break;
-            await countries.nth(index % (await countries.count())).focus();
+        if (game === "geo-guess") {
+            const canada = page
+                .getByRole("button", { name: "Select Canada", exact: true })
+                .first();
+            await canada.focus();
             await page.keyboard.press("Enter");
-            await page.waitForTimeout(30);
+        } else {
+            const panel = page.getByRole("region", {
+                name: "Map Master challenge",
+            });
+            for (let index = 0; index < 3; index += 1) {
+                const target = await panel.getByRole("heading").innerText();
+                const country = page
+                    .getByRole("button", {
+                        name: `Select ${target}`,
+                        exact: true,
+                    })
+                    .first();
+                await country.focus();
+                await page.keyboard.press("Enter");
+            }
         }
+        const resultName =
+            game === "geo-guess"
+                ? "Mystery solved — you win!"
+                : "Map mastered — you win!";
         await expect(
-            page.getByRole("dialog", {
-                name: /brilliant journey|little detour/i,
-            }),
+            page.getByRole("dialog", { name: resultName }),
         ).toBeVisible();
         await page.getByRole("button", { name: "Play again" }).click();
         await expect(
@@ -219,7 +240,7 @@ test("outline explorer can reach a result and replay", async ({
         if (
             await page
                 .getByRole("dialog", {
-                    name: /brilliant journey|little detour/i,
+                    name: /outline decoded|silhouette slipped away/i,
                 })
                 .isVisible()
         )
@@ -236,7 +257,9 @@ test("outline explorer can reach a result and replay", async ({
         await page.waitForTimeout(30);
     }
     await expect(
-        page.getByRole("dialog", { name: /brilliant journey|little detour/i }),
+        page.getByRole("dialog", {
+            name: /outline decoded|silhouette slipped away/i,
+        }),
     ).toBeVisible();
     await page.getByRole("button", { name: "Play again" }).click();
     await expect(

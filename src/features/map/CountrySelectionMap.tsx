@@ -13,6 +13,7 @@ interface CountrySelectionMapProps {
     disabledCodes: readonly string[];
     revealCode?: string;
     viewKey?: string;
+    borderOpacity?: number;
     onSelect: (country: InfoData) => void;
 }
 
@@ -24,6 +25,7 @@ export function CountrySelectionMap({
     disabledCodes,
     revealCode,
     viewKey,
+    borderOpacity,
     onSelect,
 }: CountrySelectionMapProps) {
     const info = useLoadInfoData();
@@ -95,6 +97,7 @@ export function CountrySelectionMap({
                         fillOpacity: color ? 0.8 : 1,
                         color: color ?? "var(--map-border)",
                         weight: color ? 2 : 1,
+                        opacity: color ? 1 : (borderOpacity ?? 1),
                     };
                 }}
                 onEachFeature={(feature, layer) => {
@@ -102,7 +105,21 @@ export function CountrySelectionMap({
                     const country = info[code];
                     if (!country) return;
                     const activate = () => selectRef.current(country);
+                    const emphasize = () => {
+                        if (borderOpacity === undefined) return;
+                        (layer as L.Path).setStyle({
+                            color: "var(--accent)",
+                            opacity: 1,
+                            weight: 2,
+                        });
+                    };
+                    const restore = () => {
+                        if (borderOpacity === undefined) return;
+                        layers.current?.resetStyle(layer);
+                    };
                     layer.on("click", activate);
+                    layer.on("mouseover", emphasize);
+                    layer.on("mouseout", restore);
                     layer.on("add", () => {
                         const element = (layer as L.Path).getElement();
                         if (!element) return;
@@ -118,10 +135,14 @@ export function CountrySelectionMap({
                             event.preventDefault();
                             activate();
                         };
+                        element.addEventListener("focus", emphasize);
+                        element.addEventListener("blur", restore);
                         element.addEventListener("keydown", onKeyDown);
-                        layer.once("remove", () =>
-                            element.removeEventListener("keydown", onKeyDown),
-                        );
+                        layer.once("remove", () => {
+                            element.removeEventListener("focus", emphasize);
+                            element.removeEventListener("blur", restore);
+                            element.removeEventListener("keydown", onKeyDown);
+                        });
                     });
                 }}
             />

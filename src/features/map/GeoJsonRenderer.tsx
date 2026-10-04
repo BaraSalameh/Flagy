@@ -6,6 +6,7 @@ import { GeoGuessMap } from "@/features/games/geo-guess/GeoGuessMap";
 import { MapMasterMap } from "@/features/games/map-master/MapMasterMap";
 import { OutlineMap } from "@/features/games/outline-explorer/OutlineMap";
 import { BorderHopMap } from "@/features/games/border-hop/BorderHopMap";
+import { FlagFinderMap } from "@/features/games/flag-finder/FlagFinderMap";
 import type { GeoJsonRendererProps } from "./types";
 
 function MapPaintReporter({
@@ -56,6 +57,9 @@ export const GeoJsonRenderer = ({
             break;
         case "border-hop":
             renderer = <BorderHopMap geoData={geoData} />;
+            break;
+        case "flag-finder":
+            renderer = <FlagFinderMap geoData={geoData} />;
             break;
     }
 
