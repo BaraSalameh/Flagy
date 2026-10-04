@@ -68,9 +68,9 @@ test("identifies bundled flags, advances explicitly, and keeps expert countries 
     });
 });
 
-test("expert hides static borders, reveals them on focus, and ends the streak", async ({
+test("expert hides static borders, reveals only the active outline, and ends the streak", async ({
     page,
-}) => {
+}, testInfo) => {
     await page.route("**/data/countries.info.json", (route) =>
         route.fulfill({ json: { CA: countries.CA, CN: countries.CN } }),
     );
@@ -83,9 +83,24 @@ test("expert hides static borders, reveals them on focus, and ends the streak", 
     const wrongCountry = page
         .getByRole("button", { name: `Select ${wrongName}`, exact: true })
         .first();
-    await expect(wrongCountry).toHaveAttribute("stroke-opacity", "0");
+    const targetCountry = page
+        .getByRole("button", {
+            name: `Select ${namesByCode[code]}`,
+            exact: true,
+        })
+        .first();
+    await expect(wrongCountry).toHaveCSS("stroke-opacity", "0");
+    if (testInfo.project.name === "desktop") {
+        await wrongCountry.hover();
+        await expect(wrongCountry).toHaveCSS("stroke-opacity", "1");
+        await targetCountry.hover();
+        await expect(wrongCountry).toHaveCSS("stroke-opacity", "0");
+        await expect(targetCountry).toHaveCSS("stroke-opacity", "1");
+        await panel(page).hover();
+        await expect(targetCountry).toHaveCSS("stroke-opacity", "0");
+    }
     await wrongCountry.focus();
-    await expect(wrongCountry).toHaveAttribute("stroke-opacity", "1");
+    await expect(wrongCountry).toBeFocused();
     await page.keyboard.press("Enter");
 
     const result = page.getByRole("dialog", { name: "Streak ended" });
@@ -93,6 +108,30 @@ test("expert hides static borders, reveals them on focus, and ends the streak", 
     await result.getByRole("button", { name: "Explore answer" }).click();
     await expect(panel(page)).toContainText(namesByCode[code]);
     await expect(panel(page)).toContainText("highlighted on the map");
+});
+
+test("changes the question flag after a non-final wrong selection", async ({
+    page,
+}) => {
+    await page.route("**/data/countries.info.json", (route) =>
+        route.fulfill({ json: { CA: countries.CA, CN: countries.CN } }),
+    );
+    await page.goto("/map/flag-finder");
+    await page.getByRole("button", { name: /advanced/i }).click();
+
+    const firstCode = await targetCode(page);
+    await selectCountry(
+        page,
+        firstCode === "CA"
+            ? countries.CN.countryName
+            : countries.CA.countryName,
+    );
+
+    await expect(panel(page).locator(".fi")).not.toHaveAttribute(
+        "data-country-code",
+        firstCode,
+    );
+    await expect(panel(page)).toContainText("1 attempt remaining");
 });
 
 test("fits the minimum mobile viewport and can replay after a loss", async ({

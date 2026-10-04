@@ -90,8 +90,8 @@ export function FlagPanel({ onNext }: { onNext: () => void }) {
 
             {!solved && !finished ? (
                 <p className="mt-3 text-xs leading-5 text-muted">
-                    Wrong countries stay marked. Repeated selections do not use
-                    another attempt.
+                    A wrong country uses an attempt and changes the question
+                    flag.
                 </p>
             ) : null}
         </section>

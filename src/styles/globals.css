@@ -311,6 +311,12 @@ a {
         0 0 4px color-mix(in srgb, var(--sun) 72%, transparent)
     );
 }
+.country-selection-outline:hover,
+.country-selection-outline:focus-visible {
+    stroke: var(--accent) !important;
+    stroke-width: 2 !important;
+    stroke-opacity: 1 !important;
+}
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

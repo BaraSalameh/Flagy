@@ -41,14 +41,15 @@ describe("Flag Finder rounds", () => {
         },
     );
 
-    it("charges a wrong country once and reveals the answer at zero", () => {
+    it("charges a wrong country, changes the flag, and reveals the final answer", () => {
         let state = reducer(
             undefined,
             startFlagFinder({ deck, difficulty: "Advanced" }),
         );
         state = reducer(state, submitFlagGuess(brazil));
         expect(state.attemptsRemaining).toBe(1);
-        expect(reducer(state, submitFlagGuess(brazil))).toEqual(state);
+        expect(getFlagTarget(state)).toEqual(china);
+        expect(state.incorrectCodes).toEqual([]);
         state = reducer(
             state,
             submitFlagGuess({ countryCode: "JO", countryName: "Jordan" }),
@@ -59,7 +60,20 @@ describe("Flag Finder rounds", () => {
             revealedAnswer: true,
             streak: 0,
         });
-        expect(reducer(state, submitFlagGuess(canada))).toEqual(state);
+        expect(getFlagTarget(state)).toEqual(china);
+        expect(reducer(state, submitFlagGuess(china))).toEqual(state);
+    });
+
+    it("wraps to the first flag after a non-final miss at the end of the deck", () => {
+        let state = reducer(
+            undefined,
+            startFlagFinder({ deck, difficulty: "Beginner" }),
+        );
+        state = reducer(state, submitFlagGuess(canada));
+        state = reducer(state, advanceFlag({}));
+        state = reducer(state, submitFlagGuess(brazil));
+        expect(getFlagTarget(state)).toEqual(canada);
+        expect(state.attemptsRemaining).toBe(3);
     });
 
     it("increments the streak and waits for an explicit next flag", () => {

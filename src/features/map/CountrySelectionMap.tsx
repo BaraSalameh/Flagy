@@ -104,25 +104,14 @@ export function CountrySelectionMap({
                     const code: string = feature.properties?.ISO2;
                     const country = info[code];
                     if (!country) return;
+                    const path = layer as L.Path;
                     const activate = () => selectRef.current(country);
-                    const emphasize = () => {
-                        if (borderOpacity === undefined) return;
-                        (layer as L.Path).setStyle({
-                            color: "var(--accent)",
-                            opacity: 1,
-                            weight: 2,
-                        });
-                    };
-                    const restore = () => {
-                        if (borderOpacity === undefined) return;
-                        layers.current?.resetStyle(layer);
-                    };
                     layer.on("click", activate);
-                    layer.on("mouseover", emphasize);
-                    layer.on("mouseout", restore);
                     layer.on("add", () => {
-                        const element = (layer as L.Path).getElement();
+                        const element = path.getElement();
                         if (!element) return;
+                        if (borderOpacity !== undefined)
+                            element.classList.add("country-selection-outline");
                         element.setAttribute("tabindex", "0");
                         element.setAttribute("role", "button");
                         element.setAttribute(
@@ -135,12 +124,8 @@ export function CountrySelectionMap({
                             event.preventDefault();
                             activate();
                         };
-                        element.addEventListener("focus", emphasize);
-                        element.addEventListener("blur", restore);
                         element.addEventListener("keydown", onKeyDown);
                         layer.once("remove", () => {
-                            element.removeEventListener("focus", emphasize);
-                            element.removeEventListener("blur", restore);
                             element.removeEventListener("keydown", onKeyDown);
                         });
                     });

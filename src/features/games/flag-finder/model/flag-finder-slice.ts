@@ -80,7 +80,13 @@ const slice = createSlice({
             if (state.attemptsRemaining === 0) {
                 state.status = "lost";
                 state.revealedAnswer = true;
+                return;
             }
+
+            // Keep the game moving after a miss. The final miss stays on the
+            // current target so its answer can still be revealed.
+            state.targetIndex = (state.targetIndex + 1) % state.deck.length;
+            state.incorrectCodes = [];
         },
         advanceFlag: (
             state,

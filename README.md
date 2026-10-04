@@ -93,8 +93,8 @@ the chosen path was optimal.
 
 Study a flag and locate its country on the world map. Each correct answer grows
 an endless streak and waits for **Next flag** before continuing. Wrong countries
-stay marked and repeated selections are free. Running out of attempts reveals
-the answer and ends the streak. There is no timer.
+cost an attempt and immediately change the question flag. Running out of
+attempts reveals the final answer and ends the streak. There is no timer.
 
 | Difficulty   | Eligible area    | Attempts | Static borders |
 | ------------ | ---------------- | -------: | -------------- |
