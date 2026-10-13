@@ -575,40 +575,8 @@ export function GameGlobe() {
                     </div>
                 </div>
 
-                <div className="relative z-20 -mt-7 flex w-full max-w-xl items-center gap-3 rounded-2xl border border-white/12 bg-[#081523]/86 p-3.5 text-white shadow-[0_24px_70px_-30px_rgb(0_0_0_/_0.85)] backdrop-blur-xl sm:gap-4 sm:p-4">
-                    <span
-                        className="grid size-11 shrink-0 place-items-center rounded-xl text-[#07131f] sm:size-12"
-                        style={{ backgroundColor: activeContinent.color }}
-                    >
-                        <Icon aria-hidden="true" className="size-5" />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                        <p className="truncate text-[0.6rem] font-black uppercase tracking-[0.16em] text-white/50">
-                            {activeContinent.continent} ·{" "}
-                            {activeContinent.coordinates}
-                        </p>
-                        <h3 className="mt-0.5 text-xl font-black tracking-[-0.045em] sm:text-2xl">
-                            {activeGame.title}
-                        </h3>
-                        <p className="mt-0.5 hidden truncate text-xs font-medium text-white/58 sm:block">
-                            {activeGame.description}
-                        </p>
-                    </div>
-                    <Link
-                        href={`/map/${activeGame.slug}`}
-                        aria-label={`Play now: ${activeGame.title}`}
-                        className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-3.5 text-xs font-black text-[#081523] transition hover:bg-[#d8ff52] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7ec8ff]/50 sm:px-4"
-                    >
-                        <span className="hidden sm:inline">Play</span>
-                        <ArrowUpRight
-                            aria-hidden="true"
-                            className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                        />
-                    </Link>
-                </div>
-
                 <div
-                    className="relative z-40 mt-3 w-full max-w-sm"
+                    className="relative z-40 -mt-7 w-full max-w-xl"
                     onBlur={(event) => {
                         if (!event.currentTarget.contains(event.relatedTarget))
                             setIsGamePickerOpen(false);
@@ -619,7 +587,7 @@ export function GameGlobe() {
                             id="game-picker-options"
                             role="listbox"
                             aria-label="Available games"
-                            className="absolute bottom-full left-0 mb-2 w-full overflow-hidden rounded-2xl border border-white/15 bg-[#081523]/96 p-1.5 text-white shadow-[0_24px_70px_-24px_rgb(0_0_0_/_0.9)] backdrop-blur-xl"
+                            className="absolute bottom-full left-0 mb-2 grid w-full gap-1 overflow-hidden rounded-2xl border border-white/15 bg-[#081523]/96 p-1.5 text-white shadow-[0_24px_70px_-24px_rgb(0_0_0_/_0.9)] backdrop-blur-xl sm:grid-cols-2"
                         >
                             {gameDefinitions.map((game, index) => {
                                 const GameIcon = game.icon;
@@ -666,46 +634,66 @@ export function GameGlobe() {
                         </div>
                     ) : null}
 
-                    <button
-                        type="button"
-                        aria-haspopup="listbox"
-                        aria-expanded={isGamePickerOpen}
-                        aria-controls="game-picker-options"
-                        aria-label={`Choose game. ${activeGame.title} selected`}
-                        onClick={() => setIsGamePickerOpen((open) => !open)}
-                        onKeyDown={(event) => {
-                            if (event.key === "ArrowUp") {
-                                event.preventDefault();
-                                selectGame(wrapIndex(activeIndex - 1));
-                            }
-                            if (event.key === "ArrowDown") {
-                                event.preventDefault();
-                                selectGame(wrapIndex(activeIndex + 1));
-                            }
-                        }}
-                        className="group flex w-full items-center gap-3 rounded-2xl border border-white/15 bg-[#081523]/88 p-2 text-left text-white shadow-[0_18px_50px_-28px_rgb(0_0_0_/_0.9)] backdrop-blur-xl transition hover:border-white/25 hover:bg-[#0b1c2c] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7ec8ff]/50"
-                    >
-                        <span
-                            className="grid size-10 shrink-0 place-items-center rounded-xl text-[#07131f]"
-                            style={{ backgroundColor: activeContinent.color }}
+                    <div className="flex items-center gap-2 rounded-2xl border border-white/12 bg-[#081523]/88 p-2 text-white shadow-[0_24px_70px_-30px_rgb(0_0_0_/_0.85)] backdrop-blur-xl sm:gap-3">
+                        <button
+                            type="button"
+                            aria-haspopup="listbox"
+                            aria-expanded={isGamePickerOpen}
+                            aria-controls="game-picker-options"
+                            aria-label={`Choose game. ${activeGame.title} selected`}
+                            onClick={() => setIsGamePickerOpen((open) => !open)}
+                            onKeyDown={(event) => {
+                                if (event.key === "ArrowUp") {
+                                    event.preventDefault();
+                                    selectGame(wrapIndex(activeIndex - 1));
+                                }
+                                if (event.key === "ArrowDown") {
+                                    event.preventDefault();
+                                    selectGame(wrapIndex(activeIndex + 1));
+                                }
+                            }}
+                            className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl p-1.5 text-left transition hover:bg-white/5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7ec8ff]/50 sm:gap-4 sm:p-2"
                         >
-                            <Icon aria-hidden="true" className="size-4" />
-                        </span>
-                        <span className="min-w-0 flex-1">
-                            <span className="block text-[0.58rem] font-black uppercase tracking-[0.16em] text-white/42">
-                                Choose a game
+                            <span
+                                className="grid size-11 shrink-0 place-items-center rounded-xl text-[#07131f] sm:size-12"
+                                style={{
+                                    backgroundColor: activeContinent.color,
+                                }}
+                            >
+                                <Icon aria-hidden="true" className="size-5" />
                             </span>
-                            <span className="block truncate text-sm font-black tracking-[-0.02em]">
-                                {activeGame.title}
+                            <span className="min-w-0 flex-1">
+                                <span className="block truncate text-[0.6rem] font-black uppercase tracking-[0.16em] text-white/50">
+                                    {activeContinent.continent} ·{" "}
+                                    {activeContinent.coordinates}
+                                </span>
+                                <span className="mt-0.5 block truncate text-lg font-black tracking-[-0.045em] sm:text-2xl">
+                                    {activeGame.title}
+                                </span>
+                                <span className="mt-0.5 hidden truncate text-xs font-medium text-white/58 sm:block">
+                                    {activeGame.description}
+                                </span>
                             </span>
-                        </span>
-                        <span className="mr-1 grid size-8 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/65 transition group-hover:bg-white/10 group-hover:text-white">
-                            <ChevronDown
+                            <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/65 transition group-hover:bg-white/10 group-hover:text-white">
+                                <ChevronDown
+                                    aria-hidden="true"
+                                    className={`size-4 transition-transform ${isGamePickerOpen ? "rotate-180" : ""}`}
+                                />
+                            </span>
+                        </button>
+
+                        <Link
+                            href={`/map/${activeGame.slug}`}
+                            aria-label={`Play now: ${activeGame.title}`}
+                            className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-3.5 text-xs font-black text-[#081523] transition hover:bg-[#d8ff52] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7ec8ff]/50 sm:mr-1 sm:px-4"
+                        >
+                            <span className="hidden sm:inline">Play</span>
+                            <ArrowUpRight
                                 aria-hidden="true"
-                                className={`size-4 transition-transform ${isGamePickerOpen ? "rotate-180" : ""}`}
+                                className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                             />
-                        </span>
-                    </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </section>
