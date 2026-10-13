@@ -224,6 +224,7 @@ a {
     --hub-faint: #718078;
     --hub-line: rgb(22 34 29 / 0.14);
     --hub-strong-line: rgb(22 34 29 / 0.35);
+    --hub-panel-solid: rgb(250 251 247 / 0.94);
     background:
         radial-gradient(
             circle at 12% 84%,
@@ -245,6 +246,7 @@ a {
     --hub-faint: #78857c;
     --hub-line: rgb(229 238 225 / 0.13);
     --hub-strong-line: rgb(216 255 82 / 0.42);
+    --hub-panel-solid: rgb(15 24 38 / 0.94);
     background:
         radial-gradient(
             circle at 12% 84%,
@@ -274,6 +276,60 @@ a {
         80px 80px,
         80px 80px;
     mask-image: linear-gradient(115deg, black, transparent 48%, black);
+}
+.earth-panel {
+    background:
+        radial-gradient(
+            circle at 50% 42%,
+            rgb(26 86 133 / 0.42),
+            transparent 36%
+        ),
+        radial-gradient(circle at 50% 85%, rgb(9 38 62 / 0.7), transparent 45%),
+        #070e18;
+}
+.earth-panel::before {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 14% 20%, white 0 1px, transparent 1.5px),
+        radial-gradient(circle at 76% 12%, white 0 0.8px, transparent 1.3px),
+        radial-gradient(circle at 84% 68%, white 0 1px, transparent 1.5px),
+        radial-gradient(circle at 34% 82%, white 0 0.7px, transparent 1.2px);
+    background-size:
+        190px 190px,
+        240px 240px,
+        170px 170px,
+        220px 220px;
+    content: "";
+    opacity: 0.28;
+    pointer-events: none;
+}
+.earth-atmosphere {
+    position: absolute;
+    background: radial-gradient(
+        circle,
+        transparent 59%,
+        rgb(52 171 255 / 0.2) 68%,
+        transparent 73%
+    );
+    filter: blur(9px);
+    pointer-events: none;
+}
+.earth-control {
+    display: grid;
+    width: 2.65rem;
+    height: 2.65rem;
+    place-items: center;
+    transition:
+        background 160ms ease,
+        color 160ms ease;
+}
+.earth-control:hover {
+    background: rgb(255 255 255 / 0.12);
+}
+.earth-control:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px #7ec8ff;
 }
 .leaflet-container {
     background: #bfe1ed;

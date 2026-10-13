@@ -44,6 +44,45 @@ test("hub can be navigated by keyboard", async ({ page }) => {
     ).toBeVisible();
 });
 
+test("game globe rotates between continent missions", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    const globe = page.getByRole("group", { name: /rotating game globe/i });
+    await expect(globe).toHaveAccessibleName(/africa selected for geo guess/i);
+    await globe.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(globe).toHaveAccessibleName(/asia selected for map master/i);
+    await page
+        .getByRole("button", { name: /select europe: flag finder/i })
+        .click();
+    await expect(globe).toHaveAccessibleName(
+        /europe selected for flag finder/i,
+    );
+    await expect(
+        page.getByRole("link", { name: "Play now: Flag Finder" }),
+    ).toHaveAttribute("href", "/map/flag-finder");
+
+    await page
+        .getByRole("button", { name: /select africa: geo guess/i })
+        .click();
+    const bounds = await globe.boundingBox();
+    expect(bounds).not.toBeNull();
+    if (bounds) {
+        await page.mouse.move(
+            bounds.x + bounds.width * 0.58,
+            bounds.y + bounds.height * 0.5,
+        );
+        await page.mouse.down();
+        await page.mouse.move(
+            bounds.x + bounds.width * 0.2,
+            bounds.y + bounds.height * 0.5,
+            { steps: 5 },
+        );
+        await page.mouse.up();
+    }
+    await expect(globe).toHaveAccessibleName(/asia selected for map master/i);
+});
+
 test("invalid games use the friendly not-found screen", async ({ page }) => {
     await page.goto("/map/not-a-game");
     await expect(
