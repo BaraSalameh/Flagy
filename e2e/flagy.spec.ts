@@ -52,19 +52,19 @@ test("game globe rotates between continent missions", async ({ page }) => {
     await globe.focus();
     await page.keyboard.press("ArrowRight");
     await expect(globe).toHaveAccessibleName(/asia selected for map master/i);
-    await page
-        .getByRole("button", { name: /select europe: flag finder/i })
-        .click();
+    const gamePicker = page.getByRole("button", { name: /choose game/i });
+    await gamePicker.click();
+    await page.getByRole("option", { name: /flag finder/i }).click();
     await expect(globe).toHaveAccessibleName(
         /europe selected for flag finder/i,
     );
+    await expect(gamePicker).toHaveAccessibleName(/flag finder selected/i);
     await expect(
         page.getByRole("link", { name: "Play now: Flag Finder" }),
     ).toHaveAttribute("href", "/map/flag-finder");
 
-    await page
-        .getByRole("button", { name: /select africa: geo guess/i })
-        .click();
+    await gamePicker.click();
+    await page.getByRole("option", { name: /geo guess/i }).click();
     const bounds = await globe.boundingBox();
     expect(bounds).not.toBeNull();
     if (bounds) {
@@ -81,6 +81,7 @@ test("game globe rotates between continent missions", async ({ page }) => {
         await page.mouse.up();
     }
     await expect(globe).toHaveAccessibleName(/asia selected for map master/i);
+    await expect(gamePicker).toHaveAccessibleName(/map master selected/i);
 });
 
 test("invalid games use the friendly not-found screen", async ({ page }) => {

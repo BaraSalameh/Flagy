@@ -3,6 +3,8 @@
 import Link from "next/link";
 import {
     ArrowUpRight,
+    Check,
+    ChevronDown,
     LocateFixed,
     MousePointer2,
     ZoomIn,
@@ -249,6 +251,7 @@ export function GameGlobe() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isGamePickerOpen, setIsGamePickerOpen] = useState(false);
     const activeIndexRef = useRef(activeIndex);
     const activeGame = gameDefinitions[activeIndex];
     const activeContinent = continentGames[activeIndex];
@@ -486,6 +489,11 @@ export function GameGlobe() {
         paint();
     };
 
+    const selectGame = (index: number) => {
+        focusContinent(index);
+        setIsGamePickerOpen(false);
+    };
+
     return (
         <section
             aria-labelledby="games-heading"
@@ -600,21 +608,104 @@ export function GameGlobe() {
                 </div>
 
                 <div
-                    className="relative z-20 mt-3 flex max-w-full gap-1.5 overflow-x-auto rounded-2xl border border-white/10 bg-black/15 p-1.5 backdrop-blur-sm"
-                    aria-label="Choose a continent"
+                    className="relative z-40 mt-3 w-full max-w-sm"
+                    onBlur={(event) => {
+                        if (!event.currentTarget.contains(event.relatedTarget))
+                            setIsGamePickerOpen(false);
+                    }}
                 >
-                    {continentGames.map((item, index) => (
-                        <button
-                            key={item.continent}
-                            type="button"
-                            onClick={() => focusContinent(index)}
-                            aria-label={`Select ${item.continent}: ${gameDefinitions[index].title}`}
-                            aria-pressed={index === activeIndex}
-                            className={`shrink-0 rounded-xl px-2.5 py-2 text-[0.62rem] font-black uppercase tracking-[0.08em] transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7ec8ff]/50 sm:px-3 ${index === activeIndex ? "bg-white text-[#081523]" : "text-white/52 hover:bg-white/10 hover:text-white"}`}
+                    {isGamePickerOpen ? (
+                        <div
+                            id="game-picker-options"
+                            role="listbox"
+                            aria-label="Available games"
+                            className="absolute bottom-full left-0 mb-2 w-full overflow-hidden rounded-2xl border border-white/15 bg-[#081523]/96 p-1.5 text-white shadow-[0_24px_70px_-24px_rgb(0_0_0_/_0.9)] backdrop-blur-xl"
                         >
-                            {item.continent}
-                        </button>
-                    ))}
+                            {gameDefinitions.map((game, index) => {
+                                const GameIcon = game.icon;
+                                const isSelected = index === activeIndex;
+
+                                return (
+                                    <button
+                                        key={game.slug}
+                                        type="button"
+                                        role="option"
+                                        aria-selected={isSelected}
+                                        onClick={() => selectGame(index)}
+                                        className={`group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7ec8ff] ${isSelected ? "bg-white text-[#081523]" : "text-white hover:bg-white/10"}`}
+                                    >
+                                        <span
+                                            className="grid size-9 shrink-0 place-items-center rounded-lg text-[#07131f]"
+                                            style={{
+                                                backgroundColor:
+                                                    continentGames[index].color,
+                                            }}
+                                        >
+                                            <GameIcon
+                                                aria-hidden="true"
+                                                className="size-4"
+                                            />
+                                        </span>
+                                        <span className="min-w-0 flex-1">
+                                            <span className="block text-sm font-black tracking-[-0.02em]">
+                                                {game.title}
+                                            </span>
+                                            <span
+                                                className={`block truncate text-[0.62rem] font-bold uppercase tracking-[0.12em] ${isSelected ? "text-[#52616c]" : "text-white/45"}`}
+                                            >
+                                                {game.eyebrow}
+                                            </span>
+                                        </span>
+                                        <Check
+                                            aria-hidden="true"
+                                            className={`size-4 shrink-0 ${isSelected ? "opacity-100" : "opacity-0"}`}
+                                        />
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    ) : null}
+
+                    <button
+                        type="button"
+                        aria-haspopup="listbox"
+                        aria-expanded={isGamePickerOpen}
+                        aria-controls="game-picker-options"
+                        aria-label={`Choose game. ${activeGame.title} selected`}
+                        onClick={() => setIsGamePickerOpen((open) => !open)}
+                        onKeyDown={(event) => {
+                            if (event.key === "ArrowUp") {
+                                event.preventDefault();
+                                selectGame(wrapIndex(activeIndex - 1));
+                            }
+                            if (event.key === "ArrowDown") {
+                                event.preventDefault();
+                                selectGame(wrapIndex(activeIndex + 1));
+                            }
+                        }}
+                        className="group flex w-full items-center gap-3 rounded-2xl border border-white/15 bg-[#081523]/88 p-2 text-left text-white shadow-[0_18px_50px_-28px_rgb(0_0_0_/_0.9)] backdrop-blur-xl transition hover:border-white/25 hover:bg-[#0b1c2c] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7ec8ff]/50"
+                    >
+                        <span
+                            className="grid size-10 shrink-0 place-items-center rounded-xl text-[#07131f]"
+                            style={{ backgroundColor: activeContinent.color }}
+                        >
+                            <Icon aria-hidden="true" className="size-4" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                            <span className="block text-[0.58rem] font-black uppercase tracking-[0.16em] text-white/42">
+                                Choose a game
+                            </span>
+                            <span className="block truncate text-sm font-black tracking-[-0.02em]">
+                                {activeGame.title}
+                            </span>
+                        </span>
+                        <span className="mr-1 grid size-8 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/65 transition group-hover:bg-white/10 group-hover:text-white">
+                            <ChevronDown
+                                aria-hidden="true"
+                                className={`size-4 transition-transform ${isGamePickerOpen ? "rotate-180" : ""}`}
+                            />
+                        </span>
+                    </button>
                 </div>
             </div>
         </section>
